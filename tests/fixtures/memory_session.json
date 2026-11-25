@@ -1,0 +1,423 @@
+{
+  "_note": "Synthetic regression exchanges authored for offline testing; arbitrary fixture clock. Educational concept vocabulary is shared with other tests.",
+  "record": {
+    "id": "mem",
+    "topic": "기억의 왜곡",
+    "interest": "",
+    "level": "beginner",
+    "stage": 5,
+    "maxStage": 5,
+    "lesson": {
+      "title": "기억의 왜곡: 소리를 들은 기록과 설명 카드를 구별하기",
+      "hook": "듣지 않은 종소리를 들었다고 보고한 이유는 무엇일까요?",
+      "prerequisites": [
+        {
+          "term": "기록",
+          "plain": "사건을 담아 둔 자료예요.",
+          "example": "원본 소리 파일"
+        },
+        {
+          "term": "단서",
+          "plain": "무엇을 떠올릴 때 참고한 정보예요.",
+          "example": "카드에 인쇄된 종 그림"
+        },
+        {
+          "term": "비교",
+          "plain": "두 보고의 공통점과 차이를 찾아요.",
+          "example": "두 모둠의 답을 나란히 써요."
+        },
+        {
+          "term": "출처",
+          "plain": "정보를 접한 경로예요.",
+          "example": "녹음을 듣거나 설명을 읽어요."
+        }
+      ],
+      "story": "두 모둠이 같은 소리 녹음을 듣고 서로 다른 설명 카드를 읽습니다.",
+      "prediction": "종소리가 없던 녹음에 종이라는 설명을 붙이면 어떤 보고가 나올까요?",
+      "scenarios": [
+        {
+          "title": "사고 실험 1: 소리와 설명 카드",
+          "question": "녹음에는 종소리가 없었습니다. 한 모둠만 종소리를 언급한 카드를 읽으면 두 모둠의 보고는 어떻게 달라질까요?",
+          "options": [
+            "두 번째 집단에서 더 높아질 수 있다.",
+            "첫 번째 집단에서 더 높아진다.",
+            "두 집단은 항상 같다."
+          ],
+          "answerIndex": 0,
+          "reason": "뒤늦게 읽은 설명을 실제 소리와 혼동할 수 있습니다."
+        },
+        {
+          "title": "사고 실험 2: 반복 청취",
+          "question": "같은 설명을 여러 차례 읽으면 보고의 확신은 어떻게 달라질까요?",
+          "options": [
+            "반드시 정확해진다.",
+            "확신과 정확성은 별개다.",
+            "아무것도 떠오르지 않는다."
+          ],
+          "answerIndex": 1,
+          "reason": "설명이 익숙해져도 녹음에 그 소리가 있었다는 증거는 늘지 않아요."
+        }
+      ],
+      "concepts": [
+        {
+          "id": "k1",
+          "name": "선택적인 부호화",
+          "description": "주의를 둔 소리와 놓친 소리가 달라요."
+        },
+        {
+          "id": "k2",
+          "name": "재구성적 기억",
+          "description": "기억을 꺼낼 때 여러 단서를 모아요."
+        },
+        {
+          "id": "k3",
+          "name": "사후 오정보 효과",
+          "description": "나중에 본 설명이 보고에 섞일 수 있어요."
+        },
+        {
+          "id": "k4",
+          "name": "출처 판단 오류",
+          "description": "녹음에서 들었는지 카드에서 읽었는지 혼동할 수 있어요."
+        },
+        {
+          "id": "k5",
+          "name": "확신과 정확성의 구별",
+          "description": "확신이 커져도 기록과 일치하는지 확인해야 해요."
+        }
+      ],
+      "connections": [
+        {
+          "from": "k3",
+          "to": "k4",
+          "why": "나중에 본 카드가 기억을 떠올리는 단서가 되기 때문이에요."
+        }
+      ],
+      "technical": [
+        {
+          "heading": "소리와 글의 출처",
+          "plain": "듣기와 읽기는 다른 경험이에요.",
+          "text": "먼저 들은 소리를 적고 카드를 본 뒤에 새로 떠오른 내용을 다른 색으로 표시해요."
+        },
+        {
+          "heading": "보고와 녹음 비교",
+          "plain": "원본은 별도로 보관해요.",
+          "text": "모둠의 확신 정도와 원본 녹음의 일치 여부를 서로 다른 열에 기록해요."
+        }
+      ],
+      "explainPrompt": "듣기와 읽기의 순서가 소리의 출처 판단에 어떻게 영향을 줄까요?",
+      "limitations": "모둠의 실제 실험 결과는 주어지지 않았어요.",
+      "shortTitle": "기억의 왜곡"
+    },
+    "prediction": "",
+    "predictionUnsure": true,
+    "scenarios": [
+      {
+        "i": 0,
+        "choice": 0,
+        "at": 946684860000
+      },
+      {
+        "i": 1,
+        "choice": 0,
+        "at": 946685340000
+      }
+    ],
+    "drafts": [
+      {
+        "text": "아마 이 종을 전에 들은 적 있나요? 라고 물으면 그 질문 자체가 단서가 되죠? 다른 사람이 나중에 종소리를 묘사하면 내가 들었던 소리와 읽었던 묘사를 뒤섞어서 소리의 출처를 혼동할 수 있어요.",
+        "at": 946685400000,
+        "feedback": {
+          "schema": 2,
+          "summary": "들었던 정보와 읽었던 정보의 경로를 구별해 보세요.",
+          "correct": [
+            {
+              "quote": "다른 사람이 나중에 종소리를 묘사하면 내가 들었던 소리와 읽었던 묘사를 뒤섞어서 소리의 출처를 혼동할 수 있어요",
+              "point": "정보를 접한 경로를 구분했어요."
+            }
+          ],
+          "precision": [
+            {
+              "quote": "아마 이 종을 전에 들은 적 있나요? 라고 물으면",
+              "issue": "자료를 구분해 보세요.",
+              "why": "두 기록을 각각 살펴볼 수 있어요.",
+              "question": "어떤 기록에서 단서를 얻었나요?"
+            },
+            {
+              "quote": "다른 사람이 나중에 종소리를 묘사하면 내가 들었던 소리와 읽었던 묘사를 뒤섞어서 소리의 출처를 혼동할 수 있어요",
+              "issue": "자료를 구분해 보세요.",
+              "why": "두 기록을 각각 살펴볼 수 있어요.",
+              "question": "카드를 언제 공개했나요?"
+            }
+          ],
+          "misconceptions": [],
+          "missing": [
+            {
+              "issue": "비교할 단서가 필요해요.",
+              "question": "원래 소리를 확인할 방법은 무엇인가요?"
+            },
+            {
+              "issue": "비교할 단서가 필요해요.",
+              "question": "다른 모둠은 무엇을 들었나요?"
+            }
+          ],
+          "explained": [],
+          "uncertainty": "",
+          "reviewer": {
+            "provider": "fixture",
+            "model": "fixture-model",
+            "at": 946685400000
+          }
+        }
+      }
+    ],
+    "feedback": {
+      "schema": 2,
+      "summary": "들었던 정보와 읽었던 정보의 경로를 구별해 보세요.",
+      "correct": [
+        {
+          "quote": "다른 사람이 나중에 종소리를 묘사하면 내가 들었던 소리와 읽었던 묘사를 뒤섞어서 소리의 출처를 혼동할 수 있어요",
+          "point": "정보를 접한 경로를 구분했어요."
+        }
+      ],
+      "precision": [
+        {
+          "quote": "아마 이 종을 전에 들은 적 있나요? 라고 물으면",
+          "issue": "자료를 구분해 보세요.",
+          "why": "두 기록을 각각 살펴볼 수 있어요.",
+          "question": "어떤 기록에서 단서를 얻었나요?"
+        },
+        {
+          "quote": "다른 사람이 나중에 종소리를 묘사하면 내가 들었던 소리와 읽었던 묘사를 뒤섞어서 소리의 출처를 혼동할 수 있어요",
+          "issue": "자료를 구분해 보세요.",
+          "why": "두 기록을 각각 살펴볼 수 있어요.",
+          "question": "카드를 언제 공개했나요?"
+        }
+      ],
+      "misconceptions": [],
+      "missing": [
+        {
+          "issue": "비교할 단서가 필요해요.",
+          "question": "원래 소리를 확인할 방법은 무엇인가요?"
+        },
+        {
+          "issue": "비교할 단서가 필요해요.",
+          "question": "다른 모둠은 무엇을 들었나요?"
+        }
+      ],
+      "explained": [],
+      "uncertainty": "",
+      "reviewer": {
+        "provider": "fixture",
+        "model": "fixture-model",
+        "at": 946685400000
+      }
+    },
+    "feedbackFor": 946685400000,
+    "dialogue": [
+      {
+        "id": "audio-0",
+        "role": "learner",
+        "text": "녹음은 몇 번 들려주나요?",
+        "intent": "ask",
+        "ref": {
+          "kind": "scenario",
+          "i": 0
+        },
+        "stage": 2,
+        "at": 946684920000,
+        "status": "answered"
+      },
+      {
+        "id": "audio-1",
+        "role": "tutor",
+        "replyTo": "audio-0",
+        "text": "두 모둠 모두 한 번 들어요.",
+        "followUp": "",
+        "assessment": null,
+        "uncertainty": "",
+        "withheld": 0,
+        "reviewer": {
+          "provider": "fixture",
+          "model": "fixture-model",
+          "at": 946684980000
+        },
+        "at": 946684980000
+      },
+      {
+        "id": "audio-2",
+        "role": "learner",
+        "text": "그럼 설명을 읽은 순서도 기록해야 하는 거죠?",
+        "intent": "ask",
+        "ref": {
+          "kind": "scenario",
+          "i": 0
+        },
+        "stage": 2,
+        "at": 946685040000,
+        "status": "answered"
+      },
+      {
+        "id": "audio-3",
+        "role": "tutor",
+        "replyTo": "audio-2",
+        "text": "네. 두 모둠에 카드를 보여 준 시점도 적어 보세요.",
+        "followUp": "",
+        "assessment": {
+          "verdict": "assumption",
+          "quote": "그럼 설명을 읽은 순서도 기록해야 하는 거죠?",
+          "note": "정보가 어디에서 왔는지 구분해요.",
+          "utterance": "check",
+          "adjustedFrom": "imprecise"
+        },
+        "uncertainty": "",
+        "withheld": 0,
+        "reviewer": {
+          "provider": "fixture",
+          "model": "fixture-model",
+          "at": 946685100000
+        },
+        "at": 946685100000
+      },
+      {
+        "id": "audio-4",
+        "role": "learner",
+        "text": "그럼 설명을 읽은 순서도 기록해야 하는 거죠?",
+        "intent": "check",
+        "ref": {
+          "kind": "scenario",
+          "i": 0
+        },
+        "stage": 2,
+        "at": 946685160000,
+        "status": "answered"
+      },
+      {
+        "id": "audio-5",
+        "role": "tutor",
+        "replyTo": "audio-4",
+        "text": "같은 시각에 제시하면 순서 차이를 줄일 수 있어요.",
+        "followUp": "",
+        "assessment": {
+          "verdict": "assumption",
+          "quote": "그럼 설명을 읽은 순서도 기록해야 하는 거죠?",
+          "note": "정보가 어디에서 왔는지 구분해요.",
+          "utterance": "check",
+          "adjustedFrom": "imprecise"
+        },
+        "uncertainty": "",
+        "withheld": 0,
+        "reviewer": {
+          "provider": "fixture",
+          "model": "fixture-model",
+          "at": 946685220000
+        },
+        "at": 946685220000
+      },
+      {
+        "id": "audio-6",
+        "role": "learner",
+        "text": "쉽게 설명해 줘",
+        "intent": "simpler",
+        "ref": {
+          "kind": "scenario",
+          "i": 0
+        },
+        "stage": 2,
+        "at": 946685220000,
+        "status": "answered",
+        "quick": true
+      },
+      {
+        "id": "audio-7",
+        "role": "tutor",
+        "replyTo": "audio-6",
+        "text": "들은 것과 읽은 것을 각각 표시해 보세요.",
+        "followUp": "",
+        "assessment": null,
+        "uncertainty": "",
+        "withheld": 0,
+        "reviewer": {
+          "provider": "fixture",
+          "model": "fixture-model",
+          "at": 946685280000
+        },
+        "at": 946685280000
+      },
+      {
+        "id": "audio-8",
+        "role": "learner",
+        "text": "원본 녹음과 나중에 읽은 설명을 따로 비교하겠어요.\n",
+        "intent": "reply",
+        "ref": {
+          "kind": "feedback",
+          "draftAt": 946685400000,
+          "type": "precision",
+          "index": 0
+        },
+        "stage": 4,
+        "at": 946685460000,
+        "status": "answered"
+      },
+      {
+        "id": "audio-9",
+        "role": "tutor",
+        "replyTo": "audio-8",
+        "text": "두 자료를 각각 확인한다는 설명이에요.",
+        "followUp": "",
+        "assessment": {
+          "verdict": "imprecise",
+          "quote": "원본 녹음과 나중에 읽은 설명을 따로 비교하겠어요.",
+          "note": "정보가 어디에서 왔는지 구분해요.",
+          "utterance": "hypothesis"
+        },
+        "uncertainty": "",
+        "withheld": 0,
+        "reviewer": {
+          "provider": "fixture",
+          "model": "fixture-model",
+          "at": 946685520000
+        },
+        "at": 946685520000
+      },
+      {
+        "id": "audio-10",
+        "role": "learner",
+        "text": "어떤 자료부터 비교하면 좋을까요?",
+        "intent": "reply",
+        "ref": {
+          "kind": "feedback",
+          "draftAt": 946685400000,
+          "type": "precision",
+          "index": 0
+        },
+        "stage": 4,
+        "at": 946685520000,
+        "status": "answered"
+      },
+      {
+        "id": "audio-11",
+        "role": "tutor",
+        "replyTo": "audio-10",
+        "text": "녹음 원본을 먼저 확인해 보세요.",
+        "followUp": "",
+        "assessment": null,
+        "uncertainty": "",
+        "withheld": 0,
+        "reviewer": {
+          "provider": "fixture",
+          "model": "fixture-model",
+          "at": 946685580000
+        },
+        "at": 946685580000
+      }
+    ],
+    "events": [],
+    "createdAt": 946684800000,
+    "updatedAt": 946685580000,
+    "complete": true,
+    "generatedBy": {
+      "provider": "fixture",
+      "model": "fixture-model"
+    }
+  }
+}

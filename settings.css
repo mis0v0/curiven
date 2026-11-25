@@ -1,0 +1,93 @@
+/* Sidebar settings entry and the settings dialog. Uses the page tokens (index.html :root). */
+.side-actions{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.settings-entry{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:7px 12px;text-align:left;min-height:40px;font-size:14px;color:var(--ink)}
+.settings-entry:hover{border-color:var(--line-field);background:var(--surface)}
+.settings-icon{flex:none;color:var(--accent)}
+button.status{cursor:pointer;color:var(--ink)}
+button.status:hover{border-color:var(--line-field)}
+.settings{width:min(720px,calc(100vw - 32px));max-height:calc(100vh - 48px);border:1px solid var(--line);border-radius:23px;padding:0;background:var(--paper);color:var(--ink);box-shadow:0 30px 80px -30px rgba(24,24,24,.4);overflow:hidden}
+.settings[open]{display:flex;flex-direction:column}
+.settings::backdrop{background:var(--scrim)}
+.settings-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 24px 8px}
+.settings-close{width:40px;height:40px;flex:none;border:1px solid var(--line);background:var(--paper);border-radius:50%;font-size:24px;line-height:1;display:grid;place-items:center;color:var(--muted)}
+.settings-tabs{display:flex;gap:6px;padding:6px 24px 12px;border-bottom:1px solid var(--line);overflow-x:auto}
+.settings-tab{border:0;background:transparent;border-radius:12px;padding:8px 14px;color:var(--muted);font-size:14px;white-space:nowrap;min-height:40px}
+.settings-tab[aria-current="page"]{background:var(--soft);color:var(--accent);font-weight:700}
+.settings-body{padding:8px 24px 16px;overflow-y:auto;overscroll-behavior:contain;flex:1 1 auto;min-height:0}
+.settings-section h3{margin:14px 0 6px}
+.settings-section .field{margin:18px 0}
+.settings-foot{padding:12px 24px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-start}
+.settings-file{display:inline-flex;align-items:center;cursor:pointer}
+.settings-file:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.settings :focus-visible,.settings-entry:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.prepare-topic{margin:14px 0 4px}
+.prepare-elapsed{margin-left:4px;font-variant-numeric:tabular-nums}
+.dev-tools{border-style:dashed}
+@media(max-width:1050px){.side-actions{flex-direction:row;flex-wrap:wrap;align-items:center}}
+@media(max-width:700px){.settings{width:100vw;max-width:100vw;height:100%;max-height:100%;border-radius:0;margin:0}.settings-head,.settings-tabs,.settings-body,.settings-foot{padding-left:16px;padding-right:16px}}
+@media(prefers-reduced-motion:reduce){.settings{transition:none}}
+.notion-steps{padding-left:20px;font-size:14px}.notion-steps li{margin:6px 0}
+.notion-auto{display:flex;align-items:center;gap:8px;margin-top:16px;font-size:14px}.notion-auto input{width:18px;height:18px}
+.notion-save{margin-top:16px}.notion-line{font-size:14px;margin-bottom:8px}
+/* Start choices and class material */
+.start-modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 4px}
+.start-mode{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1px solid var(--line);background:var(--paper);border-radius:15px;padding:13px 15px;min-height:56px}
+.start-mode[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);color:var(--accent)}
+.start-mode strong{font-size:15px}.start-mode:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.material-pick{display:inline-flex;align-items:center;cursor:pointer}.material-pick:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.material-summary p{margin-top:4px;font-size:14px}.material-snippet{font-size:13px;color:var(--text-2);white-space:pre-line;margin-bottom:8px}
+.material-refs{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px}.material-chip{font-size:12px;padding:3px 10px}
+.material-quote{font-size:13px;color:var(--text-2);margin-top:6px;display:flex;flex-direction:column;gap:2px}
+.material-ai{color:var(--text-muted)}.material-tag{color:var(--muted)}
+.material-viewer summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:14px}
+.material-nav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}.material-nav .select{flex:1 1 220px;min-width:0;padding:9px 12px}
+.material-page{white-space:pre-wrap;font-size:14px;line-height:1.8;max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface);overflow-wrap:anywhere}
+.material-page mark{background:var(--surface-sunken);color:var(--text);border-radius:3px;box-shadow:inset 0 -2px 0 var(--text)}
+.tutor-src{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+@media(max-width:700px){.start-modes{grid-template-columns:1fr}}
+.note-actions{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.note-actions .actions{margin-top:8px}
+.note-actions a.btn{display:inline-flex;align-items:center;text-decoration:none}
+/* Concept note (Phase 2E): one quiet document preview inside the completion screen's note group. Monochrome. */
+.cn{margin-bottom:var(--s2)}
+.cn-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}.cn-head h3{margin:0}
+.cn-meta{font-size:var(--fs-hint);color:var(--text-muted)}
+.cn-stale{margin-top:8px;font-size:var(--fs-small);color:var(--text);border-left:3px solid var(--text);padding:6px 12px;background:var(--surface-sunken);border-radius:8px}
+.cn-preview{margin-top:12px;border:1px solid var(--line);border-radius:var(--radius-panel);background:var(--surface)}
+.cn-preview>summary{cursor:pointer;padding:14px 18px;font-weight:650;font-size:var(--fs-small);color:var(--text)}
+.cn-preview>summary:focus-visible,.cn-qa summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:8px}
+.cn-article{padding:4px 22px 22px;max-width:72ch;color:var(--text-2);font-size:15px;line-height:1.75}
+.cn-title{font-size:22px;line-height:var(--lh-tight);color:var(--text);margin:6px 0 10px;letter-spacing:-.01em}
+.cn-lead{color:var(--text);font-size:16px}
+.cn-section{margin-top:26px}.cn-section h4{font-size:17px;color:var(--text);margin:0 0 8px}
+.cn-section h5{font-size:15px;color:var(--text);margin:16px 0 4px}
+.cn-article p,.cn-article ul,.cn-article ol{margin:8px 0}.cn-article ul,.cn-article ol{padding-left:22px}.cn-article li{margin:4px 0}
+.cn-article code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--surface-sunken);padding:1px 5px;border-radius:5px}
+.cn-code,.cn-math{background:var(--surface-sunken);border-radius:12px;padding:12px 14px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.6;color:var(--text);white-space:pre}
+.cn-code code{background:none;padding:0}
+.cn-table{overflow-x:auto;margin:10px 0}.cn-table table{border-collapse:collapse;font-size:14px;min-width:100%}
+.cn-table th,.cn-table td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}.cn-table th{background:var(--surface-sunken);color:var(--text)}
+.cn-note{margin:10px 0;padding:10px 14px;background:var(--surface-sunken);border-radius:12px;color:var(--text)}
+.cn-source{font-size:var(--fs-hint);color:var(--text-muted)}
+.cn-qa{border-top:1px solid var(--line);padding:6px 0}.cn-qa summary{cursor:pointer;color:var(--text);padding:4px 0}
+.cn-raw{white-space:pre-wrap}
+.cn-reliability{font-size:var(--fs-small)}
+.cn-history{margin-top:24px;font-size:var(--fs-hint);color:var(--text-muted)}
+.cn-edit{margin-top:12px;display:grid;gap:12px}.cn-field{display:grid;gap:4px;font-size:var(--fs-small);color:var(--text-2)}
+.cn-body{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.6}
+@media (max-width:560px){.cn-article{padding:2px 14px 16px}.cn-preview>summary{padding:12px 14px}}
+/* Learning-journey archive preview (tutor-ui.js openJourney): the exact Markdown that will be downloaded */
+.journey-note{font-size:14px;margin:4px 0 6px}
+.journey-preview{white-space:pre-wrap;overflow-wrap:anywhere;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--surface-sunken);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0 0;max-height:min(56vh,640px);overflow:auto;color:var(--ink)}
+.journey .settings-foot{gap:10px}
+/* Notion save / update dialog (notion-ui.js openNoteDialog) */
+.note-intro{font-size:14px;margin:4px 0 12px}
+.note-dialog .cn{margin-top:4px}
+.note-same{font-size:14px;margin-top:12px;color:var(--text-2)}
+.note-remote{margin-top:10px;font-size:14px}
+.note-remote-result{margin-top:10px}
+.note-remote-result .btn{margin-top:10px}
+.note-remote-now pre{max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;margin:6px 0 0;padding:10px;border:1px solid var(--line,#ddd);border-radius:8px}
+.note-file{margin-top:14px;font-size:14px}
+.note-dialog .settings-foot{gap:10px}
+/* Completion screen: navigation ("다음 탐험 시작하기", "내 설명 다시 보기") set apart from the note's save actions */
+.note-actions+.actions{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}

@@ -1,0 +1,120 @@
+{
+  "_note": "Scripted synthetic response. No model or learner record was used to generate it.",
+  "model": "fixture-model",
+  "raw": {
+    "title": "책 제목을 안전하게 찾는 방법",
+    "lead": "작은따옴표를 포함한 제목도 하나의 값이에요.",
+    "sections": [
+      {
+        "heading": "검색어와 질의 구조",
+        "body": "**SQL 삽입(SQLi)**은 외부 입력이 값의 경계를 넘어 명령의 일부로 해석되는 문제예요.",
+        "origin": "ai",
+        "asks": [
+          1
+        ],
+        "sources": []
+      },
+      {
+        "heading": "직접 보이지 않는 결과",
+        "body": "블라인드 SQL 삽입은 조회한 값이 화면에 바로 나오지 않는 경우예요.",
+        "origin": "ai",
+        "asks": [
+          2
+        ],
+        "sources": []
+      },
+      {
+        "heading": "응답을 비교할 때",
+        "body": "조건과 관찰 결과 사이에 연결이 있어야 단서가 돼요. 조건에 따라 처리량이 달라지면 시간에도 차이가 날 수 있어요.\n\n| 관찰 대상 | 신호 |\n| --- | --- |\n| 내용 | 표시 차이 |\n| 시간 | 응답 간격 |",
+        "origin": "ai",
+        "asks": [
+          3
+        ],
+        "sources": []
+      },
+      {
+        "heading": "측정의 한계",
+        "body": "한 번의 지연은 혼잡 때문일 수도 있어요. 서버 코드를 읽지 않아도 관찰할 수 있지만 시스템에 관한 가정은 따로 점검해야 해요.",
+        "origin": "ai",
+        "asks": [
+          4
+        ],
+        "sources": []
+      },
+      {
+        "heading": "일부 정보와 전체 정보",
+        "body": "한 항목에 관한 단서로 목록 전체를 안다고 결론지을 수 없어요.",
+        "origin": "ai",
+        "asks": [
+          5
+        ],
+        "sources": []
+      },
+      {
+        "heading": "검색어를 별도로 전달하기",
+        "body": "문자열 조립은 입력과 명령의 경계를 흐립니다. 자리표시자와 별도 값을 사용해요.\n\n```python\n# 비교용 결함 예시: 제목이 명령 문자열에 들어갑니다.\nquery = \"SELECT title FROM books WHERE title = \" + title\n```\n\n```python\ncursor.execute(\"SELECT title FROM books WHERE title = ?\", (title,))\n```",
+        "origin": "ai",
+        "asks": [
+          6
+        ],
+        "sources": []
+      }
+    ],
+    "resolved": [
+      {
+        "n": 1,
+        "answer": "기호도 값으로 전달하면 돼요.",
+        "section": "검색어와 질의 구조"
+      },
+      {
+        "n": 2,
+        "answer": "작은따옴표도 글자예요.",
+        "section": "직접 보이지 않는 결과"
+      },
+      {
+        "n": 3,
+        "answer": "빈 제목과 입력하지 않은 경우를 구별해요.",
+        "section": "응답을 비교할 때"
+      },
+      {
+        "n": 4,
+        "answer": "같은 이름을 가진 여러 행이 나올 수 있어요.",
+        "section": "측정의 한계"
+      },
+      {
+        "n": 5,
+        "answer": "표지 색을 별도 필드로 저장해야 해요.",
+        "section": "일부 정보와 전체 정보"
+      },
+      {
+        "n": 6,
+        "answer": "앱이 허용한 기준을 선택해요.",
+        "section": "검색어를 별도로 전달하기"
+      },
+      {
+        "n": 7,
+        "answer": "제목 칸에 달빛 지도를 넣어 보세요.",
+        "section": "검색어를 별도로 전달하기"
+      },
+      {
+        "n": 8,
+        "answer": "자리표시자에 별도 인자로 전달해요.",
+        "section": "검색어를 별도로 전달하기"
+      }
+    ],
+    "open": [],
+    "selfCheck": [
+      {
+        "q": "제목에 기호가 있으면?",
+        "a": "하나의 값으로 전달해요."
+      }
+    ],
+    "corrections": [
+      {
+        "text": "제목만으로 책을 구별한다는 설명을 고쳐요. 제목이 같은 여러 책이 있을 수 있어요."
+      }
+    ],
+    "conflicts": [],
+    "limitations": "실제 서비스에서 측정한 기록은 없어요."
+  }
+}

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>curiven. — 궁금함이 배움이 되는 곳</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px/1.7 -apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;color:var(--ink);background:var(--bg);word-break:keep-all}button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}a{color:var(--accent)}h1,h2,h3,p{margin:0}h1{font-size:clamp(32px,4vw,52px);line-height:1.27;letter-spacing:-.055em}h2{font-size:clamp(23px,2.7vw,32px);letter-spacing:-.045em;line-height:1.4}h3{font-size:18px;letter-spacing:-.03em}.muted,.hint{color:var(--muted)}.hint{font-size:13px}.page{max-width:1440px;margin:auto;padding:0 28px 48px}.header{display:flex;align-items:center;justify-content:space-between;padding:25px 0;gap:12px;border-bottom:1px solid var(--line)}.logo{border:0;background:none;font-weight:750;letter-spacing:-.08em;font-size:29px;color:var(--ink)}.mark{color:var(--grey)}.status{border:1px solid var(--line);background:var(--paper);border-radius:40px;padding:6px 12px;font-size:12px;white-space:nowrap}.green-dot{display:inline-block;background:var(--text);width:8px;height:8px;border-radius:50%;margin-right:5px}.layout{display:grid;grid-template-columns:215px minmax(0,1fr) 294px;gap:24px;padding-top:28px;align-items:start}.side{position:sticky;top:24px}.card{background:var(--paper);border:1px solid var(--line);border-radius:23px;padding:25px;box-shadow:var(--shadow)}.card+.card{margin-top:16px}.side .card{padding:18px}.navitem{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;width:100%;border:0;background:transparent;text-align:left;color:var(--muted);font-size:14px}.navitem.active{background:var(--soft);color:var(--accent);font-weight:700}.navnum{width:24px;height:24px;border:1px solid var(--line);display:grid;place-items:center;border-radius:50%;font-size:12px}.navitem.active .navnum{background:var(--accent);color:white;border-color:var(--accent)}.navitem:disabled{opacity:.4}.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:12px}.sub{margin-top:15px;color:var(--muted);font-size:15px}.pills{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.pill{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:7px 13px;color:var(--accent);font-size:13px}.divider{border:0;border-top:1px solid var(--line);margin:22px 0}.field{margin:22px 0}.field label{display:block;font-size:14px;font-weight:700;margin-bottom:7px}.input,.textarea,.select{width:100%;padding:14px 15px;border:1px solid var(--line-field);border-radius:13px;background:var(--surface);outline:none}.input:focus,.textarea:focus,.select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--focus-halo)}.textarea{min-height:112px;resize:vertical}.actions{display:flex;gap:calc(var(--space)*1.5);flex-wrap:wrap;margin-top:22px}@media(max-width:560px){.actions{flex-direction:column;align-items:stretch}.actions>.btn{width:100%}}.btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:13px;padding:11px 18px;font-weight:700;min-height:46px}.btn.secondary{background:transparent;color:var(--accent)}.btn.minor{background:var(--soft);border-color:transparent;color:var(--accent)}.info{background:var(--surface-sunken);border-radius:16px;padding:17px;margin-top:19px}.note{background:var(--surface-sunken);border:1px solid var(--line);border-radius:15px;padding:18px;margin-top:18px}.story{font-size:17px;line-height:2.05;white-space:pre-line;margin-top:27px}.q{font-size:18px;font-weight:750;line-height:1.6}.opt{width:100%;border:1px solid var(--line);background:white;border-radius:13px;padding:13px 15px;text-align:left;margin-top:9px}.opt.selected{border-color:var(--accent);background:var(--soft)}.opt.right{border-color:var(--text);background:var(--surface)}.opt.wrong{border-color:var(--line-field);background:var(--surface)}.segment{display:inline-flex;align-items:center;border-radius:30px;padding:5px 11px;background:var(--soft);color:var(--accent);font-size:12px;margin-top:9px}.concept{border:1px solid var(--line);border-radius:16px;padding:17px 18px;margin:12px 0;background:var(--surface)}.concept p{font-size:14px;color:var(--text-2);margin-top:8px}.map{width:100%;height:265px;display:block}.mapbox{border-radius:16px;background:radial-gradient(ellipse at 45% 47%,var(--surface-sunken),var(--surface-sunken) 70%);border:1px solid var(--line);overflow:hidden}.map-caption{margin-top:12px;font-size:12px;color:var(--muted)}.journal{padding-left:17px;font-size:13px;color:var(--muted);max-height:230px;overflow:auto;margin-bottom:0}.journal li{margin-bottom:9px}.stat{display:inline-block;margin-right:16px;margin-top:18px}.stat strong{display:block;font-size:26px;color:var(--accent);line-height:1.2}.stat span{font-size:12px;color:var(--muted)}.flower{font-size:40px;color:var(--accent);margin-bottom:12px}.old{border-left:3px solid var(--line);padding:6px 13px;margin-top:12px;color:var(--text-2)}.new{border-left:3px solid var(--accent);padding:6px 13px;margin-top:12px}.msg{margin-top:15px;background:var(--surface);border:1px solid var(--line);padding:13px 15px;border-radius:12px;color:var(--text);font-size:13px}.small-action{border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:white;font-size:12px}.tiny{font-size:12px;color:var(--muted)}.spaced{margin-top:18px}.glow{animation:grow 1s ease-out 1}@keyframes grow{0%{opacity:.2;filter:blur(3px);transform:scale(.94)}100%{opacity:1;filter:blur(0);transform:scale(1)}}@media(prefers-reduced-motion:reduce){.glow{animation:none}}@media(max-width:1050px){.layout{grid-template-columns:1fr 270px}.side{grid-column:1/-1;position:static}.sidenav{display:flex;gap:6px;overflow:auto}.navitem{width:auto;white-space:nowrap}}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}.chips:empty{display:none}.chip{display:inline-flex;align-items:center;gap:4px;background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:5px 6px 5px 13px;color:var(--accent);font-size:13px}.chip-x{border:0;background:none;color:inherit;width:24px;height:24px;border-radius:50%;line-height:1;font-size:15px;padding:0}.chip-x:hover{background:var(--line)}.add-row{display:flex;gap:8px}.add-row .input{flex:1;min-width:0}.add-row .btn{flex:none}.notice{margin:0 0 16px}.profile-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}.linkish{border:0;background:none;color:var(--accent);padding:4px 2px;font-size:13px;text-decoration:underline;text-underline-offset:3px}.saved{margin-top:15px;background:var(--soft);border-radius:12px;padding:12px 15px;color:var(--accent);font-size:13px}
+@media(max-width:700px){.page{padding:0 14px 28px}.layout{display:block;padding-top:15px}.header{padding:14px 0}.logo{font-size:25px}.right{margin-top:16px}.side{margin-bottom:15px}.card{padding:19px}.navitem{padding:8px}.navnum{display:none}.status{font-size:10px}.story{font-size:16px}}
+</style><link rel="stylesheet" href="/tokens.css"><link rel="stylesheet" href="/constellation.css"><link rel="stylesheet" href="/boundary.css"><link rel="stylesheet" href="/tutor.css"><link rel="stylesheet" href="/settings.css"></head><body><div class="page"><header class="header"><button class="logo" id="homeLogo" aria-label="curiven. 처음 화면">curiven<span class="mark">.</span></button><nav class="topnav" aria-label="빠른 이동"><button type="button" class="topnav-link" id="universeBtn" hidden>나의 우주</button><button type="button" class="status" id="status" title="AI 연결 설정 열기">● AI 확인 중</button><span id="topSettingsSlot"></span></nav></header><div class="layout"><aside class="side"><div class="card side-card"><nav class="sidenav" id="nav" aria-label="학습 단계"></nav><hr class="divider"><div class="side-actions"><button class="small-action" id="newLesson">＋ 새로운 탐험</button><button type="button" class="settings-entry" id="settingsBtn" aria-haspopup="dialog" aria-controls="settings"><svg class="settings-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span>설정</span></button></div></div></aside><main id="main"></main><aside class="right"><div class="card"><h3 style="margin-bottom:var(--s2)">나의 우주</h3><div class="mapbox"><svg class="map" id="map" viewBox="0 0 290 265" role="img" aria-label="현재 학습의 개념 연결 그래프"></svg></div><div class="map-caption" id="map-caption">아직 시작한 탐험이 없어요.</div><button id="atlasMiniBtn" class="small-action" style="margin-top:12px;width:100%" disabled>크게 보기</button></div><div class="card"><h3>나의 탐험 기록</h3><ul class="journal" id="journal"></ul><button class="small-action" id="exportJourney" hidden>학습 과정 기록 다운로드</button></div></aside></div></div>
+<div class="atlas-overlay" id="atlasOverlay" hidden aria-hidden="true">
+  <section class="atlas-window" role="dialog" aria-modal="true" aria-labelledby="atlasTitle">
+    <header class="atlas-header">
+      <h2 id="atlasTitle">나의 우주</h2>
+      <button type="button" class="atlas-close" id="atlasClose" aria-label="별자리 닫기">×</button>
+    </header>
+    <div class="atlas-toolbar"><div class="atlas-switch" role="group" aria-label="지도 범위">
+      <button type="button" data-atlas-mode="today" aria-pressed="true">이번 탐험</button><button type="button" data-atlas-mode="all" aria-pressed="false">모든 탐험</button>
+    </div><div class="atlas-tools"><label class="atlas-jump" id="atlasJump" hidden><select aria-label="탐험으로 이동"></select></label><button type="button" class="atlas-tool" id="atlasFit" hidden aria-pressed="false">한눈에 보기</button></div></div>
+    <div class="atlas-content"><div class="atlas-sky"><svg id="atlasSvg" viewBox="0 0 960 530" role="group" aria-label="학습 기록의 별자리 지도. 별은 기록한 학습 활동이며 숙달을 판정하지 않아요."></svg></div>
+      <aside class="atlas-inspector" id="atlasInfo" aria-live="polite" tabindex="0" aria-label="선택한 별의 설명"><h3>별을 선택해 보세요</h3></aside></div>
+    <footer class="atlas-footer"><span id="atlasCount"></span><details class="atlas-guide" id="atlasGuide"><summary>표시 안내</summary><div class="atlas-legends" aria-label="범례"><span class="atlas-key"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7" fill="none" stroke="#f7f7f5" stroke-opacity=".55"/><circle cx="9" cy="9" r="4" fill="#fff"/></svg>탐험</span><span class="atlas-key"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><circle cx="7" cy="7" r="3" fill="#b4b4b0"/></svg>만난 개념</span><span class="atlas-key"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="#fff" stroke-opacity=".85"/><circle cx="8" cy="8" r="3.4" fill="#fff"/></svg>AI가 내 설명과 연결한 개념</span><span class="atlas-key" id="atlasLegacyKey" hidden><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="#fff" stroke-opacity=".85" stroke-dasharray="1.5 2.5"/><circle cx="8" cy="8" r="3.4" fill="#fff"/></svg>이전 피드백에서 언급</span><span class="atlas-key"><svg width="20" height="8" viewBox="0 0 20 8" aria-hidden="true"><line x1="1" y1="4" x2="19" y2="4" stroke="#fff" stroke-opacity=".6"/></svg>기록된 연결</span><span class="atlas-key"><svg width="20" height="8" viewBox="0 0 20 8" aria-hidden="true"><line x1="1" y1="4" x2="19" y2="4" stroke="#fff" stroke-opacity=".35" stroke-dasharray="2 4"/></svg>같은 탐험</span><span class="atlas-key" id="atlasBoundaryKey" hidden><svg width="20" height="8" viewBox="0 0 20 8" aria-hidden="true"><line x1="1" y1="4" x2="19" y2="4" stroke="#c4c4c0" stroke-width="2" stroke-dasharray="6 4"/></svg>경계 비교 (선 모양 = 증거 단계)</span></div><p class="atlas-note">별은 기록한 학습 활동이에요. 숙달을 판정하지 않아요.</p></details></footer>
+  </section>
+</div>
+<dialog class="settings" id="settings" aria-labelledby="settingsTitle">
+  <div class="settings-head"><h2 id="settingsTitle">설정</h2><button type="button" class="settings-close" id="settingsClose" aria-label="설정 닫고 학습으로 돌아가기">×</button></div>
+  <nav class="settings-tabs" id="settingsTabs" aria-label="설정 항목"></nav>
+  <div class="settings-body" id="settingsBody"></div>
+  <div class="settings-foot"><button type="button" class="btn secondary" id="settingsBack">← 학습으로 돌아가기</button></div>
+</dialog>
+<script src="/profile.js"></script>
+<script src="/copy.js"></script>
+<script src="/records.js"></script>
+<script src="/learning.js"></script>
+<script src="/boundary.js"></script>
+<script src="/material.js"></script>
+<script src="/tutor.js"></script>
+<script src="/notes.js"></script>
+<script src="/concept-note.js"></script>
+<script src="/journey.js"></script>
+<script src="/boundary-ui.js"></script>
+<script src="/tutor-ui.js"></script>
+<script src="/material-ui.js"></script>
+<script src="/home-ui.js"></script>
+<script src="/atlas-layout.js"></script>
+<script src="/constellation.js"></script>
+<script src="/settings-ui.js"></script>
+<script src="/notion-ui.js"></script>
+<script src="/concept-ui.js"></script>
+<script>
+'use strict';
+const KEY='curiven-v01-personal';
+const C=window.CuriCopy,steps=C.STAGES.map(x=>[x.label]);
+const $=s=>document.querySelector(s);
+const E=(tag,cls,txt)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(txt!=null)el.textContent=String(txt);return el};
+const P=window.CuriProfile,R=window.CuriRecords,L=window.CuriLearning,LOCK='curiven-writer';
+let data={lessons:[],active:null},provider={online:false,model:''},busy=false;
+// Personal profile lives apart from `data` (learning records) under its own storage key.
+let profile=null,view=null,storageOk=true;const loadNotices=[];
+/* Cross-tab safety (D1): exactly one tab may write, enforced with a Web Lock; others are read-only
+   until the learner explicitly continues there (which re-reads storage first). Every write is also
+   revision-checked (records.js), so a write from any other source is detected, never overwritten.
+   access: 'pending' | 'writer' | 'reader' | 'conflict' | 'solo' (no Web Locks: revision check only) */
+let access='pending',hasLock=false,baseRaw=null,waitingTurn=false; // baseRaw: exact stored records string this tab last read/wrote
+const inflight=new Map(),genError=new Map(); // 'gen:<id>'|'fb:<id>' -> AbortController ; lessonId -> message
+function store(){try{return window.localStorage}catch{return null}}
+function canWrite(){return access==='writer'||access==='solo'}
+function persist(){if(!canWrite())return false;const r=R.writeRecords(store(),data,baseRaw);
+ if(r.ok){baseRaw=r.raw;data.rev=r.rev;storageOk=true;return true}
+ if(r.reason==='conflict'){enterConflict();return false}
+ if(storageOk&&store())toast('브라우저 저장에 실패했어요. 설정 → 데이터에서 백업을 저장해 주세요.');storageOk=false;return false}
+function abortAll(){for(const c of inflight.values())c.abort();inflight.clear();busy=false}
+function enterConflict(){if(access==='conflict')return;abortAll();access='conflict';closeSettings(true);render()}
+function reloadFromStorage(){const s=store(),r=R.readRecords(s);if(r.status==='ok'){data=r.data;baseRaw=r.raw}else if(r.status==='empty'){data={lessons:[],active:null};baseRaw=null}const p=P.readProfile(s);if(p.status==='ok')profile=p.profile}
+function latestProfile(){const r=P.readProfile(store());if(r.status==='ok')profile=r.profile;return profile}
+function grantWriter(){hasLock=true;reloadFromStorage();access='writer'}
+// Text typed in this tab but not yet saved when another tab takes over is shown on the read-only card, never silently dropped.
+let orphanInputs=[];for(const root of ['#main','#settingsBody'])$(root).addEventListener('input',e=>{if(e.target.matches('textarea,input'))e.target.dataset.dirty='1'});
+// Settings are closed when this tab stops being the writer, so the read-only / conflict card is never hidden behind the dialog.
+function lostLock(){hasLock=false;abortAll();if(access!=='reader'){orphanInputs=[...document.querySelectorAll('#main [data-dirty], #settingsBody [data-dirty]')].map(el=>el.value.trim()).filter(Boolean);pendingDraft=null;access='reader';closeSettings(true);render()}waitTurn()}
+function waitTurn(){if(waitingTurn)return;waitingTurn=true;navigator.locks.request(LOCK,()=>{waitingTurn=false;grantWriter();render();return new Promise(()=>{})}).catch(()=>{waitingTurn=false;lostLock()})}
+function claim(steal=false){if(!navigator.locks){access='solo';return Promise.resolve()}
+ return new Promise(ready=>{navigator.locks.request(LOCK,steal?{steal:true}:{ifAvailable:true},lock=>{if(!lock){access='reader';ready();waitTurn();return}grantWriter();ready();return new Promise(()=>{})}).catch(()=>{ready();lostLock()})})}
+function saveProfile(next,{keepTime=false}={}){if(!canWrite())return 'readonly';const s=store(),stored=P.readProfile(s);
+ // Never overwrite a profile saved elsewhere since this tab last read it.
+ if(stored.status==='ok'&&!(profile&&stored.profile.updatedAt===profile.updatedAt&&P.sameProfile(stored.profile,profile))){profile=stored.profile;return 'conflict'}
+ const now=Date.now();profile=P.normalizeProfile({...next,createdAt:keepTime?next.createdAt:(profile?.createdAt||now),updatedAt:keepTime?next.updatedAt:now});const ok=P.writeProfile(s,profile);storageOk=ok;return ok?'ok':'failed'}
+function load(){const s=store();storageOk=P.storageAvailable(s);if(!storageOk)return;
+ const rec=R.readRecords(s);
+ if(rec.status==='ok'){data=rec.data;baseRaw=rec.raw}
+ else if(rec.status==='corrupt'){const k=P.quarantine(s,KEY,rec.raw);if(k){try{s.removeItem(KEY)}catch{}}loadNotices.push(k?`저장된 학습 기록을 읽을 수 없어 원본을 브라우저 저장소의 "${k}" 항목에 보관했어요.`:'저장된 학습 기록을 읽을 수 없어요. 원본을 지키기 위해 이 탭은 기록을 저장하지 않아요. 브라우저 개발자 도구에서 원본을 백업해 주세요.')}
+ const r=P.readProfile(s);if(r.status==='ok')profile=r.profile;else if(r.status==='corrupt'){const k=P.quarantine(s,P.PROFILE_KEY,r.raw);loadNotices.push(k?`저장된 프로필을 읽을 수 없어 원본을 "${k}" 항목에 보관했어요. 프로필을 다시 설정해 주세요.`:'저장된 프로필을 읽을 수 없어요. 다시 설정하면 기존 값이 대체돼요.')}}
+function notices(m){const list=[...loadNotices];if(!storageOk)list.unshift('브라우저 저장소를 사용할 수 없어 프로필과 학습 기록이 이 창에만 유지돼요. 창을 닫기 전에 설정 → 데이터에서 백업을 저장해 주세요.');for(const t of list){const n=E('div','msg notice',t);n.setAttribute('role','status');m.append(n)}}
+function current(){return data.lessons.find(l=>l.id===data.active)||null}
+/** Imported records may lack a usable `events` list. Reading never rewrites the record or invents history; the first real
+    learner action starts a list, keeping any unreadable original value aside (`eventsUnreadable`) instead of discarding it. */
+function eventsOf(l){return Array.isArray(l.events)?l.events.filter(x=>x&&typeof x==='object'&&typeof x.what==='string'):[]}
+function eventLog(l){if(!Array.isArray(l.events)){if(l.events!==undefined&&!('eventsUnreadable' in l))l.eventsUnreadable=l.events;l.events=[]}return l.events}
+function track(l,what){eventLog(l).push({at:new Date().toISOString(),what});l.updatedAt=Date.now();persist()}
+function toast(s){const m=$('#message');if(m)m.textContent=s;else alert(s)}
+function button(label,action,cls='btn'){const b=E('button',cls,label);b.addEventListener('click',action);return b}
+function area(id,placeholder,val='',rows=5){const t=E('textarea','textarea');t.id=id;t.rows=rows;t.placeholder=placeholder;t.value=val;return t}
+/* Unsent self-explanation drafts (D3): debounced into lesson.draftInProgress — never into lesson.drafts,
+   which only holds explanations the learner explicitly submitted. Flushed before any re-render and when the page is hidden. */
+let pendingDraft=null,draftTimer=0;
+function queueDraft(id,text){pendingDraft={id,text};clearTimeout(draftTimer);draftTimer=setTimeout(flushDraft,500)}
+function flushDraft(){clearTimeout(draftTimer);const p=pendingDraft;pendingDraft=null;if(!p||!canWrite())return;const l=data.lessons.find(x=>x.id===p.id);if(!l)return;
+ const unsent=p.text.trim()&&p.text!==(l.drafts.at(-1)?.text||'');if(unsent)l.draftInProgress={text:p.text,at:Date.now()};else if(l.draftInProgress)delete l.draftInProgress;else return;persist()}
+addEventListener('pagehide',flushDraft);document.addEventListener('visibilitychange',()=>{if(document.hidden)flushDraft()});
+function readerCard(m){const c=panel(m,'다른 탭에서 CURIVEN을 사용하고 있어요');c.id='readerCard';c.append(E('p','sub','기록이 서로 덮어써 사라지지 않도록, 학습은 한 번에 한 탭에서만 이어갈 수 있어요. 이 탭은 저장된 최신 기록을 보여 주기만 해요.'),E('div','info',`저장된 탐험 기록 ${data.lessons.length}개`));if(profile){const pr=E('p','hint',`프로필: ${P.summary(profile)}`);pr.id='readerProfile';c.append(pr)}
+ if(orphanInputs.length){const o=E('div','msg');o.id='orphanInputs';o.append(E('strong','','이 탭에서 저장되지 않은 입력이에요. 필요하면 복사해 두세요.'));for(const v of orphanInputs)o.append(E('div','old',v));c.append(o)}
+ const row=E('div','actions');row.append(button('이 탭에서 계속하기',()=>claim(true).then(render)));c.append(row,E('p','hint spaced','이 탭에서 계속하면 다른 탭은 읽기 전용으로 바뀌어요. 다른 탭을 닫으면 이 탭이 자동으로 이어받아요.'))}
+function conflictCard(m){const c=panel(m,'다른 곳에서 기록이 바뀌었어요');c.id='conflictCard';c.append(E('p','sub','이 탭이 마지막으로 읽은 뒤 저장된 기록이 바뀌어서, 덮어쓰지 않도록 이 탭의 마지막 변경은 저장하지 않았어요.'),E('div','msg','최신 기록을 불러오기 전에 설정 → 데이터에서 백업을 저장하면 이 탭에 남아 있는 내용을 파일로 보관할 수 있어요.'));
+ const row=E('div','actions');row.append(button('최신 기록 불러오기',()=>{reloadFromStorage();access=!navigator.locks?'solo':hasLock?'writer':'reader';if(access==='reader')waitTurn();render()}));c.append(row)}
+/* Text the learner typed but has not saved survives any re-render of the same screen (status polling, settings,
+   a lesson arriving): fields are matched by id, and only when the lesson and stage are unchanged. */
+function unsentInputs(){return {active:data.active,stage:current()?.stage,fields:[...document.querySelectorAll('#main [data-dirty][id]')].filter(el=>'value' in el).map(el=>[el.id,el.value])}}
+function restoreInputs(k){if(!k||k.active!==data.active||k.stage!==current()?.stage)return;for(const [id,v] of k.fields){const el=document.getElementById(id);if(el&&el.closest('#main')&&!el.dataset.dirty&&el.value!==v){el.value=v;el.dataset.dirty='1';el.dispatchEvent(new Event('input',{bubbles:true}))}}}
+function render(){flushDraft();const keep=unsentInputs(),l=current(),stage=l?l.stage:0;$('#nav').replaceChildren(...steps.map(([name,desc],i)=>{const b=button(`${i+1}. ${name}`,()=>{l.stage=i;persist();render()},'navitem'+(l&&stage===i?' active':''));b.disabled=!l||i>l.maxStage;return b}));const m=$('#main');m.replaceChildren();notices(m);layoutFor(l,stage);if(access==='reader'||access==='pending')readerCard(m);else if(access==='conflict')conflictCard(m);else if(!profile)onboarding(m);else if(!l)homeHero(m);else if(stage===0)(l.lesson?home(m,l):preparePanel(m,l));else if(stage===1)story(m,l);else if(stage===2)practice(m,l);else if(stage===3)technical(m,l);else if(stage===4)explain(m,l);else done(m,l);if(l?.material&&l.lesson&&(stage===1||stage===2)&&access!=='reader'&&access!=='conflict'){const card=m.querySelector('section.card');if(card)materialViewer(card,l)}if(l&&l.lesson&&stage>=1&&!view&&profile&&canWrite())mountHelp(m,l);restoreInputs(keep);graph(l);journal(l);const viewer=document.getElementById("atlasMiniBtn");if(viewer){viewer.disabled=!(l&&l.lesson)&&!data.lessons.some(x=>x.complete&&x.lesson)}}
+function panel(m,title,eyebrow=''){const c=E('section','card');if(eyebrow)c.append(E('div','eyebrow',eyebrow));c.append(E('h2','',title));m.append(c);return c}
+/** A learning stage: the stable stage label, the exploration it belongs to, and the stage heading (shared copy rules, copy.js). */
+function stagePanel(m,l,stage,{heading,sub,context=true}={}){const sc=C.stageCopy(stage,l.lesson),c=E('section','card stage');c.dataset.stage=String(stage);
+ const top=E('div','stage-top');top.append(E('span','eyebrow stage-label',sc.label));if(context){const t=E('span','stage-context',C.identity(l).title);t.id='stageContext';top.append(t)}
+ c.append(top,E('h2','',heading||sc.heading));const lead=sub??sc.sub;if(lead)c.append(E('p','sub',lead));m.append(c);return c}
+function setStage(l,st){l.stage=st;l.maxStage=Math.max(l.maxStage,st);persist();render();if(st===5&&l.complete)openAtlas(l)}
+function inputField(c,label,el,note){const f=E('div','field');f.append(E('label','',label),el);if(note)f.append(E('p','hint',note));c.append(f);return el}
+function home(m,l){const c=panel(m,'이 탐험을 이어서 할까요?','시작');
+ c.append(E('div','info',C.identity(l).title));const row=E('div','actions resume-actions');row.append(button(l.lesson?'이어서 학습하기 →':'학습 자료 준비하기 →',()=>{if(l.lesson)setStage(l,l.stage||1);else prepare(l)}),button('다른 주제로 시작',()=>{data.active=null;persist();render()},'btn secondary'));c.append(row)}
+/* Home, onboarding and lesson preparation have nothing to navigate yet: one centred column, no side panels
+   (design spec p.3). The single settings entry (gear + 설정) moves to the top bar there and back to the sidebar in a lesson. */
+function layoutFor(l,stage){const focus=canWrite()&&(!profile||!l||(!l.lesson&&stage===0));document.body.classList.toggle('focus-mode',focus);
+ const btn=document.getElementById('settingsBtn'),slot=focus?document.getElementById('topSettingsSlot'):document.querySelector('.side-actions');if(btn&&slot&&btn.parentElement!==slot)slot.append(btn);
+ const u=document.getElementById('universeBtn');if(u)u.hidden=!(focus&&data.lessons.some(x=>x.complete&&x.lesson))}
+function interestEditor(c,initial){const list=initial.slice(),f=E('div','field');f.append(E('label','','관심사·취미'));const chips=E('div','chips');chips.id='interestChips';const row=E('div','add-row'),inp=E('input','input');inp.id='interestInput';inp.placeholder='예: 추리 소설, 등산, 홈베이킹';inp.setAttribute('aria-label','관심사 추가');
+ const draw=()=>chips.replaceChildren(...list.map((x,i)=>{const ch=E('span','chip',x);const del=button('×',()=>{list.splice(i,1);draw()},'chip-x');del.setAttribute('aria-label',`${x} 삭제`);ch.append(del);return ch}));
+ const add=()=>{const next=P.splitInterests([...list,...P.splitInterests(inp.value)]);if(next.length===list.length&&inp.value.trim()&&list.length>=P.LIMITS.interests)toast(`관심사는 ${P.LIMITS.interests}개까지 저장할 수 있어요.`);list.splice(0,list.length,...next);inp.value='';draw()};
+ inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();add()}});row.append(inp,button('추가',add,'btn minor'));f.append(chips,row,E('p','hint','Enter 또는 쉼표로 여러 개를 추가할 수 있어요. 주제와 자연스럽게 이어지는 관심사만 이야기에 쓰여요.'));c.append(f);draw();
+ return ()=>P.splitInterests([...list,...P.splitInterests(inp.value)])}
+function selectOf(id,options,value){const s=E('select','select');s.id=id;for(const [v,t] of Object.entries(options)){const op=E('option','',t);op.value=v;s.append(op)}s.value=value;return s}
+function profileForm(c,p){const interests=interestEditor(c,p.interests);
+ const meaning=inputField(c,'그 관심사가 왜 즐겁거나 의미 있나요? (선택)',area('meaning','예: 작은 단서를 모아 범인을 좁혀 가는 과정이 짜릿해요.',p.meaning,3),'이야기의 장면과 질문을 고를 때 참고해요.');
+ const approach=inputField(c,'선호하는 학습 방식',selectOf('approach',P.APPROACHES,p.approach));
+ const depth=inputField(c,'원하는 설명 깊이',selectOf('depth',P.DEPTHS,p.depth));
+ const nick=inputField(c,'불러 드릴 이름 (선택)',E('input','input'));nick.id='nickname';nick.maxLength=P.LIMITS.nickname;nick.placeholder='비워 두어도 괜찮아요';nick.value=p.nickname;
+ return ()=>({nickname:nick.value,interests:interests(),meaning:meaning.value,approach:approach.value,depth:depth.value})}
+function onboarding(m){const c=panel(m,'처음 오셨네요. 당신을 조금 알려 주세요');c.id='onboarding';c.append(E('p','sub','한 번만 설정하면 다음부터는 배우고 싶은 주제만 입력하면 돼요. 모든 항목은 선택이며 언제든 설정에서 바꿀 수 있어요.'));
+ const legacy=P.legacyInterests(data.lessons);if(legacy.length)c.append(E('div','info','이전 탐험 기록에 남아 있던 관심사를 불러왔어요. 확인한 뒤 저장해 주세요.'));
+ const read=profileForm(c,P.normalizeProfile({interests:legacy,depth:P.legacyDepth(data.lessons)}));
+ c.append(E('p','hint','프로필은 이 브라우저에만 저장되고, AI 요청(연결한 ChatGPT 또는 로컬 Ollama)에만 포함돼요. 학습 기록과는 따로 보관돼요.'));
+ const row=E('div','actions');const save=v=>{if(saveProfile(v)==='conflict')toast('다른 탭에서 이미 프로필을 저장했어요. 저장된 프로필을 불러왔어요.');render()};
+ row.append(button('저장하고 시작하기 →',()=>save(read())),button('건너뛰기',()=>save({}),'btn secondary'));c.append(row)}
+function newRecord(topic,interest,level,question=topic){return {id:(typeof crypto.randomUUID==='function'?crypto.randomUUID():'lesson-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10)),topic,interest,level,question:String(question||''),stage:0,maxStage:0,lesson:null,prediction:'',scenarios:[],drafts:[],feedback:null,events:[],createdAt:Date.now(),updatedAt:Date.now(),complete:false}}
+function start(topic){if(!topic){toast('학습하고 싶은 주제를 입력해 주세요.');return}if(topic.length>160){toast('주제를 조금 더 짧게 적어 주세요.');return}const l=newRecord(topic,profile.interests.join(', ').slice(0,300),profile.depth);data.lessons.push(l);data.active=l.id;track(l,'새로운 주제: '+topic);prepare(l)}
+/* Every state-changing request carries the per-server CSRF token the server embedded in this page. */
+const CSRF=document.querySelector('meta[name="curiven-csrf"]')?.content||'';
+async function post(path,body,signal){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-CURIVEN-CSRF':CSRF},body:JSON.stringify(body||{}),signal});let j={};try{j=await r.json()}catch{}if(!r.ok||!j.ok){const e=Error(j.reason==='csrf'?'서버가 다시 시작됐어요. 페이지를 새로고침해 주세요.':(j.error||`오류 ${r.status}`));e.code=j.code||null;e.status=r.status;throw e}return j}
+/* After an AI failure, re-read the connection: an expired or revoked sign-in then shows as "reconnect"
+   instead of the app still looking online. Quota errors keep the connection and show the usage link. */
+function afterAiError(e){if(e?.status===401||e?.status===429||e?.status===403||e?.code==='model_not_selected')status(false)}
+async function api(mode,body,signal){const j=await post('/api/ai',{mode,...body},signal);return {data:j.data,provider:j.provider,model:j.model}}
+function aiName(){return provider.provider==='chatgpt'?'ChatGPT':provider.provider==='ollama'?'로컬 AI(실험)':'AI'}
+function lessonPrompt(l){return `당신은 한국어 호기심 기반 AI 학습 설계자입니다. 다음 학습 주제로 학습 자료 JSON 객체 하나만 생성하세요. 주제: ${l.topic}.\n${P.promptText(latestProfile())}\n관심사 중 주제와 자연스럽게 이어지는 것이 있을 때만 이야기의 배경으로 쓰고, 억지로 연결하지 마세요. 설명 깊이와 학습 방식은 프로필을 따르세요.\n호기심 유발 이야기는 정답을 먼저 알려주지 말고, 정확한 원리 설명에서는 비유를 제거하세요. 실제 조작한 적 없는 활동을 실제 실험으로 표현하지 마세요.\n처음 배우는 학습자도 따라올 수 있게: 아직 모를 수 있는 용어 1~4개를 prerequisites에 쉬운 말과 짧은 예로 먼저 풀고, 사고 실험의 질문·선택지에는 먼저 풀어 둔 용어만 쓰세요. 배우지 않은 용어의 뜻을 맞히는 문제를 만들지 말고, 각 사고 실험에 정답을 말하지 않는 hint를 넣으세요. technical 단락은 주제에 맞을 때만 plain(쉬운 말)·example(예)·steps(원인→결과 단계)·misread(흔한 오해)·conditions(조건과 한계)를 채우세요. 과정·인과 흐름이나 헷갈리기 쉬운 비슷한 개념이 있으면 그 단락 1~2개에 visual을 넣으세요(순수하게 말로 된 개념이면 생략): 과정·인과 흐름은 {"type":"flow","title":"제목","relation":"sequence|cause|possible","steps":[{"label":"단계","detail":"한 문장"}]}, 비슷한 개념의 구별은 {"type":"compare","title":"제목","columns":["A","B"],"rows":[{"aspect":"기준","values":["A","B"]}]}. 숫자·통계를 지어내지 마세요. reading에는 확인해 볼 개념과 검색어만 쓰고 제목·저자·연도·URL은 쓰지 마세요. 반환 형식 (반드시 JSON만): {"title":"학습 제목","hook":"호기심 한 문장","prerequisites":[{"term":"용어","plain":"쉬운 말 설명","example":"짧은 예"}],"story":"짧은 관심사 기반 이야기","prediction":"예측 질문","scenarios":[{"title":"상황을 나타내는 짧은 제목","question":"질문","options":["선택1","선택2","선택3"],"answerIndex":0,"hint":"정답을 말하지 않는 단서","reason":"근거"}],"concepts":[{"id":"k1","name":"개념","description":"정의"},{"id":"k2","name":"개념","description":"정의"},{"id":"k3","name":"개념","description":"정의"}],"connections":[{"from":"k1","to":"k2","why":"연결 이유"}],"technical":[{"heading":"핵심 원리","plain":"쉬운 말","example":"구체적 예","steps":["1단계","2단계"],"misread":"흔한 오해와 실제","conditions":"조건과 한계","text":"비유 없는 정확한 설명","visual":null}],"explainPrompt":"자기 설명 질문","limitations":"한계","reading":[{"claim":"확인할 개념","query":"검색어","kind":"자료 종류"}]}. 사고 실험 2~3개, 개념 4~6개, 정확한 설명 단락 3~5개를 채우세요. 연결 ID를 실제 개념 ID에 맞추세요.`}
+function normalizeLesson(v){if(!v||typeof v!=='object'||!v.title||!v.story||!v.prediction||!v.explainPrompt)throw Error('필수 학습 자료 항목이 없어요.');if(!Array.isArray(v.concepts)||!Array.isArray(v.scenarios)||!Array.isArray(v.technical)||v.concepts.length<2||!v.scenarios.length)throw Error('개념·사고 실험·기술 설명이 필요해요.');const ids=new Set(v.concepts.map(c=>c.id));if(!v.concepts.every(c=>typeof c.id==='string'&&typeof c.name==='string'&&typeof c.description==='string')||ids.size!==v.concepts.length)throw Error('개념 자료에 문제가 있어요.');if(!v.scenarios.every(s=>Array.isArray(s.options)&&s.options.length>=2&&Number.isInteger(s.answerIndex)&&s.answerIndex>=0&&s.answerIndex<s.options.length&&s.question&&s.reason))throw Error('선택지 정보가 올바르지 않아요.');v.connections=(Array.isArray(v.connections)?v.connections:[]).filter(e=>ids.has(e.from)&&ids.has(e.to));v.limitations=String(v.limitations||'');return window.CuriTutor.normalizeExtras(v)}
+// Answer options are shuffled once at install (answerIndex remapped), removing model answer-position bias.
+function installLesson(l,v,source,generator){try{const nv=normalizeLesson(v);if(l.material)CuriMaterial.groundLesson(nv,l.material);else for(const k of ['concepts','technical'])for(const x of nv[k]||[])if(x&&typeof x==='object')delete x.sources;l.lesson=L.shuffleScenarios(nv);l.profileUsed=P.aiPayload(profile);l.generatedBy=generator||{provider:'manual-import'};const c=inflight.get('gen:'+l.id);if(c){inflight.delete('gen:'+l.id);c.abort()}genError.delete(l.id);track(l,`학습 자료 준비 (${source})`);
+ l.stage=Math.max(l.stage,1);l.maxStage=Math.max(l.maxStage,1);persist();if(data.active===l.id)render()}catch(e){toast('자료를 불러오지 못했어요: '+e.message)}}
+/* One generation per lesson (D4). Results are matched to the request that produced them; cancelled,
+   superseded, or already-prepared lessons ignore late responses, and the learner is never navigated away. */
+function prepare(l){if(!provider.online||l.lesson||inflight.has('gen:'+l.id)||!canWrite()){render();return}
+ const id=l.id,key='gen:'+id,ctl=new AbortController();inflight.set(key,ctl);genError.delete(id);genStart.set(id,Date.now());tickPrepare();render();
+ const p=latestProfile(),body={topic:l.topic,level:p.depth,profile:P.aiPayload(p)};if(l.material&&window.CuriMaterial)body.material=window.CuriMaterial.lessonPayload(l.material);
+ api('lesson',body,ctl.signal).then(r=>{if(inflight.get(key)!==ctl)return;inflight.delete(key);const cur=data.lessons.find(x=>x.id===id);if(!cur||cur.lesson||!canWrite())return;installLesson(cur,r.data,aiName(),{provider:r.provider,model:r.model,at:Date.now()})})
+ .catch(e=>{if(inflight.get(key)!==ctl)return;inflight.delete(key);const net=e instanceof TypeError&&!e.status;genError.set(id,net?'CURIVEN 서버와 연결이 끊겼어요.':e.message);afterAiError(e);if(data.active===id)render()})}
+function cancelGeneration(id){const c=inflight.get('gen:'+id);if(c){inflight.delete('gen:'+id);c.abort()}render()}
+/* Elapsed time while a lesson is being made (text only; the status line itself is announced once). */
+const genStart=new Map();let prepTimer=0;
+function tickPrepare(){clearInterval(prepTimer);prepTimer=setInterval(()=>{const el=document.getElementById('prepareElapsed'),l=current();if(!l||!inflight.has('gen:'+l.id)){if(![...inflight.keys()].some(k=>k.startsWith('gen:')))clearInterval(prepTimer);return}if(el){const s=Math.floor((Date.now()-(genStart.get(l.id)||Date.now()))/1000);el.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}},1000)}
+/* The everyday flow: the topic, one status line, cancel / retry. The prompt-copy and JSON-paste fallback is a
+   development tool, shown only when the server runs with CURIVEN_DEV_TOOLS=1 — never because generation is slow or failed. */
+function preparePanel(m,l){const gen=inflight.has('gen:'+l.id),err=genError.get(l.id);
+ // Same quiet frame as home: the motif (its halo breathes only while the lesson is being made), the question, one status.
+ const c=E('section','home prepare');c.id='preparePanel';m.append(c);
+ c.append(homeMotif(gen),E('p','home-eyebrow',gen?'Preparing your exploration':'Your exploration'),E('h2','',gen?'탐험을 준비하고 있어요':err?'탐험을 준비하지 못했어요':'탐험 준비'));
+ const id=C.identity(l),topic=E('p','q prepare-topic',id.question||'수업 자료에서 시작하는 탐험');c.append(topic);
+ if(id.file)c.append(E('p','home-sub',`수업 자료: ${id.file.name}`));
+ const msg=E('p',err?'home-status msg':'home-status');msg.id='prepareStatus';msg.setAttribute('role','status');
+ if(gen){msg.append(E('span','',`${aiName()}로 이야기와 생각 실험을 만들고 있어요. 보통 1~2분 걸려요. `));const t=E('span','tiny prepare-elapsed','0:00');t.id='prepareElapsed';t.setAttribute('aria-hidden','true');msg.append(t)}
+ else if(err)msg.textContent=err+' 입력한 주제는 그대로 남아 있어요.';
+ else if(provider.online)msg.textContent='아직 이 탐험의 학습 자료가 없어요.';
+ else if(provider.provider==='chatgpt'&&provider.needsModel)msg.textContent='ChatGPT는 연결됐어요. 사용할 모델을 먼저 골라 주세요.';
+ else msg.textContent='AI가 연결되지 않았어요. 설정에서 ChatGPT를 연결하면 탐험을 만들 수 있어요.';
+ c.append(msg);if(gen)c.append(E('p','home-hint','이 창을 닫거나 새로고침하면 준비가 멈춰요.'));
+ const act=E('div','actions prepare-actions');
+ if(gen)act.append(button('준비 취소',()=>cancelGeneration(l.id),'btn secondary'));
+ else if(provider.online)act.append(button(err?'다시 시도':'탐험 만들기',()=>prepare(l)));
+ else act.append(button(provider.needsModel?'모델 고르기':'AI 연결하기',()=>openSettings('ai')));
+ if(!gen)act.append(button('다른 주제로 시작',()=>{data.active=null;persist();render()},'btn secondary'));c.append(act);
+ if(provider.devTools)devLessonTools(c,l)}
+function devLessonTools(c,l){const d=E('details','note dev-tools');d.id='devTools';d.append(E('summary','','개발자 도구 · 수동 학습 자료'),E('p','hint','개발 모드(CURIVEN_DEV_TOOLS=1)에서만 보여요.'));
+ const row=E('div','actions');row.append(button('AI 생성 프롬프트 복사',async()=>{try{await navigator.clipboard.writeText(lessonPrompt(l));toast('프롬프트를 복사했어요.')}catch{toast('브라우저가 클립보드를 허용하지 않아요.')}},'btn secondary'));d.append(row);
+ const t=area('import-lesson','JSON을 붙여 넣으세요','',7);d.append(t);const n=E('div','actions');n.append(button('학습 자료 가져오기',()=>{try{installLesson(l,JSON.parse(t.value),'JSON 가져오기')}catch(e){toast(e.message)}}));d.append(n);c.append(d)}
+function story(m,l){const d=l.lesson,c=stagePanel(m,l,1,{heading:C.identity(l).title,sub:d.hook||'',context:false});prereqBlock(c,l);c.append(E('div','story',d.story));const q=E('div','note');q.append(E('p','q',d.prediction));const t=area('prediction','어떤 일이 일어날 것 같나요? 짐작이어도 괜찮아요.',l.prediction,4);q.append(t);const row=E('div','actions');row.append(button('예상 남기고 계속하기 →',()=>{if(t.value.trim().length<3){toast('예상을 한 문장 정도 적어 주세요.');return}l.prediction=t.value.trim();delete l.predictionUnsure;track(l,'나의 예상 기록');setStage(l,2)}),
+ // Guessing is never required: the learner may go on without a prediction (no penalty; recorded honestly).
+ button('예상 없이 둘러보기',()=>{if(t.value.trim())return toast('적은 예상이 있어요. ‘예상 남기고 계속하기’로 남겨 주세요.');l.prediction='';l.predictionUnsure=true;track(l,'예상 없이 계속함 (잘 모르겠어요)');setStage(l,2)},'btn secondary'));q.append(row,E('p','hint','예상은 채점하지 않아요.'));c.append(q)}
+function practice(m,l){const d=l.lesson,c=stagePanel(m,l,2);d.scenarios.forEach((s,i)=>{const rec=l.scenarios.find(x=>x.i===i),box=E('div','concept');box.append(E('div','eyebrow',`생각 실험 ${i+1}`),E('h3','',L.scenarioTitle(s.title)||'생각 실험'),E('p','spaced',s.question));scenarioHelp(box,l,s,i,rec);const choices=E('div');let picked=rec?.choice??null;s.options.forEach((o,j)=>{const opt=button(o,()=>{picked=j;choices.querySelectorAll('button').forEach((b,k)=>{b.className='opt'+(k===j?' selected':'')})},'opt'+(picked===j?' selected':''));if(rec){opt.disabled=true;if(j===s.answerIndex)opt.classList.add('right');else if(j===picked)opt.classList.add('wrong')}choices.append(opt)});box.append(choices);if(!rec){const row=E('div','actions');row.append(button('예상 확인하기',()=>{if(picked===null){toast('하나를 선택해 주세요.');return}l.scenarios.push({i,choice:picked,at:Date.now()});track(l,'사고 실험 '+(i+1)+' 완료');render()}),
+  button('잘 모르겠어요 — 해설 보기',()=>{l.scenarios.push({i,choice:null,unsure:true,at:Date.now()});track(l,'사고 실험 '+(i+1)+': 잘 모르겠다고 기록');render()},'btn secondary'));box.append(row)}else{box.append(E('p','info',s.reason));box.append(E('p','hint spaced',rec.unsure?'괜찮아요. 해설을 천천히 읽어 보세요.':rec.choice===s.answerIndex?'예상과 해설이 같았어요.':'예상과 다른 결과예요. 어떤 조건이 달랐는지 살펴보세요.'))}scenarioAsk(box,l,i,rec);c.append(box)});boundarySituations(c,l);if(l.scenarios.length>=d.scenarios.length){
+ // Compare the story-stage prediction with what the thought experiments showed; reflection is the learner's own, optional.
+ const cmp=E('div','note');cmp.id='predictionCompare';cmp.append(E('h3','','처음 예상과 비교해 보기'),E('div','old','처음의 내 예상: '+(l.prediction||(l.predictionUnsure?'(잘 모르겠다고 하고 넘어감)':'(기록 없음)'))));
+ d.scenarios.forEach((s,i)=>{const r=l.scenarios.find(x=>x.i===i);if(r)cmp.append(E('p','hint',r.unsure||r.choice==null?`사고 실험 ${i+1}: 잘 모르겠다고 기록 · 해설의 결과 “${s.options[s.answerIndex]}”`:`사고 실험 ${i+1}: 내 선택 “${s.options[r.choice]??'?'}” · 해설의 결과 “${s.options[s.answerIndex]}” — ${r.choice===s.answerIndex?'일치':'다름'}`))});
+ const t=area('reflection','처음 예상에서 바뀐 생각이나 놓쳤던 조건을 내 말로 적어 보세요. (선택)',l.reflection||'',3);t.style.marginTop='12px';cmp.append(t);c.append(cmp);
+ c.append(button('원리 알아보기 →',()=>{const r=t.value.trim();if(r&&r!==l.reflection){l.reflection=r.slice(0,2000);eventLog(l).push({at:new Date().toISOString(),what:'처음 예상과 결과를 비교함'})}track(l,'사고 실험을 마침');setStage(l,3)}))}}
+function technical(m,l){const d=l.lesson,c=stagePanel(m,l,3);
+ // The lesson's concept definitions were never shown in the flow before; they come first here.
+ const ks=E('div','key-concepts');ks.id='keyConcepts';ks.append(E('h3','','이 탐험의 핵심 개념'));for(const k of d.concepts){const r=E('p','');r.append(E('strong','',k.name),document.createTextNode(' — '+k.description));if(l.material){const src=CuriMaterial.verify(k.sources,l.material);r.append(E('span','tiny material-tag',src.length?' · 자료 '+[...new Set(src.map(s=>CuriMaterial.label(l.material,s.page)))].join(', '):' · AI 보충'))}ks.append(r)}c.append(ks);
+ d.technical.forEach((x,i)=>{const b=E('section','concept tech-section');const hd=E('h3','');hd.append(E('span','tech-num',String(i+1)),document.createTextNode(x.heading));b.append(hd);techLayers(b,x,l.id+'|tech|'+i);materialRefs(b,l,x);if(canWrite())helpLink(b,l,i,x.heading);c.append(b)});materialViewer(c,l);sourcesBlock(c,l);c.append(button('이해한 내용 정리하기 →',()=>{track(l,'개념 설명을 읽음');setStage(l,4)}))}
+function explain(m,l){const d=l.lesson,c=stagePanel(m,l,4),inv=C.explainInvite(d);if(inv.question){const q=E('p','q explain-question',inv.question);q.id='explainQuestion';c.append(q)}
+ const restored=l.draftInProgress?.text,last=l.drafts.at(-1)?.text||'',t=area('draft','정해진 형식은 없어요. 이해한 만큼, 떠오르는 순서대로 적어 보세요.',restored??last,9);t.setAttribute('aria-label','내가 이해한 내용');t.addEventListener('input',()=>queueDraft(l.id,t.value));c.append(t);
+ explainScaffold(c,l,inv,t);
+ if(restored!=null){const h=E('p','hint','저장하지 않은 초안을 불러왔어요.');h.id='draftRestored';c.append(h)}
+ if(l.drafts.length)c.append(E('p','hint','고쳐 쓰면 새 버전으로 저장돼요. 이전 설명도 그대로 남아요.'));
+ // Status only when there is something to know (reviewing, or no AI); no standing disclaimer.
+ const reviewing=inflight.has('fb:'+l.id);if(reviewing||!provider.online){const msg=E('div','msg',reviewing?'AI가 설명을 읽고 있어요…':'AI가 연결되지 않았어요. 설명은 저장되고, 연결한 뒤 피드백을 받을 수 있어요.');msg.id='explainStatus';msg.setAttribute('role','status');c.append(msg)}const row=E('div','actions');
+ const submit=button(provider.online?'설명 저장하고 피드백 받기':'내 설명 저장하기',()=>{const text=t.value.trim();if(text.length<12){toast('한두 문장만 더 적어 주세요. 모르는 부분은 모른다고 적어도 괜찮아요.');return}if(busy)return;clearTimeout(draftTimer);pendingDraft=null;delete l.draftInProgress;const draft={text,at:Date.now(),feedback:null};l.drafts.push(draft);track(l,'이해한 내용을 설명함');if(provider.online)requestFeedback(l,draft);else render()});submit.disabled=reviewing;row.append(submit,button('학습 마무리하기 →',()=>{if(!l.drafts.length){toast('먼저 자신의 설명을 남겨 주세요.');return}if(!l.complete){l.complete=true;track(l,'탐험 완료');setStage(l,5);notionAfterComplete(l);return}setStage(l,5)},'btn secondary'));c.append(row);
+ if(l.drafts.length){const h=E('div','concept');h.id='draftHistory';h.append(E('h3','',`내 설명 ${l.drafts.length}개 기록`));const ids=d.concepts.map(x=>x.id);l.drafts.slice().reverse().forEach((draft,i)=>{const n=l.drafts.length-i;h.append(E('p','tiny draft-version',`설명 ${n} · ${n===1?'처음 쓴 설명':'고쳐 쓴 설명'}`),E('div','old',draft.text));
+  let f=null,bad=false;if(draft.feedback){try{f=L.validateFeedback(draft.feedback,ids,draft.text)}catch{bad=true}}
+  if(f)renderFeedback(h,f,d.concepts,{l,draft});
+  else{h.append(E('p','hint feedback-missing',bad?'저장된 AI 피드백의 형식이 올바르지 않아 표시하지 않았어요. 내 설명은 그대로 남아 있어요.':draft.feedbackError?'AI 피드백을 받지 못했어요: '+draft.feedbackError+' (내 설명은 저장됐어요)':'AI 피드백 없음'));
+   if(i===0&&provider.online&&!reviewing){const retry=button('AI 검토 다시 요청',()=>requestFeedback(l,draft),'small-action');retry.id='retryFeedback';h.append(retry)}}
+  if(i<l.drafts.length-1)h.append(E('hr','divider'))});
+  const lost=T.unlinked(l);if(lost.length){const d=E('details','fb-unplaced');d.id='fbUnlinked';d.append(E('summary','',`어느 설명의 피드백에 대한 대화인지 확인할 수 없어요 (${lost.filter(m=>m.role==='learner').length}개)`));
+   for(const m of lost)d.append(E('p','hint '+(m.role==='learner'?'fb-unplaced-mine':'fb-unplaced-ai'),(m.role==='learner'?'나: ':'AI 튜터 (AI): ')+m.text));h.append(d)}
+  c.append(h)}boundaryApply(c,l)}
+/* Optional structure for the self-explanation, shown only on request: sentence starters (inserted at the end of what the
+   learner wrote, never replacing it) and, for older lessons, the original fill-in-the-blanks prompt as a guide. */
+function explainScaffold(c,l,inv,t){const k=l.id+'|scaffold',d=E('details','explain-scaffold');d.id='explainScaffold';d.open=tutorOpen.has(k);d.addEventListener('toggle',()=>{d.open?tutorOpen.add(k):tutorOpen.delete(k)});
+ d.append(E('summary','','어떻게 시작할지 막막하다면'));const row=E('div','scaffold-starters');
+ for(const st of inv.starters){const b=button(st,()=>{const v=t.value,add=st.replace(/…$/,' ');t.value=v+(v&&!v.endsWith('\n')?'\n':'')+add;t.dispatchEvent(new Event('input',{bubbles:true}));t.focus();t.setSelectionRange(t.value.length,t.value.length)},'pill scaffold-starter');b.setAttribute('aria-label',`‘${st}’로 문장 시작하기`);row.append(b)}
+ d.append(row);if(inv.template){d.append(E('p','hint','자료의 정리 틀이에요. 따라 써도 되고, 무시해도 괜찮아요.'),E('p','explain-template',inv.template))}c.append(d)}
+/* Three kinds of comment, kept apart: what is right, what is right but needs precision, and what is wrong.
+   Criticisms show the learner's own words they refer to; nothing here is a mastery verdict. */
+function renderFeedback(h,f,concepts,ctx,text=ctx?.draft.text){const box=E('div','feedback');box.dataset.schema=String(f.schema);h.append(E('div','new',f.summary));
+ const q=s=>{const v=L.verbatimQuote(s,text);return v?`“${v}” — `:''};
+ // One focused follow-up question by default: every point stays visible, but only the most important one carries its
+ // question and reply box (a misconception first, then precision, then a missing condition). The rest wait behind an
+ // explicit "다른 질문도 보기"; an item the learner already answered always keeps its question and thread. Nothing stored changes.
+ const items=[...f.misconceptions.map((x,i)=>['misconceptions',i]),...f.precision.map((x,i)=>['precision',i]),...f.missing.map((x,i)=>['missing',i])];
+ const answered=(type,i)=>!!ctx&&T.stream(ctx.l,T.itemRef(ctx.l,ctx.draft,type,i)).length>0;
+ const moreKey=ctx?`${ctx.l.id}|fbmore|${ctx.draft.at}`:null;let moreLocal=false;
+ const fill=()=>{box.replaceChildren();const more=moreKey?tutorOpen.has(moreKey):moreLocal,primary=items[0]?.join(':');
+  const asks=(type,i)=>more||`${type}:${i}`===primary||answered(type,i);
+  // With a lesson context, a shown question gets a real reply box (an AI conversation scoped to that item).
+  const reply=(type,i)=>{if(ctx)feedbackReplies(box,ctx.l,ctx.draft,type,i,'이 질문에 답하기')};
+  for(const x of f.correct)box.append(E('p','hint fb-correct','✓ '+q(x.quote)+x.point));
+  // A question or guess the coach had called a misconception is listed as a point to refine (x.reclassified stays in the record).
+  const point=(type,i,cls,text,question)=>{const on=asks(type,i),el=E('p','hint '+cls,text+(on?' — '+question:''));el.dataset.fb=`${type}:${i}`;box.append(el);if(on)reply(type,i)};
+  f.precision.forEach((x,i)=>point('precision',i,'fb-precision','더 정확하게: '+q(x.quote)+x.issue+' 왜: '+x.why,x.question));
+  f.misconceptions.forEach((x,i)=>point('misconceptions',i,'fb-misconception','다시 생각하기: '+q(x.quote)+x.issue+(x.why?' 왜: '+x.why:''),x.question));
+  f.missing.forEach((x,i)=>point('missing',i,'fb-missing','빠진 조건: '+x.issue,x.question));
+  const hidden=items.filter(([t,i])=>!asks(t,i)).length;
+  // Keyboard focus moves to the first newly shown question's reply button, so the learner is not dropped to the page top.
+  if(hidden){const first=items.find(([t,i])=>!asks(t,i)).join(':');const b=button(`다른 질문도 보기 (${hidden})`,()=>{if(moreKey)tutorOpen.add(moreKey);else moreLocal=true;fill();
+   const el=box.querySelector(`[data-fb="${first}"]`);const to=el?.nextElementSibling?.querySelector('button')||el;if(to){if(to===el)el.tabIndex=-1;to.focus()}},'small-action fb-more');box.append(b)}
+  if(f.schema===2&&f.explained.length){const names=new Map(concepts.map(c=>[c.id,c.name]));const evidence=E('div','hint fb-explained');
+   evidence.append(E('strong','','AI가 내 설명과 연결한 개념'),E('p','','AI의 연결 의견이에요. 이해를 확인한 시험 결과는 아니에요.'));
+   const quotes=E('ul','');for(const e of f.explained)quotes.append(E('li','',`${names.get(e.id)||e.id} — “${L.verbatimQuote(e.quote,text)}”`));
+   evidence.append(quotes);box.append(evidence)}
+  if(f.uncertainty)box.append(E('p','hint fb-uncertainty','AI가 판단하지 못한 점: '+f.uncertainty));
+  box.append(E('p','tiny fb-provenance',(f.schema===2?'AI 피드백':'이전 버전 AI 피드백')+(f.reviewer?.model?' · '+f.reviewer.model:'')+' · 참고 의견이에요'));
+  if(ctx)feedbackReplies(box,ctx.l,ctx.draft,'summary',0,'피드백에 대해 말하기');
+  if(ctx)unplacedReplies(box,ctx.l,ctx.draft)};
+ fill();h.append(box)}
+/* Follow-ups on this feedback whose item can no longer be identified (an older record read with newer rules, a
+   replaced feedback, two explanations with one timestamp): shown apart, read-only, never under some other item. */
+function unplacedReplies(box,l,draft){const msgs=T.unplaced(l,draft);if(!msgs.length)return;
+ const d=E('details','fb-unplaced');d.id='fbUnplaced-'+draft.at;d.append(E('summary','',`어느 피드백 항목에 대한 대화인지 확인할 수 없어요 (${msgs.filter(m=>m.role==='learner').length}개)`));
+ d.append(E('p','hint','기록은 그대로 있어요. 피드백을 읽는 규칙이 바뀌었거나 피드백이 다시 만들어져서, 어느 항목에 답한 것인지 확실하지 않아요.'));
+ for(const m of msgs)d.append(E('p','hint '+(m.role==='learner'?'fb-unplaced-mine':'fb-unplaced-ai'),(m.role==='learner'?'나: ':'AI 튜터 (AI): ')+m.text));box.append(d)}
+/* Feedback (D2/D5): only the fields the coach needs are sent; the response is schema-checked before it is
+   stored. Failures keep the learner's explanation and record a retryable error. */
+async function requestFeedback(l,draft){if(busy||!canWrite())return;busy=true;const id=l.id,key='fb:'+id,ctl=new AbortController();inflight.set(key,ctl);render();
+ const find=()=>{const cur=data.lessons.find(x=>x.id===id);return cur?[cur,cur.drafts.find(x=>x.at===draft.at&&x.text===draft.text)]:[]};
+ try{const r=await api('feedback',{lesson:L.feedbackPayload(l.lesson),context:L.learningContext(l),text:draft.text,profile:P.aiPayload(latestProfile())},ctl.signal);
+  const f=L.validateFeedback({...r.data,reviewer:{provider:r.provider,model:r.model,at:Date.now()}},l.lesson.concepts.map(c=>c.id),draft.text);if(inflight.get(key)!==ctl)return;const [cur,dr]=find();if(!dr||!canWrite())return;
+  const stamped=L.stampFeedback(f);dr.feedback=stamped;delete dr.feedbackError;cur.feedback=stamped;cur.feedbackFor=dr.at;track(cur,'AI 피드백 받음')}
+ catch(e){if(inflight.get(key)!==ctl)return;const [,dr]=find();if(dr&&canWrite()){dr.feedbackError=String(e.message||e).slice(0,300);persist()}afterAiError(e)}
+ finally{if(inflight.get(key)===ctl){inflight.delete(key);busy=false}const cur=current();if(cur?.id===id&&cur.stage===4&&!view)render()}}
+function done(m,l){const d=l.lesson,c=stagePanel(m,l,5,{sub:'이해를 다 끝냈다는 판정은 아니에요. 오늘 질문하고, 예상하고, 설명한 기록이 남았어요.'});const stats=E('div');[[String(l.scenarios.length),'생각 실험'],[String(l.drafts.length),'나의 설명'],[String(d.concepts.length),'만난 개념']].forEach(([n,t])=>{const b=E('div','stat');b.append(E('strong','',n),E('span','',t));stats.append(b)});c.append(stats);const idn=C.identity(l),teaser=E('div','constellation-teaser');teaser.append(E('h3','',idn.short));const go=button('별자리 보기',()=>openAtlas(l),'atlas-launch');go.setAttribute('aria-label',`${idn.short} 별자리 보기`);teaser.append(go);c.append(teaser);c.append(E('hr','divider'),E('h3','','나의 배움 경로'),E('p','sub',idn.question?'처음 궁금했던 것: '+idn.question:'수업 자료에서 시작: '+(idn.file?.name||idn.title)));if(l.prediction)c.append(E('div','old','처음의 내 예상: '+l.prediction));if(l.reflection)c.append(E('div','old','예상과 비교한 내 생각: '+l.reflection));explanationRounds(c,l);boundarySummary(c,l);notionBlock(c,l);const row=E('div','actions');row.append(button('다음 탐험 시작하기 →',()=>{data.active=null;persist();render()}),button('내 설명 다시 보기',()=>setStage(l,4),'btn secondary'));c.append(row)}
+/* Growth stage: each explanation together with what the record links to it — its AI feedback, the AI's own rewrite (a
+   step shown only when the AI actually wrote one; never made from the feedback, tutor replies or the learner's text),
+   the conversation that followed, and the learner's next explanation. The same links as the archive (journey.js chain()). The learner's text is shown exactly, a long text as a
+   preview with the full text one click away; AI parts are labelled; nothing here is a verdict. */
+function explanationRounds(c,l){const rounds=CuriJourney.chain(l);if(!rounds.length)return;
+ const sec=E('section','xr');sec.id='explanationRounds';const h=E('h3','','내 설명과 AI 피드백');h.id='xrTitle';sec.setAttribute('aria-labelledby','xrTitle');
+ sec.append(h,E('p','hint','설명마다 AI 피드백과 이어진 대화를 함께 모았어요. AI가 쓴 부분은 참고 의견이고, 맞는지 확인된 판단이 아니에요.'));
+ const at=t=>t===null?'':new Date(t).toLocaleString('ko-KR',{dateStyle:'medium',timeStyle:'short'});
+ const LIM=220,body=(t,id)=>{const box=E('div','xr-text');if(t.length>LIM){box.append(E('p','xr-preview',t.slice(0,LIM)+'…'));const d=E('details','xr-full');d.append(E('summary','','전체 보기'));const w=E('p','xr-whole',t);if(id)w.id=id;d.append(w);box.append(d)}else{const w=E('p','xr-whole',t);if(id)w.id=id;box.append(w)}return box};
+ const step=(cls,label,tag)=>{const li=E('li','xr-step '+cls),p=E('p','xr-label');p.append(E('span','',label));if(tag)p.append(E('span','xr-tag',tag));li.append(p);return li};
+ const STATE={ok:'AI 피드백 있음',error:'AI 피드백을 받지 못함',invalid:'AI 피드백 형식 오류',none:'AI 피드백 없음'};
+ rounds.forEach((r,i)=>{const d=E('details','xr-round');d.id='xr-'+r.n;d.open=i===rounds.length-1;
+  d.append(E('summary','',[`설명 ${r.n}`,at(r.at),STATE[r.feedback],r.next?'다음 설명 있음':''].filter(Boolean).join(' · ')));const ol=E('ol','xr-steps');
+  const mine=step('xr-mine','내가 작성한 설명','내 글');mine.append(body(r.text,`xr-${r.n}-text`));ol.append(mine);
+  const fb=step('xr-feedback','AI 피드백',r.feedback==='ok'?['AI',r.model,r.schema===1?'이전 형식':''].filter(Boolean).join(' · '):'');
+  if(r.feedback==='ok'){fb.append(E('p','xr-summary',r.summary));
+   if(r.items.length){const ul=E('ul','xr-items');for(const y of r.items){const li=E('li','xr-item');li.dataset.kind=y.kind;li.append(E('span','xr-kind',J_KIND[y.kind]+' (AI 분류) '),document.createTextNode((y.quote?`“${y.quote}” — `:'')+y.text+(y.why?' · 왜: '+y.why:'')));ul.append(li)}fb.append(ul)}
+   else fb.append(E('p','xr-none','세부 항목 없이 요약만 있어요 (분류 없음).'));
+   if(r.uncertainty)fb.append(E('p','xr-none','AI가 판단하지 못한 점: '+r.uncertainty))}
+  else fb.append(E('p','xr-none',r.feedback==='error'?'AI 피드백을 받지 못했어요: '+r.error:r.feedback==='invalid'?'저장된 AI 피드백의 형식이 올바르지 않아 표시하지 않았어요. 기록에는 그대로 있어요.':'AI 피드백 없음'));
+  ol.append(fb);
+  if(r.revision){const rv=step('xr-revision','AI가 제안한 수정 설명','AI가 쓴 글');rv.append(body(r.revision));ol.append(rv)}
+  if(r.thread.length){const th=step('xr-thread','피드백에 이어진 대화','');const det=E('details','xr-thread-all');det.append(E('summary','',`대화 ${r.thread.length}개 보기`));
+   for(const t of r.thread){det.append(E('p','xr-msg xr-msg-mine',`${t.quick?'버튼: '+t.intent:'내 메시지'+(t.n?' #'+t.n:'')} · ${t.about}에 대해 — ${t.text}`));
+    det.append(E('p','xr-msg xr-msg-ai',t.reply?'AI 튜터의 답 (AI): '+t.reply.text:'AI 튜터의 답이 기록되지 않았어요.'))}
+   th.append(det);ol.append(th)}
+  if(r.next){const nx=step('xr-next','다음에 쓴 설명','내 글');
+   // order only: whether the feedback was used is not in the record, so it is not claimed
+   if(r.feedback==='ok')nx.append(E('p','xr-none',r.afterFeedback===true?'이 피드백을 받은 뒤에 썼어요. 피드백을 반영했는지는 기록으로 알 수 없어요.':r.afterFeedback===false?'이 피드백이 오기 전에 썼어요.':'이 피드백과의 순서는 기록으로 알 수 없어요.'));
+   const go=button(`설명 ${r.next} 보기`,()=>{const t=document.getElementById('xr-'+r.next);if(t){t.open=true;const s=t.querySelector('summary');s.focus();s.scrollIntoView({block:'nearest'})}},'small-action xr-go');nx.append(go);ol.append(nx)}
+  d.append(ol);sec.append(d)});
+ const lost=CuriJourney.unlinked(l);if(lost.length){const d=E('details','xr-round xr-unlinked');d.id='xrUnlinked';d.append(E('summary','',`어느 설명의 피드백에 대한 대화인지 확인할 수 없어요 (${lost.length}개)`));
+  for(const t of lost){d.append(E('p','xr-msg xr-msg-mine',`${t.quick?'버튼: '+t.intent:'내 메시지'+(t.n?' #'+t.n:'')} · ${t.about} — ${t.text}`));d.append(E('p','xr-msg xr-msg-ai',t.reply?'AI 튜터의 답 (AI): '+t.reply.text:'AI 튜터의 답이 기록되지 않았어요.'))}sec.append(d)}
+ c.append(sec)}
+const J_KIND=CuriJourney.KIND;
+function graph(l){paintMiniConstellation(l)}
+function journal(l){const jb=$('#exportJourney');if(jb)jb.hidden=!l||l.stage===5; // the completion screen has its own (notion-ui.js)
+ const root=$('#journal');root.replaceChildren();$('#journalAll')?.remove();if(!l){root.append(E('li','','첫 질문을 남기면 시작돼요.'));return}
+ // Condensed view: repeated activity in a row becomes one line ("AI 튜터에게 물어봄 ×4"); the five most recent lines show,
+ // and the full, unmodified history stays one click away. The record itself is never changed.
+ const ev=eventsOf(l),runs=[];for(const x of ev){const last=runs.at(-1);if(last&&last.what===x.what){last.n++;last.at=x.at}else runs.push({what:x.what,at:x.at,n:1})}
+ const line=r=>E('li','',`${new Date(r.at).toLocaleDateString('ko-KR')} · ${r.what}${r.n>1?` ×${r.n}`:''}`);
+ runs.slice().reverse().slice(0,5).forEach(r=>root.append(line(r)));
+ if(ev.length>5){const d=E('details','journal-all');d.id='journalAll';d.append(E('summary','',`전체 기록 ${ev.length}개`));const ol=E('ol','journal journal-full');
+  d.addEventListener('toggle',()=>{if(d.open&&!ol.childElementCount)ev.slice().reverse().forEach(x=>ol.append(E('li','',`${new Date(x.at).toLocaleString('ko-KR')} · ${x.what}`)))},{});d.append(ol);root.after(d)}}
+function setStatus(text,online){const b=$('#status'),dot=E('span','status-dot',text.slice(0,1)),t=E('span','status-text',text.slice(2));dot.setAttribute('aria-hidden','true');b.replaceChildren(dot,document.createTextNode(' '),t);b.classList.toggle('online',!!online);b.setAttribute('aria-label',text.slice(2)+' — AI 연결 설정 열기')}
+function statusText(j){if(j.provider==='chatgpt')return j.online?'● ChatGPT 연결 · '+j.model:j.needsModel?'◐ ChatGPT 연결됨 · 모델 선택 필요':j.status==='connecting'?'◌ ChatGPT 로그인 진행 중':'○ AI 연결 안 됨';return j.online?'● 로컬 AI(실험) · '+j.model:'○ AI 연결 안 됨'}
+/* Re-render only when asked or when the AI panel is open, so polling never rebuilds a form the learner is typing in. */
+let pollTimer=null;
+async function status(rerender=true){try{const r=await fetch('/api/status');const j=await r.json();const was=provider.online;provider=j;setStatus(statusText(j),j.online);if(!rerender&&was!==j.online)rerender=true}catch{setStatus('○ AI 연결 안 됨',false)}
+ clearTimeout(pollTimer);if(provider.status==='connecting')pollTimer=setTimeout(()=>status(false),2000);
+ if(settingsIsOpen()&&settingsTab==='ai')renderSettings();if(rerender)render()}
+async function aiAction(path,body,done){try{const j=await post('/api/chatgpt/'+path,body);if(j.warning)toast(j.warning);if(done)done(j)}catch(e){toast(e.message)}await status(true)}
+// Same 'curiven-v01' format older versions accept; the extra `profile` field is ignored by them.
+function exportData(){const b=new Blob([JSON.stringify({format:'curiven-v01',profileVersion:P.VERSION,profile,...data},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='curiven-learning-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),800)}
+$('#exportJourney').onclick=()=>{const l=current();if(l)openJourney(l)}; // read-only: no draft flush, nothing saved
+$('#atlasMiniBtn').onclick=()=>{const l=current()?.lesson?current():data.lessons.filter(x=>x.complete&&x.lesson).at(-1);if(l)openAtlas(l)};$('#homeLogo').onclick=()=>{data.active=null;persist();render()};$('#newLesson').onclick=()=>{data.active=null;persist();render()};$('#status').onclick=()=>openSettings('ai');$('#universeBtn').onclick=()=>{const l=data.lessons.filter(x=>x.complete&&x.lesson).at(-1);if(l)openAtlas(l)};
+async function importBackup(file){if(!canWrite())throw Error('이 탭은 읽기 전용이에요. 학습 중인 탭에서 가져오거나 ‘이 탭에서 계속하기’를 눌러 주세요.');const v=JSON.parse(await file.text());if(v.format!=='curiven-v01'||!Array.isArray(v.lessons))throw Error('CURIVEN 백업 파일이 아닙니다');
+ const plan=P.planImport(profile,v.profile);
+ const note=plan.action==='restore'?'\n\n파일에 저장된 개인 프로필도 함께 복원돼요.':plan.action==='overwrite'?'\n\n파일에 다른 개인 프로필이 있어요. 다음 단계에서 교체 여부를 따로 물어볼게요.':'\n\n현재 개인 프로필은 그대로 유지돼요.';
+ if(!confirm('현재 학습 기록을 가져온 파일로 교체할까요?'+note))return;
+ let nextProfile=plan.action==='restore'?plan.incoming:null;
+ if(plan.action==='overwrite'&&confirm(`현재 프로필을 파일의 프로필로 바꿀까요?\n\n현재: ${P.summary(profile)}\n파일: ${P.summary(plan.incoming)}\n\n[취소]를 누르면 현재 프로필을 유지하고 학습 기록만 가져와요.`))nextProfile=plan.incoming;
+ abortAll();data={lessons:v.lessons,active:v.active??null};persist();if(nextProfile)saveProfile(nextProfile,{keepTime:true});closeSettings(true);render();return true}
+/* Changes made by other tabs (D1/D8). Read-only tabs mirror them. A writing tab should never see its
+   records change underneath it; if it does, it stops writing (conflict) instead of overwriting.
+   Profile changes are applied without re-rendering an open form, so unsaved input is never replaced. */
+addEventListener('storage',e=>{if(e.storageArea!==store())return;
+ if(e.key===KEY||e.key===null){if(!canWrite()&&access!=='conflict'){reloadFromStorage();render()}else if(canWrite()){const r=R.readRecords(store());if((r.raw??null)!==baseRaw)enterConflict()}}
+ if(e.key===P.PROFILE_KEY||e.key===null){const r=P.readProfile(store());if(r.status!=='ok')return;const changed=!profile||!P.sameProfile(profile,r.profile)||profile.updatedAt!==r.profile.updatedAt;profile=r.profile;if(!changed)return;
+  if(!canWrite()){if(access!=='conflict')render()}else if(settingsIsOpen()&&settingsTab==='profile'){const s=$('#profileStatus');if(s){s.className='msg';s.textContent='다른 탭에서 프로필이 바뀌었어요. 지금 입력한 내용은 그대로 두었어요. 저장하면 이 내용으로 바뀌어요.'}}
+  else{const pl=$('#profileLine span');if(pl)pl.textContent='내 프로필: '+P.summary(profile);settingsEntry()}}});
+load();claim().then(()=>{render();status();notionRefresh()});
+</script></body></html>

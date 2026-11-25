@@ -1,0 +1,94 @@
+{
+ "_about": "Shared by tests/test_feedback_review.py (server.review_feedback) and tests/feedback_review.test.js (learning.js validateFeedback). Each `model` is a hand-written stand-in for an AI reviewer's raw output, deliberately including the failure modes seen in real runs (invented quotes, criticism without reasons, harmless imprecision). These test CURIVEN's enforcement rules, not model quality.",
+ "concepts": ["k1", "k2", "k3", "k4"],
+ "cases": [
+  {
+   "name": "correct",
+   "text": "HTTP는 상태가 없어서 서버는 요청 하나만 보고는 같은 사용자인지 알 수 없어요. 로그인하면 서버가 세션 ID를 만들고 Set-Cookie 응답 헤더로 브라우저에 보냅니다. 브라우저는 다음 요청에 Cookie 헤더로 그 값을 보내고 서버는 세션 저장소에서 사용자를 찾아요.",
+   "model": {
+    "summary": "흐름을 정확히 설명했어요.",
+    "correct": [{"quote": "Set-Cookie 응답 헤더로 브라우저에 보냅니다", "point": "쿠키를 설정하는 방향이 맞아요."}, {"quote": "다음 요청에 Cookie 헤더로 그 값을 보내고", "point": "브라우저가 돌려보내는 헤더가 맞아요."}],
+    "precision": [{"quote": "다음 요청에 Cookie 헤더로 그 값을 보내고", "issue": "모든 요청에 보내는 것은 아니에요.", "why": "Domain과 Path 조건에 맞는 요청에만 포함돼요.", "question": "어떤 요청에는 쿠키가 실리지 않을까요?"}],
+    "misconceptions": [],
+    "missing": [],
+    "explained": [{"id": "k1", "quote": "HTTP는 상태가 없어서 서버는 요청 하나만 보고는 같은 사용자인지 알 수 없다"}, {"id": "k4", "quote": "서버가 세션 ID를 만들고"}],
+    "uncertainty": ""
+   },
+   "expect": {"correct": 2, "precision": 1, "misconceptions": 0, "explained": ["k1", "k4"], "withheld": 0}
+  },
+  {
+   "name": "partial",
+   "text": "쿠키는 서버가 보내서 브라우저에 저장되는 작은 데이터예요. 다음에 접속하면 브라우저가 쿠키를 다시 보내서 서버가 나를 기억해요.",
+   "model": {
+    "summary": "쿠키의 흐름은 짚었어요.",
+    "correct": [{"quote": "서버가 보내서 브라우저에 저장되는 작은 데이터예요", "point": "맞아요."}],
+    "precision": [{"quote": "브라우저가 쿠키를 다시 보내서", "issue": "조건 없이 보내는 것처럼 들려요.", "why": "쿠키는 범위 조건에 맞을 때만 전송돼요.", "question": "다른 사이트에 접속할 때도 보낼까요?"}],
+    "misconceptions": [{"quote": "서버가 나를 기억해요", "issue": "서버가 기억하는 방식이 빠졌어요.", "question": "서버는 무엇으로 나를 알아볼까요?"}],
+    "missing": [{"issue": "세션 ID와 서버 저장소의 관계", "question": "쿠키에는 무엇이 들어 있을까요?"}],
+    "explained": [{"id": "k2", "quote": "쿠키는 서버가 보내서 브라우저에 저장되는 작은 데이터예요"}],
+    "uncertainty": ""
+   },
+   "expect": {"correct": 1, "precision": 1, "misconceptions": 0, "explained": ["k2"], "withheld": 1, "note": "a 'misconception' without a reason (why) is withheld: it is also harmless imprecision"}
+  },
+  {
+   "name": "incorrect",
+   "text": "세션은 브라우저 안에 저장되는 비밀번호 목록이고, 쿠키는 서버의 데이터베이스에 저장돼요. 브라우저에서 쿠키를 지우면 서버 데이터베이스에서 내 계정도 삭제돼요.",
+   "model": {
+    "summary": "저장 위치가 뒤바뀌었어요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [
+     {"quote": "세션은 브라우저 안에 저장되는 비밀번호 목록이고", "issue": "세션의 위치", "why": "서버 측 세션은 서버가 유지하는 기록이에요.", "question": "서버는 세션에 무엇을 기록할까요?"},
+     {"quote": "쿠키는 서버의 데이터베이스에 저장돼요", "issue": "쿠키의 위치", "why": "쿠키는 브라우저가 저장해요.", "question": "Set-Cookie를 받은 쪽은 어디일까요?"},
+     {"quote": "쿠키를 지우면 서버 데이터베이스에서 내 계정도 삭제돼요", "issue": "삭제의 범위", "why": "쿠키 삭제와 계정 삭제는 별개의 동작이에요.", "question": "쿠키를 지우면 무엇이 빠질까요?"}
+    ],
+    "missing": [],
+    "explained": [{"id": "k2", "quote": "쿠키는 서버의 데이터베이스에 저장돼요"}, {"id": "k3", "quote": "세션은 서버에 저장된다"}],
+    "uncertainty": ""
+   },
+   "expect": {"correct": 0, "precision": 0, "misconceptions": 3, "explained": [], "withheld": 2, "note": "k2's evidence is a misconception; k3's quote was never written by the learner"}
+  },
+  {
+   "name": "ambiguous",
+   "text": "쿠키랑 세션은 둘 다 뭔가를 기억하는 거라서 로그인할 때 같이 쓰이는 것 같아요.",
+   "model": {
+    "summary": "판단하기에는 설명이 짧아요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [{"quote": "쿠키와 세션은 같은 것이다", "issue": "둘을 같은 것으로 봤어요.", "why": "역할이 달라요.", "question": "무엇이 다를까요?"}],
+    "missing": [{"issue": "각각이 어디에 있는지", "question": "쿠키와 세션은 각각 어디에 있을까요?"}],
+    "explained": [],
+    "uncertainty": "설명이 짧아 쿠키와 세션을 같은 것으로 보는지 판단하기 어려워요."
+   },
+   "expect": {"correct": 0, "precision": 0, "misconceptions": 0, "explained": [], "withheld": 1, "uncertainty": true, "note": "the learner never said they are the same; the invented quotation is withheld"}
+  },
+  {
+   "name": "contradictory",
+   "text": "HTTP는 상태가 없어서 서버가 이전 요청을 기억하지 못해요. 그래서 서버는 이전 요청 내용을 모두 기억해 두었다가 다음 요청에서 그대로 이어서 처리해요.",
+   "model": {
+    "summary": "앞뒤 주장이 서로 충돌해요.",
+    "correct": [{"quote": "HTTP는 상태가 없어서 서버가 이전 요청을 기억하지 못해요", "point": "무상태성을 정확히 짚었어요."}],
+    "precision": [],
+    "misconceptions": [{"quote": "서버는 이전 요청 내용을 모두 기억해 두었다가", "issue": "앞 문장과 모순돼요.", "why": "HTTP는 요청을 자동으로 이어 주지 않으므로, 기억하려면 세션 같은 별도 장치가 필요해요.", "question": "두 문장이 동시에 참일 수 있을까요?"}],
+    "missing": [],
+    "explained": [{"id": "k1", "quote": "HTTP는 상태가 없어서 서버가 이전 요청을 기억하지 못해요"}, {"id": "k3", "quote": "이전 요청 내용을 모두 기억해 두었다가"}],
+    "uncertainty": ""
+   },
+   "expect": {"correct": 1, "precision": 0, "misconceptions": 1, "explained": ["k1"], "withheld": 1}
+  },
+  {
+   "name": "fabricated-praise-and-short-quote",
+   "text": "쿠키는 브라우저에 저장돼요. 세션은 서버에 있어요.",
+   "model": {
+    "summary": "짧지만 위치는 맞아요.",
+    "correct": [{"quote": "HttpOnly를 쓰면 안전하다", "point": "보안 속성을 알고 있어요."}, {"quote": "쿠키는 브라우저에 저장돼요", "point": "맞아요."}, "세션 위치를 알아요."],
+    "precision": [{"quote": "쿠키", "issue": "너무 짧아요.", "why": "구체적이지 않아요.", "question": "어떤 쿠키인가요?"}],
+    "misconceptions": [],
+    "missing": [],
+    "explained": [{"id": "k9", "quote": "쿠키는 브라우저에 저장돼요"}],
+    "uncertainty": ""
+   },
+   "expect": {"correct": 2, "precision": 0, "misconceptions": 0, "explained": [], "withheld": 2, "note": "praise for something never written is dropped; a 2-character quote proves nothing; unknown concept id ignored"}
+  }
+ ]
+}

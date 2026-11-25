@@ -1,0 +1,32 @@
+{
+  "provenance": "AI-authored Korean contrasts specified before the implementation. Labels describe intended speech act in the written context, independent of truth. The reserve partition was specified at the same time and is for final verification only. Neither partition is human-verified or a representative sample.",
+  "development": [
+    ["온도계는 물이 얼마나 뜨거운지 표시해요.", "claim", "The matrix verb describes the instrument."],
+    ["로그에는 누가 접속했는지 남겨요.", "claim", "Reports what gets recorded."],
+    ["이 전선은 어디에 연결해요", "question", "Asks for a destination without punctuation."],
+    ["무엇을 기록하는지 알려 주세요", "question", "Requests the embedded information."],
+    ["압력이 내려가면 끓는점도 내려가나요", "check", "Explicit confirmation ending."],
+    ["달은 스스로 빛을 내요.", "claim", "False but asserted without uncertainty."],
+    ["두 막대의 길이는 같아요.", "claim", "Equality predicate, no tentative marker."],
+    ["유리컵은 아마 물에 뜰 것 같아요.", "hypothesis", "Explicit conjecture despite factual problem."],
+    ["그늘에서는 얼음이 더 오래갈 것 같아요.", "hypothesis", "Plausibility does not remove the hedge."],
+    ["상담원은 “왜 멈췄나요?”라고 물었어요.", "claim", "Reports another speaker's question."],
+    ["그걸 누가 믿겠어요?", "question", "Rhetorical intent is uncertain; protect overt question form."],
+    ["음 그거", "ambiguous", "Too little evidence."],
+    ["전류는 흘러요. 전압은 무엇이에요?", "mixed", "Separate claim and request."],
+    ["이 상자는 창고로 가요.", "claim", "Motion verb ending in polite 요."],
+    ["현재 시각을 알려 주세요", "question", "Explicit request for information, without a WH word."],
+    ["비밀번호가 필요한지 아세요?", "check", "Main clause asks for confirmation."]
+  ],
+  "reserve": [
+    ["시간표에는 버스가 언제 오는지 나와요.", "claim", "Timetable contents are asserted."],
+    ["이번 합주의 지휘자는 누구예요", "question", "Direct identity request."],
+    ["오늘도 박물관이 열리나요?", "check", "Yes or no."],
+    ["두 파일의 크기는 정확히 같아요.", "claim", "Compares two values."],
+    ["소리가 벽에서 반사된 듯해요.", "hypothesis", "Explicitly tentative explanation."]
+  ],
+  "partialQuotes": [
+    ["센서는 어디가 뜨거운지 알려 줘요. 온도 차가 큰가요?", "어디가 뜨거운지", "claim", "Resolve the substring against the asserting sentence."],
+    ["두 값은 다릅니다. 두 값은 다를 것 같아요.", "다를 것 같아요", "hypothesis", "Use the hedged sentence, not the preceding claim."]
+  ]
+}

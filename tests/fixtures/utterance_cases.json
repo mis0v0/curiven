@@ -1,0 +1,23 @@
+{
+ "_about": "Shared by tests/test_tutor.py and tests/tutor.test.js: server.py utterance_kind and learning.js utteranceKind must agree. Topics are deliberately mixed (not security-specific).",
+ "cases": [
+  ["바인딩이 뭐예요?", "question"],
+  ["바인딩이 뭐예요", "question"],
+  ["산란이 정확히 무슨 뜻이에요?", "question"],
+  ["잘 모르겠어요", "question"],
+  ["처음 들어보는 말이에요", "question"],
+  ["조선 사람들은 다 족보가 있었던 거죠?", "check"],
+  ["그럼 쿠키만 지우면 로그아웃되는 거 아닌가요?", "check"],
+  ["블랙홀은 빛도 못 빠져나오죠", "check"],
+  ["파란빛이 더 많이 흩어져서 그런 것 같아요", "hypothesis"],
+  ["미분은 순간 변화율이라고 생각해요", "hypothesis"],
+  ["조선 시대에는 모든 사람이 족보를 가지고 있었어요.", "claim"],
+  ["쿠키는 브라우저에 저장돼요", "claim"],
+  ["하늘이 파란 건 바다색이 반사되기 때문이에요.", "explanation"],
+  ["왜냐하면 HTTP는 상태가 없기 때문이에요.", "explanation"],
+  ["바인딩은 입력을 문자열로 바꿔요. 그래서 따옴표가 무시돼요.", "explanation"],
+  ["족보는 양반만 만들었어요. 그런데 왜 후기엔 늘었어요?", "mixed"],
+  ["음 그거", "ambiguous"],
+  ["?", "ambiguous"]
+ ]
+}

@@ -1,0 +1,22 @@
+/* Boundary Constellation prototype (development only). Uses the page's existing tokens and components. */
+.boundary{margin-top:26px;padding-top:20px;border-top:1px dashed var(--line-field)}
+.boundary>h3{margin-top:10px}
+.boundary-badge{display:inline-block;background:var(--surface-sunken);border:1px solid var(--line);color:var(--text);border-radius:20px;padding:4px 11px;font-size:12px;font-weight:700}
+.boundary-dev{margin-top:22px;padding:18px;border:1px dashed var(--line-field);border-radius:16px;background:var(--surface)}
+.boundary-dev h3{margin:4px 0 8px}.boundary-dev .boundary-badge{margin-bottom:8px}.boundary-dev .btn{margin-top:12px}
+.boundary-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.boundary-compare>div{margin-top:0}.boundary-compare strong{display:block;font-size:13px;margin-bottom:4px}
+.boundary-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.boundary-check{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0 0;min-width:0}
+.boundary-check legend{font-weight:750;font-size:14px;padding:0 6px}
+.boundary-assume{margin-top:10px;font-size:13px}.boundary-assume summary{cursor:pointer;color:var(--accent)}
+.boundary-kind{margin-top:12px}
+.boundary-summary h3{margin:8px 0 6px}
+.opt:focus-visible,.boundary-assume summary:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media(max-width:700px){.boundary-compare{grid-template-columns:1fr}}
+/* Atlas: the boundary line between two concepts; its style shows how much evidence exists. */
+.atlas-boundary{opacity:0;animation:atlas-membership-in .9s ease forwards;animation-delay:var(--delay,0s);cursor:pointer}
+.atlas-boundary:focus{outline:none}/* Focus ring is neutral white, never the achievement gold, so a focused draft line cannot look awarded. */
+.atlas-boundary:focus-visible .bnd-focus{stroke:#ffffff;stroke-opacity:.22}
+.atlas-key[hidden]{display:none}.atlas-key .bnd{width:16px;height:3px;border-radius:2px;background:#d9c6ff;box-shadow:none}
+@media(prefers-reduced-motion:reduce){.atlas-boundary{animation:none!important;opacity:1}}

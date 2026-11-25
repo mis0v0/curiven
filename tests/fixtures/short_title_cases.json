@@ -1,0 +1,7 @@
+{
+ "_about": "Phase 2C-R short-title rules, shared by tests/short_title.test.js (copy.js cleanShort) and tests/test_short_title.py (server.py clean_short_title) so both sides stay identical.",
+ "file": "01장_웹프로그래밍과_HTML5개요.pdf",
+ "valid": ["미분의 원리", "웹 입문", "SQL 인젝션", "기억의 왜곡", "SQL Injection", "블랙홀", "HTTP 쿠키와 세션", "광합성", "C++ 포인터"],
+ "invalid": ["학습 내용", "개요", "수업 자료", "Overview", "오늘의 미분", "나의 블랙홀", "민수님의 미분", "✦ 미분", "미분 🙂", "미분: 원리", "미분이란?", "왜 그럴까", "블랙홀은 왜 빛을 가둘까", "기억은 무엇", "01장 개요", "3강 미분", "제2장 미분", "web.pdf 정리", "01장_웹프로그래밍과_HTML5개요", "웹프로그래밍과 HTML5개요", "미", "", "이것은 다섯 단어를 넘는 너무 긴 이름", "가나다라마바사아자차카타파하가나다라마바사"],
+ "trimmed": [["  \"기억의 왜곡\"  ", "기억의 왜곡"], ["웹   입문", "웹 입문"]]
+}

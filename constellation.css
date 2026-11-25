@@ -1,0 +1,118 @@
+/* CURIVEN constellation — Minimal Curiosity "monochrome observatory" (design spec p.5). Zero libraries, no AI calls.
+   Atlas black #111317 only in constellation scenes; white and neutral-grey stars; fine lines; faint halos; no twinkling. */
+:root{--atlas-bg:#111317;--atlas-panel:#17191e;--atlas-line:#ffffff1f;--atlas-text:#f2f2f0;--atlas-muted:#a9a9a5;--atlas-dim:#8a8a86}
+/* Small map: an overview card in the same language. */
+.mapbox{position:relative;background:var(--atlas-bg);border:1px solid #2a2c31;overflow:hidden}
+.mapbox .map{position:relative;z-index:1}.right .map-caption{line-height:1.6}
+.mapbox .mini-title{fill:#f2f2f0;font-weight:650;paint-order:stroke;stroke:var(--atlas-bg);stroke-linejoin:round}
+/* Completion card: a quiet window onto the atlas. */
+.constellation-teaser{position:relative;overflow:hidden;border-radius:20px;padding:24px 26px;margin:22px 0;display:flex;align-items:center;justify-content:space-between;gap:var(--s2) var(--s3);flex-wrap:wrap;color:var(--atlas-text);background:var(--atlas-bg);border:1px solid #2a2c31}
+.constellation-teaser::before{content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff40 .7px,transparent 1px);background-size:47px 41px;opacity:.5;pointer-events:none}
+.constellation-teaser> *{position:relative;z-index:1}.constellation-teaser .atlas-kicker{color:var(--atlas-muted)}.constellation-teaser h3{font-size:22px;font-weight:650;line-height:1.4;margin:0;overflow-wrap:anywhere}.constellation-teaser p{color:#c9c9c5;max-width:460px;font-size:14px}
+.atlas-launch{border:1px solid #f2f2f0;background:#f2f2f0;color:#181818;min-height:46px;border-radius:14px;padding:10px 18px;font-weight:700}
+.atlas-launch:hover{background:#fff}
+.atlas-launch:focus-visible,.atlas-close:focus-visible,.atlas-switch button:focus-visible,.atlas-tool:focus-visible,.atlas-jump select:focus-visible,.atlas-open:focus-visible,.atlas-member:focus-visible{outline:2px solid #fff;outline-offset:3px}
+/* Overlay and window */
+.atlas-overlay[hidden]{display:none!important}.atlas-overlay{position:fixed;inset:0;z-index:1000;padding:clamp(8px,2.5vw,28px);display:flex;align-items:center;justify-content:center;background:#0b0c0fe6}
+.atlas-window{position:relative;width:min(1180px,100%);max-height:min(94dvh,940px);min-height:min(660px,90dvh);display:flex;flex-direction:column;overflow:hidden;border:1px solid #2c2e33;border-radius:24px;background:var(--atlas-bg);color:var(--atlas-text);box-shadow:0 30px 90px #000a}
+.atlas-header{display:flex;gap:20px;justify-content:space-between;align-items:center;padding:22px clamp(18px,3vw,36px) 14px}
+.atlas-overline{color:var(--atlas-muted);text-transform:uppercase;letter-spacing:.2em;font-size:11px;font-weight:650}
+.atlas-header h2{color:#fff;font-size:clamp(22px,2.2vw,28px);font-weight:600;letter-spacing:-.04em}
+.atlas-close{width:44px;height:44px;flex-shrink:0;border:1px solid #3a3c42;background:transparent;color:#f2f2f0;border-radius:50%;font-size:26px;line-height:1;display:grid;place-items:center}
+.atlas-close:hover{background:#ffffff12}
+.atlas-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px 12px;padding:0 clamp(18px,3vw,36px) 14px;flex-wrap:wrap}
+.atlas-switch{display:flex;gap:4px;padding:4px;border:1px solid #2f3137;border-radius:14px}
+.atlas-switch button{border:0;background:none;color:var(--atlas-muted);border-radius:10px;padding:8px 13px;font-size:13px;min-height:36px}
+.atlas-switch button[aria-pressed=true]{background:#f2f2f0;color:#181818;font-weight:650}
+.atlas-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.atlas-tool{border:1px solid #3a3c42;background:transparent;color:#e6e6e3;border-radius:12px;padding:8px 12px;font-size:13px;min-height:36px}
+.atlas-tool:hover,.atlas-tool[aria-pressed=true]{background:#ffffff12}
+.atlas-jump{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--atlas-muted)}.atlas-jump[hidden]{display:none}
+.atlas-jump select{max-width:240px;background:var(--atlas-panel);color:#f2f2f0;border:1px solid #3a3c42;border-radius:12px;padding:8px 10px;font-size:13px;min-height:36px}
+/* Sky and detail panel (side by side; stacked on narrow screens) */
+.atlas-content{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,min(300px,26%));gap:16px;padding:0 clamp(14px,2.4vw,28px) 4px}
+.atlas-sky{position:relative;overflow-y:auto;overflow-x:hidden;min-height:360px;border:1px solid #24262b;border-radius:18px;background:radial-gradient(ellipse at 50% 45%,#1a1c21 0%,var(--atlas-bg) 70%);overscroll-behavior:contain}
+.atlas-sky svg{display:block;width:100%;min-height:340px}
+.atlas-sky svg *{vector-effect:non-scaling-stroke}
+/* The panel scrolls on its own (min-height:0 lets the grid row shrink): long explanations and quotes are never cut off or covered. */
+.atlas-inspector{align-self:stretch;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:22px 22px 24px;background:var(--atlas-panel);border:1px solid #24262b;border-radius:18px;display:flex;flex-direction:column;gap:10px}
+.atlas-inspector:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+.atlas-inspector>*{flex-shrink:0}
+/* Title row: the short name, with a quiet rename control beside it. */
+.atlas-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.atlas-rename-btn{flex-shrink:0;border:0;background:none;color:var(--atlas-muted);font-size:12px;padding:6px 2px;min-height:36px;text-decoration:underline;text-decoration-color:#55575d;text-underline-offset:4px}
+.atlas-rename-btn:hover{color:#f2f2f0}
+.atlas-rename{display:flex;flex-direction:column;gap:8px}.atlas-rename label{font-size:12px;color:var(--atlas-muted)}
+.atlas-rename input{background:var(--atlas-bg);color:#fff;border:1px solid #4a4c52;border-radius:10px;padding:9px 12px;font-size:17px;min-height:44px;width:100%}
+.atlas-rename input[aria-invalid=true]{border-color:#e6e6e3}
+.atlas-rename-error{font-size:12px!important;color:#f2f2f0!important}
+.atlas-rename-actions{display:flex;gap:12px;flex-wrap:wrap}
+.atlas-rename-actions button{border:1px solid #3a3c42;background:transparent;color:#f2f2f0;border-radius:10px;padding:6px 14px;font-size:13px;min-height:40px}
+.atlas-rename-actions .atlas-rename-save{background:#f2f2f0;color:#181818;border-color:#f2f2f0;font-weight:650}
+/* Exploration details: full lesson title, first question, source file. */
+.atlas-about{border-top:1px solid #2a2c31;padding-top:10px}
+.atlas-about summary{cursor:pointer;font-size:13px;color:var(--atlas-muted);padding:6px 0;display:list-item}
+.atlas-about summary:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:4px}
+.atlas-about dl{margin:6px 0 0;display:grid;gap:2px}.atlas-about dt{font-size:11.5px;color:var(--atlas-dim);margin-top:8px}
+.atlas-about dd{margin:0;font-size:13.5px;color:#d4d4d0;line-height:1.65;overflow-wrap:anywhere;word-break:keep-all}
+.atlas-about dd.atlas-file{word-break:break-all;color:#c9c9c5}
+.atlas-inspector h3{font-size:21px;line-height:1.45;color:#fff;font-weight:650;overflow-wrap:anywhere;word-break:keep-all}
+.atlas-inspector p{font-size:14px;color:#d4d4d0;line-height:1.75;overflow-wrap:anywhere;word-break:keep-all}
+.atlas-inspector .atlas-from{color:var(--atlas-muted);font-size:13px;margin-top:-4px}
+.atlas-inspector .atlas-tier{font-size:13px;font-weight:650;color:#fff}
+.atlas-inspector .atlas-quote{border-left:2px solid #f2f2f0;padding-left:10px;color:#e6e6e3}
+.atlas-inspector .atlas-hint{color:var(--atlas-dim);font-size:12px;border-top:1px solid #2a2c31;padding-top:12px}
+.atlas-inspector .atlas-sub{font-size:12px;color:var(--atlas-muted);margin-top:4px;letter-spacing:.02em}
+.atlas-members{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.atlas-members li{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.atlas-member{border:0;background:none;color:#e6e6e3;font-size:14px;padding:5px 0;text-align:left;text-decoration:underline;text-decoration-color:#55575d;text-underline-offset:4px}
+.atlas-member:hover{text-decoration-color:#fff}
+.atlas-member-tier{font-size:11px;color:var(--atlas-muted);border:1px solid #3a3c42;border-radius:20px;padding:1px 8px}
+.atlas-open{margin-top:auto;border:1px solid #3a3c42;background:transparent;color:#f2f2f0;border-radius:12px;padding:10px 14px;font-size:13px;min-height:44px}
+.atlas-open:hover{background:#ffffff12}
+.atlas-footer{display:flex;justify-content:space-between;align-items:center;gap:8px 18px;padding:12px clamp(18px,3vw,36px) 14px;color:var(--atlas-muted);font-size:12px;flex-wrap:wrap}
+.atlas-guide{margin-left:auto;text-align:right}.atlas-guide[open]{flex-basis:100%;margin-left:0;text-align:left}
+.atlas-guide summary{cursor:pointer;display:list-item;padding:6px 4px;color:var(--atlas-muted)}
+.atlas-guide summary:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:4px}
+.atlas-guide[open] summary{color:#f2f2f0}
+.atlas-legends{display:flex;gap:6px 16px;flex-wrap:wrap;margin-top:8px}.atlas-key{display:inline-flex;align-items:center;gap:7px}.atlas-key[hidden]{display:none}
+.atlas-note{color:var(--atlas-dim);font-size:11.5px;margin-top:6px}
+/* Stars and lines */
+.atlas-star{cursor:pointer;outline:none}
+.atlas-star .hit{pointer-events:all}
+.atlas-star .star-core{transition:r .15s,opacity .15s}
+.atlas-star:is(:hover,:focus-visible,.selected) .star-core{filter:drop-shadow(0 0 4px #ffffffb0)}
+.atlas-star:focus-visible .hit,.atlas-star.selected .hit{stroke:#ffffff;stroke-opacity:.7;stroke-width:1;stroke-dasharray:2 3}
+.atlas-star .atlas-node-label{pointer-events:auto;font-size:13px;fill:#cfcfcb;font-weight:500;paint-order:stroke;stroke:var(--atlas-bg);stroke-width:3px;stroke-linejoin:round}
+.atlas-star .atlas-topic-label{fill:#ffffff;font-weight:650}
+.atlas-label-plate{fill:var(--atlas-bg);fill-opacity:.92;stroke:none;pointer-events:none}
+.atlas-sky svg.overview .atlas-star:not(.atlas-topic) .atlas-label-plate{display:none}
+.atlas-star.selected .atlas-node-label{fill:#fff}
+.atlas-cluster{transition:opacity .26s}
+.atlas-cluster.dim{opacity:.5}
+.atlas-sky svg.overview .atlas-star:not(.atlas-topic) .atlas-node-label{display:none}
+.atlas-boundary .atlas-node-label{fill:#f2f2f0;paint-order:stroke;stroke:var(--atlas-bg);stroke-width:3px}
+.atlas-boundary:focus-visible{outline:none}.atlas-boundary:focus-visible .bnd-focus{stroke:#ffffff40}
+/* One-time reveal (260ms stars, 320ms lines); skipped on redraws already seen and with reduced motion. */
+.atlas-star{animation:atlas-appear .26s ease-out both;animation-delay:var(--delay,0s)}
+.atlas-link{stroke-dasharray:1;stroke-dashoffset:1;animation:atlas-trace .32s ease-out forwards;animation-delay:var(--delay,0s)}
+.atlas-link:focus-visible{outline:none;stroke-opacity:1;stroke-width:2}
+.atlas-membership{animation:atlas-fade .26s ease-out both}
+#atlasSvg.no-anim .atlas-star,#atlasSvg.no-anim .atlas-link,#atlasSvg.no-anim .atlas-membership{animation:none;opacity:1;stroke-dashoffset:0}
+@keyframes atlas-appear{from{opacity:0}to{opacity:1}}
+@keyframes atlas-trace{to{stroke-dashoffset:0}}
+@keyframes atlas-fade{from{opacity:0}to{opacity:1}}
+@media(max-width:760px){
+ .atlas-overlay{padding:0}
+ .atlas-window{max-height:100dvh;min-height:100dvh;border-radius:0;border:0;overflow-y:auto}
+ .atlas-header{padding:18px 18px 10px}.atlas-header h2{font-size:23px}
+ .atlas-toolbar{padding:0 18px 12px}
+ .atlas-tools{width:100%}.atlas-jump{flex:1 1 100%}.atlas-jump select{flex:1 1 100%;min-width:0;width:100%;max-width:none}
+ .atlas-content{display:block;flex:none;padding:0 12px}
+ .atlas-sky{min-height:300px;max-height:58dvh}
+ .atlas-sky svg{min-height:300px}
+ .atlas-inspector{margin-top:12px;overflow:visible;padding:18px}
+ .atlas-inspector p{font-size:15px}.atlas-rename-btn{min-height:44px}
+ .atlas-footer{padding:14px 18px 22px}
+}
+@media(prefers-reduced-motion:reduce){.atlas-star,.atlas-link,.atlas-membership,.atlas-cluster{animation:none!important;transition:none!important;opacity:1}.atlas-cluster.dim{opacity:.5}.atlas-link{stroke-dashoffset:0}.atlas-star .star-core{transition:none}}

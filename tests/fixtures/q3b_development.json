@@ -1,0 +1,525 @@
+{
+ "provenance": "AI-authored (one author, the same author as the prompt change). Not human-verified, T0. Expectations were written after the author had designed the prompt rules but before the prompt was edited and before any live generation; they are therefore not independent of the change. An independent reader should review them, and may replace them, before a comparison. Not from, or tuned to, the frozen benchmark cases.",
+ "what": "desired = authored example of the feedback we want; flawed = authored example of a fault. Neither is model output. MOCKED in tests: they check the pipeline, not the prompt.",
+ "cases": [
+  {
+   "id": "D1",
+   "cover": "necessary correction versus unnecessary disclosure",
+   "subject": "health science",
+   "lesson": {
+    "title": "감기와 항생제",
+    "explainPrompt": "감기에 항생제가 도움이 되는지, 왜 그런지 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "감기에 걸리면 항생제를 먹어야 해요. 항생제는 바이러스를 죽이니까 빨리 나아요.",
+   "expect": {
+    "correct explicitly": [
+     "antibiotics do not act on viruses"
+    ],
+    "must not": [
+     "soften or withhold that correction",
+     "write the full account of how antibiotics act on bacteria"
+    ],
+    "remaining task": "what follows for a virus-caused cold, or when an antibiotic would be reasonable",
+    "misconceptions": "at least one"
+   },
+   "desired": {
+    "summary": "감기와 항생제의 관계를 다시 볼 필요가 있어요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "항생제는 바이러스를 죽이니까 빨리 나아요.",
+      "issue": "항생제는 바이러스를 죽이지 못해요.",
+      "why": "항생제는 세균에 작용하는 약이라 바이러스가 원인인 감기는 낫게 하지 못하고, 불필요하게 먹으면 부작용이 생길 수 있어요.",
+      "question": "이 사실을 바탕으로, 감기 환자가 항생제를 달라고 할 때 어떤 점을 먼저 확인해야 할지 설명해 볼까요?"
+     }
+    ],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flawed": {
+    "summary": "항생제의 역할을 다시 생각해 보세요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "항생제는 바이러스를 죽이니까 빨리 나아요.",
+      "issue": "항생제가 작용하는 대상을 다시 생각해 보세요.",
+      "why": "여기에는 다시 볼 부분이 있어요.",
+      "question": "항생제는 무엇에 작용할까요?"
+     }
+    ],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flaw": "withholds a materially important correction"
+  },
+  {
+   "id": "D2",
+   "cover": "a reason that answers its own question",
+   "subject": "physics",
+   "lesson": {
+    "title": "힘과 운동",
+    "explainPrompt": "힘이 물체의 운동을 어떻게 바꾸는지 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "물체를 계속 움직이게 하려면 계속 힘을 줘야 해요.",
+   "expect": {
+    "correct explicitly": [
+     "motion does not by itself need a continuing force"
+    ],
+    "must not": [
+     "list in the reason what the question asks for"
+    ],
+    "remaining task": "a comparison or prediction the learner has not made",
+    "misconceptions": "at least one"
+   },
+   "desired": {
+    "summary": "힘과 움직임을 연결하려는 점이 좋아요. 둘의 관계를 다시 살펴봐요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "물체를 계속 움직이게 하려면 계속 힘을 줘야 해요.",
+      "issue": "움직임을 유지하는 데 힘이 계속 필요하다는 전제는 맞지 않아요.",
+      "why": "힘이 작용하지 않아도 움직이던 물체는 같은 속도로 계속 움직일 수 있어요. 일상에서 멈추는 데에는 다른 까닭이 있어요.",
+      "question": "얼음판과 흙길에서 같은 빠르기로 민 물체를 비교하면, 멈추는 까닭을 어떻게 설명할 수 있을까요?"
+     }
+    ],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flawed": {
+    "summary": "힘과 움직임을 다시 살펴봐요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "물체를 계속 움직이게 하려면 계속 힘을 줘야 해요.",
+      "issue": "힘이 계속 필요하지는 않아요.",
+      "why": "물체가 멈추는 까닭은 마찰력과 공기 저항이 운동 방향과 반대로 작용하기 때문이에요.",
+      "question": "물체는 왜 멈출까요?"
+     }
+    ],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flaw": "the reason fully answers its own question"
+  },
+  {
+   "id": "D3",
+   "cover": "a question answered by another feedback item",
+   "subject": "biology",
+   "lesson": {
+    "title": "광합성과 호흡",
+    "explainPrompt": "식물의 광합성과 호흡이 각각 언제, 왜 일어나는지 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "광합성은 식물이 양분을 만드는 과정이에요. 그래서 식물은 낮에는 숨을 쉬지 않아요.",
+   "expect": {
+    "correct explicitly": [
+     "plants respire in daylight too"
+    ],
+    "must not": [
+     "state in one item what another item asks"
+    ],
+    "remaining task": "why gas exchange looks different by day, and what respiration is for",
+    "misconceptions": "at least one",
+    "missing": "the role of respiration"
+   },
+   "desired": {
+    "summary": "광합성의 핵심은 짚었어요. 호흡은 다시 살펴봐요.",
+    "correct": [
+     {
+      "quote": "광합성은 식물이 양분을 만드는 과정이에요.",
+      "point": "광합성으로 양분을 만든다는 점이 맞아요."
+     }
+    ],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "그래서 식물은 낮에는 숨을 쉬지 않아요.",
+      "issue": "식물은 낮에도 호흡해요.",
+      "why": "광합성이 일어난다고 호흡이 멈추는 것은 아니며, 두 과정은 함께 일어날 수 있어요.",
+      "question": "낮에 잎이 이산화 탄소를 흡수하는 것처럼 보인다는 관찰을, 두 과정이 함께 일어난다는 사실로 어떻게 설명할까요?"
+     }
+    ],
+    "missing": [
+     {
+      "issue": "식물에게 호흡이 왜 필요한지가 빠져 있어요.",
+      "question": "햇빛이 없는 밤에도 씨앗이 싹틀 수 있다는 사실은 호흡의 역할에 대해 무엇을 알려 줄까요?"
+     }
+    ],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flawed": {
+    "summary": "광합성은 짚었어요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "그래서 식물은 낮에는 숨을 쉬지 않아요.",
+      "issue": "식물은 낮에도 호흡해요.",
+      "why": "식물도 살아가는 데 필요한 에너지를 얻으려고 항상 호흡해요.",
+      "question": "언제 호흡할까요?"
+     }
+    ],
+    "missing": [
+     {
+      "issue": "호흡의 목적이 빠져 있어요.",
+      "question": "식물은 무엇을 얻으려고 호흡할까요?"
+     }
+    ],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flaw": "the first reason answers the second question"
+  },
+  {
+   "id": "D4",
+   "cover": "a genuinely useful counterexample (populated context)",
+   "subject": "statistics",
+   "lesson": {
+    "title": "상관과 인과",
+    "explainPrompt": "두 값이 함께 변할 때 원인을 말하려면 무엇이 더 필요한지 설명해 보세요.",
+    "concepts": [
+     {
+      "id": "k1",
+      "name": "상관",
+      "description": "두 값이 함께 변하는 관계"
+     }
+    ],
+    "technical": [
+     {
+      "heading": "상관이 크면",
+      "text": "상관이 크면 한쪽이 다른 쪽의 원인이라고 볼 수 있다."
+     }
+    ]
+   },
+   "text": "아이스크림 판매량이 늘면 물놀이 사고가 늘어요. 그러니 아이스크림이 사고의 원인이에요.",
+   "expect": {
+    "correct explicitly": [
+     "co-variation alone does not establish cause"
+    ],
+    "must not": [
+     "treat the (wrong) lesson sentence as true",
+     "name the confounder that the question asks for"
+    ],
+    "remaining task": "find a third condition or a check",
+    "misconceptions": "at least one"
+   },
+   "desired": {
+    "summary": "두 값이 함께 변한다는 관찰은 좋아요. 원인이라는 결론은 더 따져 봐야 해요.",
+    "correct": [
+     {
+      "quote": "아이스크림 판매량이 늘면 물놀이 사고가 늘어요.",
+      "point": "함께 변한다는 관찰을 분명히 썼어요."
+     }
+    ],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "그러니 아이스크림이 사고의 원인이에요.",
+      "issue": "함께 늘었다는 사실만으로 원인이라고 할 수 없어요.",
+      "why": "원인이 아니어도 두 값은 함께 변할 수 있어요.",
+      "question": "판매를 금지해도 사고가 줄지 않는 마을이 있다면, 두 값이 함께 늘어난 까닭을 어떻게 다르게 설명할 수 있을까요?"
+     }
+    ],
+    "missing": [],
+    "explained": [],
+    "uncertainty": "학습 자료의 ‘상관이 크면 원인’이라는 문장은 일반적으로 확립된 사실과 달라 기준으로 쓰지 않았어요."
+   },
+   "context": {
+    "story": "바닷가 마을의 자료를 살펴보는 이야기",
+    "prediction": {
+     "question": "두 값이 함께 늘면 무엇을 말할 수 있을까요?",
+     "learner": "하나가 원인일 것 같아요.",
+     "unsure": false
+    },
+    "scenarios": [
+     {
+      "title": "우산과 비",
+      "question": "우산을 쓴 사람이 많은 날 비가 온다면?",
+      "options": [
+       "우산이 비를 부른다",
+       "둘은 함께 나타난다"
+      ],
+      "answered": true,
+      "unsure": false,
+      "learnerChoice": "둘은 함께 나타난다",
+      "statedOutcome": "둘은 함께 나타난다",
+      "reason": "함께 나타난다고 해서 한쪽이 원인인 것은 아니에요."
+     }
+    ],
+    "reflection": ""
+   }
+  },
+  {
+   "id": "D5",
+   "cover": "correct but informal learner wording",
+   "subject": "economics",
+   "lesson": {
+    "title": "가격은 어떻게 움직일까",
+    "explainPrompt": "수요가 공급보다 많을 때 가격이 어떻게 되고 왜 그런지 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "수요가 공급보다 확 많아지면 물건이 귀해지니까 값이 올라가요. 그러면 사려는 사람이 좀 줄고 팔려는 쪽은 더 내놔요.",
+   "expect": {
+    "credit": [
+     "both sentences"
+    ],
+    "must not": [
+     "treat everyday wording as an error",
+     "add a missing item for formal vocabulary"
+    ],
+    "remaining task": "none required",
+    "critiques": "none"
+   },
+   "desired": {
+    "summary": "가격이 움직이는 까닭과 그 뒤의 변화까지 자기 말로 정확히 설명했어요.",
+    "correct": [
+     {
+      "quote": "물건이 귀해지니까 값이 올라가요.",
+      "point": "부족이 가격을 올리는 과정을 설명했어요."
+     },
+     {
+      "quote": "그러면 사려는 사람이 좀 줄고 팔려는 쪽은 더 내놔요.",
+      "point": "가격이 양쪽에 미치는 영향까지 이었어요."
+     }
+    ],
+    "precision": [],
+    "misconceptions": [],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flawed": {
+    "summary": "대체로 맞아요.",
+    "correct": [],
+    "precision": [
+     {
+      "quote": "물건이 귀해지니까",
+      "issue": "‘귀해지다’ 대신 ‘초과 수요’라고 써야 해요.",
+      "why": "전문 용어가 더 정확해요.",
+      "question": "전문 용어로 바꾸면 무엇일까요?"
+     }
+    ],
+    "misconceptions": [],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flaw": "manufactures an error from vocabulary"
+  },
+  {
+   "id": "D6",
+   "cover": "missing required concepts versus optional precision",
+   "subject": "mathematics",
+   "lesson": {
+    "title": "분수의 덧셈",
+    "explainPrompt": "분모가 다른 분수를 더할 때 왜 분모를 같게 하는지 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "분수를 더할 때는 분모를 같게 만들어요. 그건 약속이라서 그래요.",
+   "expect": {
+    "credit": [
+     "making denominators equal"
+    ],
+    "must not": [
+     "put a vocabulary point ahead of the missing reason"
+    ],
+    "remaining task": "why equal parts are needed",
+    "first shown question": "about the missing reason"
+   },
+   "desired": {
+    "summary": "방법은 알고 있어요. 왜 그렇게 하는지를 설명해 보세요.",
+    "correct": [
+     {
+      "quote": "분수를 더할 때는 분모를 같게 만들어요.",
+      "point": "방법이 맞아요."
+     }
+    ],
+    "precision": [],
+    "misconceptions": [],
+    "missing": [
+     {
+      "issue": "분모를 같게 해야 하는 까닭이 빠져 있어요.",
+      "question": "피자의 이분의 일 조각 하나와 삼분의 일 조각 하나는 두 조각인데, 이 합을 ‘몇 분의 몇’이라고 바로 말할 수 없는 까닭은 무엇일까요?"
+     }
+    ],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flawed": {
+    "summary": "방법은 맞아요.",
+    "correct": [
+     {
+      "quote": "분수를 더할 때는 분모를 같게 만들어요.",
+      "point": "맞아요."
+     }
+    ],
+    "precision": [
+     {
+      "quote": "분모를 같게 만들어요.",
+      "issue": "‘통분’이라고 하면 좋아요.",
+      "why": "용어가 있어요.",
+      "question": "뭐라고 부를까요?"
+     }
+    ],
+    "misconceptions": [],
+    "missing": [
+     {
+      "issue": "까닭이 빠져 있어요.",
+      "question": "왜 같게 할까요?"
+     }
+    ],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flaw": "optional vocabulary takes the one question shown first"
+  },
+  {
+   "id": "D7",
+   "cover": "an explanation with no evidence of understanding",
+   "subject": "programming",
+   "lesson": {
+    "title": "재귀 함수",
+    "explainPrompt": "재귀 함수가 어떻게 동작하고 왜 멈추는지 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "재귀 함수는 중요한 개념이에요. 잘 모르겠지만 열심히 공부할게요.",
+   "expect": {
+    "must not": [
+     "credit understanding",
+     "claim a misconception",
+     "explain recursion"
+    ],
+    "remaining task": "a small first step the learner can try",
+    "uncertainty": "states what cannot be judged",
+    "explained": "none"
+   },
+   "desired": {
+    "summary": "아직 동작 방식에 대한 설명이 없어 이해를 확인하기 어려워요. 작은 예부터 시작해 봐요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [],
+    "missing": [
+     {
+      "issue": "재귀 함수가 어떻게 동작하고 멈추는지가 아직 없어요.",
+      "question": "자기 자신을 다시 부르는 함수가 3에서 시작해 1씩 줄어든다면, 부르는 순서를 종이에 적어 볼까요?"
+     }
+    ],
+    "explained": [],
+    "uncertainty": "동작에 대한 문장이 없어 무엇을 이해했는지 판단할 수 없어요."
+   }
+  },
+  {
+   "id": "D8",
+   "cover": "a fully correct explanation requiring no corrective question",
+   "subject": "chemistry",
+   "lesson": {
+    "title": "못은 왜 녹슬까",
+    "explainPrompt": "못이 녹스는 조건과 막는 방법을 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "쇠로 된 못이 녹슬려면 물과 산소가 함께 있어야 해요. 그래서 기름을 발라 둘을 막으면 녹이 잘 슬지 않아요.",
+   "expect": {
+    "credit": [
+     "both sentences"
+    ],
+    "must not": [
+     "add a question, missing or precision item"
+    ],
+    "remaining task": "none required",
+    "critiques": "none"
+   },
+   "desired": {
+    "summary": "녹스는 조건과 막는 까닭을 정확히 연결했어요.",
+    "correct": [
+     {
+      "quote": "쇠로 된 못이 녹슬려면 물과 산소가 함께 있어야 해요.",
+      "point": "두 조건을 모두 짚었어요."
+     },
+     {
+      "quote": "그래서 기름을 발라 둘을 막으면 녹이 잘 슬지 않아요.",
+      "point": "막는 방법을 조건과 연결했어요."
+     }
+    ],
+    "precision": [],
+    "misconceptions": [],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flawed": {
+    "summary": "잘했어요.",
+    "correct": [],
+    "precision": [
+     {
+      "quote": "물과 산소가 함께 있어야 해요.",
+      "issue": "소금기도 녹을 빠르게 해요.",
+      "why": "염분은 반응을 빠르게 해요.",
+      "question": "소금기는 어떤 영향을 줄까요?"
+     }
+    ],
+    "misconceptions": [],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   },
+   "flaw": "adds a deeper condition the question did not ask for"
+  },
+  {
+   "id": "D9",
+   "cover": "a genuine question or exploratory hypothesis",
+   "subject": "astronomy",
+   "lesson": {
+    "title": "달의 모양 변화",
+    "explainPrompt": "달의 모양이 왜 바뀌는지 설명해 보세요.",
+    "concepts": [],
+    "technical": []
+   },
+   "text": "달의 모양이 바뀌는 건 지구 그림자 때문인 것 같아요. 보름달일 때는 왜 그림자가 없나요?",
+   "expect": {
+    "correct explicitly": [
+     "the phases are not caused by the Earth's shadow"
+    ],
+    "must not": [
+     "deliver the hedged guess as a confirmed misconception",
+     "credit the question as understanding",
+     "give the full Sun–Earth–Moon account"
+    ],
+    "remaining task": "a comparison that tests the guess"
+   },
+   "desired": {
+    "summary": "그림자를 떠올린 가설과 스스로 던진 질문이 좋은 출발점이에요.",
+    "correct": [],
+    "precision": [],
+    "misconceptions": [
+     {
+      "quote": "달의 모양이 바뀌는 건 지구 그림자 때문인 것 같아요.",
+      "issue": "모양이 바뀌는 까닭은 지구 그림자가 아니에요.",
+      "why": "지구 그림자가 달을 가리는 일은 가끔만 일어나지만, 모양은 매일 조금씩 바뀌어요.",
+      "question": "손전등 옆에서 공을 들고 한 바퀴 돌면, 밝은 부분이 어떻게 보이는지 관찰해 내 가설과 비교해 볼까요?"
+     }
+    ],
+    "missing": [],
+    "explained": [],
+    "uncertainty": ""
+   }
+  }
+ ]
+}
