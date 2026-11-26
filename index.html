@@ -110,9 +110,17 @@ function conflictCard(m){const c=panel(m,'다른 곳에서 기록이 바뀌었�
  const row=E('div','actions');row.append(button('최신 기록 불러오기',()=>{reloadFromStorage();access=!navigator.locks?'solo':hasLock?'writer':'reader';if(access==='reader')waitTurn();render()}));c.append(row)}
 /* Text the learner typed but has not saved survives any re-render of the same screen (status polling, settings,
    a lesson arriving): fields are matched by id, and only when the lesson and stage are unchanged. */
+/* A re-render (feedback arriving, status polling) keeps keyboard focus and the caret where the learner left them:
+   the same element (by id) is focused again without scrolling. Nothing moves when focus was outside the page body. */
+function focusWithin(){const a=document.activeElement;if(!a||!a.id||!$('#main').contains(a))return null;return {id:a.id,sel:'selectionStart' in a&&a.selectionStart!=null?[a.selectionStart,a.selectionEnd]:null}}
+function refocus(had){if(!had)return;const el=document.getElementById(had.id);if(!el||el===document.activeElement||!el.closest('#main'))return;if(had.sel&&el.setSelectionRange)try{el.setSelectionRange(...had.sel)}catch{}el.focus({preventScroll:true})} // selection first: setting it on a focused field makes the browser scroll to the caret
+/* Explanation versions the learner opened or closed stay that way across a re-render of the same screen. Read from the
+   page itself, because the 'toggle' event that records them is delivered later and a re-render can come first. */
+function openFolds(){return {active:data.active,stage:current()?.stage,ids:[...document.querySelectorAll('#main details.draft-earlier[id], #main details.xr-round[id]')].map(d=>[d.id,d.open])}}
+function restoreFolds(k){if(!k||k.active!==data.active||k.stage!==current()?.stage)return;for(const [id,o] of k.ids){const d=document.getElementById(id);if(d&&d.closest('#main')&&d.open!==o)d.open=o}}
 function unsentInputs(){return {active:data.active,stage:current()?.stage,fields:[...document.querySelectorAll('#main [data-dirty][id]')].filter(el=>'value' in el).map(el=>[el.id,el.value])}}
 function restoreInputs(k){if(!k||k.active!==data.active||k.stage!==current()?.stage)return;for(const [id,v] of k.fields){const el=document.getElementById(id);if(el&&el.closest('#main')&&!el.dataset.dirty&&el.value!==v){el.value=v;el.dataset.dirty='1';el.dispatchEvent(new Event('input',{bubbles:true}))}}}
-function render(){flushDraft();const keep=unsentInputs(),l=current(),stage=l?l.stage:0;$('#nav').replaceChildren(...steps.map(([name,desc],i)=>{const b=button(`${i+1}. ${name}`,()=>{l.stage=i;persist();render()},'navitem'+(l&&stage===i?' active':''));b.disabled=!l||i>l.maxStage;return b}));const m=$('#main');m.replaceChildren();notices(m);layoutFor(l,stage);if(access==='reader'||access==='pending')readerCard(m);else if(access==='conflict')conflictCard(m);else if(!profile)onboarding(m);else if(!l)homeHero(m);else if(stage===0)(l.lesson?home(m,l):preparePanel(m,l));else if(stage===1)story(m,l);else if(stage===2)practice(m,l);else if(stage===3)technical(m,l);else if(stage===4)explain(m,l);else done(m,l);if(l?.material&&l.lesson&&(stage===1||stage===2)&&access!=='reader'&&access!=='conflict'){const card=m.querySelector('section.card');if(card)materialViewer(card,l)}if(l&&l.lesson&&stage>=1&&!view&&profile&&canWrite())mountHelp(m,l);restoreInputs(keep);graph(l);journal(l);const viewer=document.getElementById("atlasMiniBtn");if(viewer){viewer.disabled=!(l&&l.lesson)&&!data.lessons.some(x=>x.complete&&x.lesson)}}
+function render(){flushDraft();const keep=unsentInputs(),had=focusWithin(),folds=openFolds(),l=current(),stage=l?l.stage:0;$('#nav').replaceChildren(...steps.map(([name,desc],i)=>{const b=button(`${i+1}. ${name}`,()=>{l.stage=i;persist();render()},'navitem'+(l&&stage===i?' active':''));b.disabled=!l||i>l.maxStage;return b}));const m=$('#main');m.replaceChildren();notices(m);layoutFor(l,stage);if(access==='reader'||access==='pending')readerCard(m);else if(access==='conflict')conflictCard(m);else if(!profile)onboarding(m);else if(!l)homeHero(m);else if(stage===0)(l.lesson?home(m,l):preparePanel(m,l));else if(stage===1)story(m,l);else if(stage===2)practice(m,l);else if(stage===3)technical(m,l);else if(stage===4)explain(m,l);else done(m,l);if(l?.material&&l.lesson&&(stage===1||stage===2)&&access!=='reader'&&access!=='conflict'){const card=m.querySelector('section.card');if(card)materialViewer(card,l)}if(l&&l.lesson&&stage>=1&&!view&&profile&&canWrite())mountHelp(m,l);restoreInputs(keep);restoreFolds(folds);refocus(had);graph(l);journal(l);const viewer=document.getElementById("atlasMiniBtn");if(viewer){viewer.disabled=!(l&&l.lesson)&&!data.lessons.some(x=>x.complete&&x.lesson)}}
 function panel(m,title,eyebrow=''){const c=E('section','card');if(eyebrow)c.append(E('div','eyebrow',eyebrow));c.append(E('h2','',title));m.append(c);return c}
 /** A learning stage: the stable stage label, the exploration it belongs to, and the stage heading (shared copy rules, copy.js). */
 function stagePanel(m,l,stage,{heading,sub,context=true}={}){const sc=C.stageCopy(stage,l.lesson),c=E('section','card stage');c.dataset.stage=String(stage);
@@ -210,22 +218,56 @@ function technical(m,l){const d=l.lesson,c=stagePanel(m,l,3);
  const ks=E('div','key-concepts');ks.id='keyConcepts';ks.append(E('h3','','이 탐험의 핵심 개념'));for(const k of d.concepts){const r=E('p','');r.append(E('strong','',k.name),document.createTextNode(' — '+k.description));if(l.material){const src=CuriMaterial.verify(k.sources,l.material);r.append(E('span','tiny material-tag',src.length?' · 자료 '+[...new Set(src.map(s=>CuriMaterial.label(l.material,s.page)))].join(', '):' · AI 보충'))}ks.append(r)}c.append(ks);
  d.technical.forEach((x,i)=>{const b=E('section','concept tech-section');const hd=E('h3','');hd.append(E('span','tech-num',String(i+1)),document.createTextNode(x.heading));b.append(hd);techLayers(b,x,l.id+'|tech|'+i);materialRefs(b,l,x);if(canWrite())helpLink(b,l,i,x.heading);c.append(b)});materialViewer(c,l);sourcesBlock(c,l);c.append(button('이해한 내용 정리하기 →',()=>{track(l,'개념 설명을 읽음');setStage(l,4)}))}
 function explain(m,l){const d=l.lesson,c=stagePanel(m,l,4),inv=C.explainInvite(d);if(inv.question){const q=E('p','q explain-question',inv.question);q.id='explainQuestion';c.append(q)}
- const restored=l.draftInProgress?.text,last=l.drafts.at(-1)?.text||'',t=area('draft','정해진 형식은 없어요. 이해한 만큼, 떠오르는 순서대로 적어 보세요.',restored??last,9);t.setAttribute('aria-label','내가 이해한 내용');t.addEventListener('input',()=>queueDraft(l.id,t.value));c.append(t);
+ const restored=l.draftInProgress?.text,last=l.drafts.at(-1)?.text||'',t=area('draft','정해진 형식은 없어요. 이해한 만큼, 떠오르는 순서대로 적어 보세요.',restored??last,9);t.setAttribute('aria-label','내가 이해한 내용');t.addEventListener('input',()=>{queueDraft(l.id,t.value);syncEdit(l,t)});c.append(t);
  explainScaffold(c,l,inv,t);
  if(restored!=null){const h=E('p','hint','저장하지 않은 초안을 불러왔어요.');h.id='draftRestored';c.append(h)}
  if(l.drafts.length)c.append(E('p','hint','고쳐 쓰면 새 버전으로 저장돼요. 이전 설명도 그대로 남아요.'));
- // Status only when there is something to know (reviewing, or no AI); no standing disclaimer.
- const reviewing=inflight.has('fb:'+l.id);if(reviewing||!provider.online){const msg=E('div','msg',reviewing?'AI가 설명을 읽고 있어요…':'AI가 연결되지 않았어요. 설명은 저장되고, 연결한 뒤 피드백을 받을 수 있어요.');msg.id='explainStatus';msg.setAttribute('role','status');c.append(msg)}const row=E('div','actions');
- const submit=button(provider.online?'설명 저장하고 피드백 받기':'내 설명 저장하기',()=>{const text=t.value.trim();if(text.length<12){toast('한두 문장만 더 적어 주세요. 모르는 부분은 모른다고 적어도 괜찮아요.');return}if(busy)return;clearTimeout(draftTimer);pendingDraft=null;delete l.draftInProgress;const draft={text,at:Date.now(),feedback:null};l.drafts.push(draft);track(l,'이해한 내용을 설명함');if(provider.online)requestFeedback(l,draft);else render()});submit.disabled=reviewing;row.append(submit,button('학습 마무리하기 →',()=>{if(!l.drafts.length){toast('먼저 자신의 설명을 남겨 주세요.');return}if(!l.complete){l.complete=true;track(l,'탐험 완료');setStage(l,5);notionAfterComplete(l);return}setStage(l,5)},'btn secondary'));c.append(row);
- if(l.drafts.length){const h=E('div','concept');h.id='draftHistory';h.append(E('h3','',`내 설명 ${l.drafts.length}개 기록`));const ids=d.concepts.map(x=>x.id);l.drafts.slice().reverse().forEach((draft,i)=>{const n=l.drafts.length-i;h.append(E('p','tiny draft-version',`설명 ${n} · ${n===1?'처음 쓴 설명':'고쳐 쓴 설명'}`),E('div','old',draft.text));if(canWrite())draftAsk(h,l,draft,n);
-  let f=null,bad=false;if(draft.feedback){try{f=L.validateFeedback(draft.feedback,ids,draft.text)}catch{bad=true}}
-  if(f)renderFeedback(h,f,d.concepts,{l,draft});
-  else{h.append(E('p','hint feedback-missing',bad?'저장된 AI 피드백의 형식이 올바르지 않아 표시하지 않았어요. 내 설명은 그대로 남아 있어요.':draft.feedbackError?'AI 피드백을 받지 못했어요: '+draft.feedbackError+' (내 설명은 저장됐어요)':'AI 피드백 없음'));
-   if(i===0&&provider.online&&!reviewing){const retry=button('AI 검토 다시 요청',()=>requestFeedback(l,draft),'small-action');retry.id='retryFeedback';h.append(retry)}}
-  if(i<l.drafts.length-1)h.append(E('hr','divider'))});
-  const lost=T.unlinked(l);if(lost.length){const d=E('details','fb-unplaced');d.id='fbUnlinked';d.append(E('summary','',`어느 설명의 피드백에 대한 대화인지 확인할 수 없어요 (${lost.filter(m=>m.role==='learner').length}개)`));
-   for(const m of lost)d.append(E('p','hint '+(m.role==='learner'?'fb-unplaced-mine':'fb-unplaced-ai'),(m.role==='learner'?'나: ':'AI 튜터 (AI): ')+m.text));h.append(d)}
-  c.append(h)}boundaryApply(c,l)}
+ // Status only when there is something to know (no AI); no standing disclaimer. "Reviewing" is shown where the
+ // feedback will appear (in the latest explanation, below), not here.
+ const reviewing=inflight.has('fb:'+l.id);if(!provider.online){const msg=E('div','msg','AI가 연결되지 않았어요. 설명은 저장되고, 연결한 뒤 피드백을 받을 수 있어요.');msg.id='explainStatus';msg.setAttribute('role','status');c.append(msg)}const row=E('div','actions');
+ // After saving, keyboard focus goes to the heading of the explanation just saved (right below), never scrolling the page.
+ const submit=button(provider.online?'설명 저장하고 피드백 받기':'내 설명 저장하기',()=>{const text=t.value.trim();if(text.length<12){toast('한두 문장만 더 적어 주세요. 모르는 부분은 모른다고 적어도 괜찮아요.');return}if(busy)return;clearTimeout(draftTimer);pendingDraft=null;delete l.draftInProgress;const draft={text,at:Date.now(),feedback:null};l.drafts.push(draft);track(l,'이해한 내용을 설명함');if(provider.online)requestFeedback(l,draft);else render();document.getElementById('currentTitle')?.focus({preventScroll:true})});submit.disabled=reviewing;row.append(submit,button('학습 마무리하기 →',()=>{if(!l.drafts.length){toast('먼저 자신의 설명을 남겨 주세요.');return}if(!l.complete){l.complete=true;track(l,'탐험 완료');setStage(l,5);notionAfterComplete(l);return}setStage(l,5)},'btn secondary'));c.append(row);
+ if(l.drafts.length)draftHistory(c,l,d,reviewing,t);
+ boundaryApply(c,l)}
+/* Q4-A: what matters right after writing comes first — the latest SAVED explanation with ITS feedback (or its own
+   state: being read, failed, none). Earlier versions follow folded, each with a one-line summary, and open on request
+   (or while one of their conversations is still waiting). Older feedback is never shown as the latest explanation's,
+   and unsaved edits are named as unsaved. Presentation only: no record is changed, merged or removed. */
+const FB_STATE={ok:'AI 피드백 있음',error:'AI 피드백 못 받음',invalid:'AI 피드백 형식 오류',none:'AI 피드백 없음'};
+function draftFeedback(draft,ids){if(!draft.feedback)return {state:draft.feedbackError?'error':'none',f:null};try{return {state:'ok',f:L.validateFeedback(draft.feedback,ids,draft.text)}}catch{return {state:'invalid',f:null}}}
+function draftHistory(c,l,d,reviewing,t){const ids=d.concepts.map(x=>x.id),N=l.drafts.length,h=E('div','concept');h.id='draftHistory';
+ const cur=E('section','current-expl');cur.setAttribute('aria-labelledby','currentTitle');
+ const title=E('h3','current-title',`내 최신 설명 · 설명 ${N}`);title.id='currentTitle';title.tabIndex=-1;cur.append(title);
+ const edit=E('p','hint edit-state','');edit.id='editState';edit.setAttribute('role','status');cur.append(edit);
+ draftVersion(cur,l,l.drafts[N-1],N,ids,d,{current:true,reviewing});h.append(cur);
+ if(N>1){const ew=E('section','earlier');ew.id='earlierExplanations';ew.setAttribute('aria-labelledby','earlierTitle');const et=E('h3','earlier-title',`이전 설명 ${N-1}개`);et.id='earlierTitle';ew.append(et);
+  const hs=typeof helpState!=='undefined'?helpState.get(l.id):null;
+  for(let n=N-1;n>=1;n--){const dr=l.drafts[n-1],k=`${l.id}|old|${dr.at}`,det=E('details','draft-earlier');det.id='draftOld-'+n;
+   const talk=(l.dialogue||[]).filter(m=>m?.role==='learner'&&m.ref?.kind==='feedback'&&m.ref.draftAt===dr.at),waiting=talk.some(m=>['pending','failed'].includes(m.status));
+   det.open=tutorOpen.has(k)||waiting||!!(hs?.open&&hs.anchor==='draft:'+n);
+   det.addEventListener('toggle',()=>{det.open?tutorOpen.add(k):tutorOpen.delete(k)});
+   const s=E('summary','');s.append(E('span','earlier-n',`설명 ${n}`),document.createTextNode(` · ${FB_STATE[draftFeedback(dr,ids).state]}${talk.length?` · 대화 ${talk.length}개`:''}`),E('span','earlier-peek',dr.text.length>60?dr.text.slice(0,60)+'…':dr.text));det.append(s);
+   draftVersion(det,l,dr,n,ids,d,{current:false,reviewing});ew.append(det)}
+  h.append(ew)}
+ const lost=T.unlinked(l);if(lost.length){const u=E('details','fb-unplaced');u.id='fbUnlinked';u.append(E('summary','',`어느 설명의 피드백에 대한 대화인지 확인할 수 없어요 (${lost.filter(m=>m.role==='learner').length}개)`));
+  for(const m of lost)u.append(E('p','hint '+(m.role==='learner'?'fb-unplaced-mine':'fb-unplaced-ai'),(m.role==='learner'?'나: ':'AI 튜터 (AI): ')+m.text));h.append(u)}
+ c.append(h);syncEdit(l,t)}
+function draftVersion(box,l,draft,n,ids,d,{current,reviewing}){
+ box.append(E('div','old',draft.text));if(canWrite())draftAsk(box,l,draft,n);
+ const {state,f}=draftFeedback(draft,ids);
+ if(f){renderFeedback(box,f,d.concepts,{l,draft});
+  // A clear way back to the learner's own words; nothing is rewritten for them.
+  if(current&&canWrite()){const rv=button('내 말로 고쳐 쓰기',()=>{const t=document.getElementById('draft');if(!t)return;t.focus({preventScroll:true});t.scrollIntoView({block:'center',behavior:reduceMotion()?'auto':'smooth'});t.setSelectionRange(t.value.length,t.value.length)},'small-action revise-link');rv.id='reviseDraft';rv.setAttribute('aria-controls','draft');box.append(rv)}
+  return}
+ if(current&&reviewing){const p=E('p','msg feedback-pending','AI가 이 설명을 읽고 있어요…');p.id='feedbackPending';p.setAttribute('role','status');box.append(p);return}
+ box.append(E('p','hint feedback-missing',state==='invalid'?'저장된 AI 피드백의 형식이 올바르지 않아 표시하지 않았어요. 내 설명은 그대로 남아 있어요.':state==='error'?'AI 피드백을 받지 못했어요: '+draft.feedbackError+' (내 설명은 저장됐어요)':current?`설명 ${n}에는 아직 AI 피드백이 없어요.${provider.online?'':' AI를 연결하면 받을 수 있어요.'}`:'AI 피드백 없음'));
+ if(current&&provider.online&&!reviewing&&canWrite()){const retry=button(state==='none'?'AI 피드백 받기':'AI 검토 다시 요청',()=>requestFeedback(l,draft),'small-action');retry.id='retryFeedback';box.append(retry)}}
+/** Names an unsaved edit as unsaved, so the feedback below is never read as being about it. */
+function syncEdit(l,t){const el=document.getElementById('editState'),last=l.drafts.at(-1);if(!el||!last)return;
+ const edited=t.value.trim()!==last.text.trim(),msg=edited?`고쳐 쓴 내용은 아직 저장 전이에요. 지금 보이는 피드백은 저장된 설명 ${l.drafts.length}에 대한 거예요.`:'';
+ el.hidden=!edited;if(el.textContent!==msg)el.textContent=msg} // changes only when the state flips, so it is not re-announced per keystroke
+/** One polite announcement outside the re-rendered page (a status line rebuilt with the page is often not read). */
+function announce(msg){let r=document.getElementById('liveNote');if(!r){r=E('p','visually-hidden');r.id='liveNote';r.setAttribute('role','status');document.body.append(r)}r.textContent='';setTimeout(()=>{r.textContent=msg},60)}
 /* Optional structure for the self-explanation, shown only on request: sentence starters (inserted at the end of what the
    learner wrote, never replacing it) and, for older lessons, the original fill-in-the-blanks prompt as a guide. */
 function explainScaffold(c,l,inv,t){const k=l.id+'|scaffold',d=E('details','explain-scaffold');d.id='explainScaffold';d.open=tutorOpen.has(k);d.addEventListener('toggle',()=>{d.open?tutorOpen.add(k):tutorOpen.delete(k)});
@@ -278,8 +320,9 @@ async function requestFeedback(l,draft){if(busy||!canWrite())return;busy=true;co
  const find=()=>{const cur=data.lessons.find(x=>x.id===id);return cur?[cur,cur.drafts.find(x=>x.at===draft.at&&x.text===draft.text)]:[]};
  try{const r=await api('feedback',{lesson:L.feedbackPayload(l.lesson),context:L.learningContext(l),text:draft.text,profile:P.aiPayload(latestProfile())},ctl.signal);
   const f=L.validateFeedback({...r.data,reviewer:{provider:r.provider,model:r.model,at:Date.now()}},l.lesson.concepts.map(c=>c.id),draft.text);if(inflight.get(key)!==ctl)return;const [cur,dr]=find();if(!dr||!canWrite())return;
-  const stamped=L.stampFeedback(f);dr.feedback=stamped;delete dr.feedbackError;cur.feedback=stamped;cur.feedbackFor=dr.at;track(cur,'AI 피드백 받음')}
- catch(e){if(inflight.get(key)!==ctl)return;const [,dr]=find();if(dr&&canWrite()){dr.feedbackError=String(e.message||e).slice(0,300);persist()}afterAiError(e)}
+  const stamped=L.stampFeedback(f);dr.feedback=stamped;delete dr.feedbackError;cur.feedback=stamped;cur.feedbackFor=dr.at;track(cur,'AI 피드백 받음');
+  announce(`설명 ${cur.drafts.indexOf(dr)+1}의 AI 피드백이 도착했어요. ‘내 최신 설명’에서 볼 수 있어요.`)}
+ catch(e){if(inflight.get(key)!==ctl)return;const [cur,dr]=find();if(dr&&canWrite()){dr.feedbackError=String(e.message||e).slice(0,300);persist();if(e?.name!=='AbortError')announce(`설명 ${cur.drafts.indexOf(dr)+1}의 AI 피드백을 받지 못했어요. 설명은 저장됐어요.`)}afterAiError(e)}
  finally{if(inflight.get(key)===ctl){inflight.delete(key);busy=false}const cur=current();if(cur?.id===id&&cur.stage===4&&!view)render()}}
 function done(m,l){const d=l.lesson,c=stagePanel(m,l,5,{sub:'이해를 다 끝냈다는 판정은 아니에요. 오늘 질문하고, 예상하고, 설명한 기록이 남았어요.'});const stats=E('div');[[String(l.scenarios.length),'생각 실험'],[String(l.drafts.length),'나의 설명'],[String(d.concepts.length),'만난 개념']].forEach(([n,t])=>{const b=E('div','stat');b.append(E('strong','',n),E('span','',t));stats.append(b)});c.append(stats);const idn=C.identity(l),teaser=E('div','constellation-teaser');teaser.append(E('h3','',idn.short));const go=button('별자리 보기',()=>openAtlas(l),'atlas-launch');go.setAttribute('aria-label',`${idn.short} 별자리 보기`);teaser.append(go);c.append(teaser);c.append(E('hr','divider'),E('h3','','나의 배움 경로'),E('p','sub',idn.question?'처음 궁금했던 것: '+idn.question:'수업 자료에서 시작: '+(idn.file?.name||idn.title)));if(l.prediction)c.append(E('div','old','처음의 내 예상: '+l.prediction));if(l.reflection)c.append(E('div','old','예상과 비교한 내 생각: '+l.reflection));explanationRounds(c,l);boundarySummary(c,l);notionBlock(c,l);const row=E('div','actions');row.append(button('다음 탐험 시작하기 →',()=>{data.active=null;persist();render()}),button('내 설명 다시 보기',()=>setStage(l,4),'btn secondary'));c.append(row)}
 /* Growth stage: each explanation together with what the record links to it — its AI feedback, the AI's own rewrite (a
@@ -293,9 +336,16 @@ function explanationRounds(c,l){const rounds=CuriJourney.chain(l);if(!rounds.len
  const LIM=220,body=(t,id)=>{const box=E('div','xr-text');if(t.length>LIM){box.append(E('p','xr-preview',t.slice(0,LIM)+'…'));const d=E('details','xr-full');d.append(E('summary','','전체 보기'));const w=E('p','xr-whole',t);if(id)w.id=id;d.append(w);box.append(d)}else{const w=E('p','xr-whole',t);if(id)w.id=id;box.append(w)}return box};
  const step=(cls,label,tag)=>{const li=E('li','xr-step '+cls),p=E('p','xr-label');p.append(E('span','',label));if(tag)p.append(E('span','xr-tag',tag));li.append(p);return li};
  const STATE={ok:'AI 피드백 있음',error:'AI 피드백을 받지 못함',invalid:'AI 피드백 형식 오류',none:'AI 피드백 없음'};
- rounds.forEach((r,i)=>{const d=E('details','xr-round');d.id='xr-'+r.n;d.open=i===rounds.length-1;
+ rounds.forEach((r,i)=>{const d=E('details','xr-round');d.id='xr-'+r.n;
+  // Stays as the learner left it across re-renders (and open while the help region sits under this explanation).
+  const xk=`${l.id}|xr|${r.at}`,hs=typeof helpState!=='undefined'?helpState.get(l.id):null;
+  d.open=tutorOpen.has(xk)?true:tutorOpen.has(xk+'|closed')?false:(i===rounds.length-1||!!(hs?.open&&hs.anchor==='draft:'+r.n));
+  d.addEventListener('toggle',()=>{tutorOpen.delete(xk);tutorOpen.delete(xk+'|closed');tutorOpen.add(d.open?xk:xk+'|closed')});
   d.append(E('summary','',[`설명 ${r.n}`,at(r.at),STATE[r.feedback],r.next?'다음 설명 있음':''].filter(Boolean).join(' · ')));const ol=E('ol','xr-steps');
-  const mine=step('xr-mine','내가 작성한 설명','내 글');mine.append(body(r.text,`xr-${r.n}-text`));ol.append(mine);
+  const mine=step('xr-mine','내가 작성한 설명','내 글');mine.append(body(r.text,`xr-${r.n}-text`));
+  // The same contextual question as on the explanation stage (one help region, opened below this explanation), so the
+  // learner does not have to go back a stage to ask about it. Only for a record that names exactly one explanation.
+  const own=l.drafts.filter(x=>x.at===r.at&&x.text===r.text);if(own.length===1&&canWrite()&&!view)draftAsk(mine,l,own[0],l.drafts.indexOf(own[0])+1);ol.append(mine);
   const fb=step('xr-feedback','AI 피드백',r.feedback==='ok'?['AI',r.model,r.schema===1?'이전 형식':''].filter(Boolean).join(' · '):'');
   if(r.feedback==='ok'){fb.append(E('p','xr-summary',r.summary));
    if(r.items.length){const ul=E('ul','xr-items');for(const y of r.items){const li=E('li','xr-item');li.dataset.kind=y.kind;li.append(E('span','xr-kind',J_KIND[y.kind]+' (AI 분류) '),document.createTextNode((y.quote?`“${y.quote}” — `:'')+y.text+(y.why?' · 왜: '+y.why:'')));ul.append(li)}fb.append(ul)}
