@@ -1,0 +1,74 @@
+name: Continuous verification
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sec6-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secrets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Scan Git history and the checked-out tree
+        shell: bash
+        run: |
+          cd "$RUNNER_TEMP"
+          curl -fsSL --retry 3 -o scanner.tgz https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz
+          echo '551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  scanner.tgz' | sha256sum -c -
+          tar -xzf scanner.tgz gitleaks
+          ./gitleaks git --redact=100 --exit-code=1 --log-opts='--all HEAD' "$GITHUB_WORKSPACE"
+          ./gitleaks dir --redact=100 --exit-code=1 "$GITHUB_WORKSPACE"
+
+  regression:
+    needs: secrets
+    runs-on: macos-15
+    timeout-minutes: 25
+    env:
+      CURIVEN_TEST: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+      - name: Prepare browser driver and synthetic PDF fixtures
+        shell: bash
+        run: |
+          test -x '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+          driver="$RUNNER_TEMP/node_modules/playwright-core"
+          mkdir -p "$driver"
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/driver.tgz" https://registry.npmjs.org/playwright-core/-/playwright-core-1.62.1.tgz
+          actual=$(openssl dgst -sha512 -binary "$RUNNER_TEMP/driver.tgz" | openssl base64 -A)
+          test "$actual" = 'wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw=='
+          tar -xzf "$RUNNER_TEMP/driver.tgz" -C "$driver" --strip-components=1
+          echo "NODE_PATH=$RUNNER_TEMP/node_modules" >> "$GITHUB_ENV"
+          echo "CURIVEN_CACHE_DIR=$RUNNER_TEMP/pdf-cache" >> "$GITHUB_ENV"
+          swiftc tests/fixtures/material/make_pdfs.swift -o "$RUNNER_TEMP/make-pdfs"
+          "$RUNNER_TEMP/make-pdfs" tests/fixtures/material
+      - name: Python regression and security tests
+        run: python3 -m unittest discover -s tests
+      - name: Node and mocked browser tests (optional SDK absent)
+        shell: bash
+        run: |
+          tap="$RUNNER_TEMP/node.tap"
+          node --test --test-concurrency=2 --test-reporter=spec --test-reporter-destination=stdout --test-reporter=tap --test-reporter-destination="$tap" tests/*.test.js tests/*.test.mjs
+          # Exactly the four official-SDK tests may skip when the optional SDK is absent.
+          grep -qx '# skipped 4' "$tap"
+          test "$(grep -c '# SKIP official SDK not installed$' "$tap")" -eq 4
