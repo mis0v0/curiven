@@ -1104,8 +1104,10 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     label = f'ChatGPT (official sign-in) · SDK {"ready" if chatgpt_bridge.sdk_installed() else "NOT installed"}' if PROVIDER == 'chatgpt' else f'Ollama model: {MODEL}' if PROVIDER == 'ollama' else 'no AI provider'
-    print(f'CURIVEN → http://{HOST}:{PORT} | {label}', flush=True)
-    if DEV_PILOT: print(f'DEV ONLY: Boundary Constellation prototype (draft material) → http://{HOST}:{PORT}/dev/boundary', flush=True)
     # The page loads ~13 files at once; the default listen backlog (5) can drop connections under load.
     ThreadingHTTPServer.request_queue_size = 64
-    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
+    with ThreadingHTTPServer((HOST, PORT), Handler) as server:
+        port = server.server_port
+        print(f'CURIVEN → http://{HOST}:{port} | {label}', flush=True)
+        if DEV_PILOT: print(f'DEV ONLY: Boundary Constellation prototype (draft material) → http://{HOST}:{port}/dev/boundary', flush=True)
+        server.serve_forever()

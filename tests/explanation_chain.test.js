@@ -12,7 +12,7 @@ const shown=md=>md.replace(/ {2}\n/g,'\n').replace(/\\([\\`*_\[\]<>#|~&$\-+=.)])
 const sec5=md=>{const i=md.indexOf('\n## 5.'),j=md.indexOf('\n## 6.');assert.ok(i>0&&j>i);return md.slice(i,j)};
 const round=(md,n)=>{const s=sec5(md),i=s.indexOf(`\n### 설명 ${n}`),j=s.indexOf('\n### 설명 ',i+5);assert.ok(i>=0,`round ${n}`);return s.slice(i,j<0?s.length:j)};
 
-const T0=Date.parse('2026-11-20T10:00:00+09:00'),min=m=>T0+m*60000;
+const T0=new Date(2026,10,20,10,0).getTime(),min=m=>T0+m*60000;
 const D1='열은 온도가 높은 곳에서 낮은 곳으로 흐른다. 차가운 기운이 따뜻한 물체로 들어가서 물체가 식는다.';
 const D2='열은 온도가 높은 곳에서 낮은 곳으로 이동한다. 물체가 식는 건 열이 빠져나가기 때문이다.';
 const D3='온도 차이가 있으면 에너지가 높은 쪽에서 낮은 쪽으로 이동해요. 차가운 것이 들어오는 게 아니에요.';

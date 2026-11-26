@@ -11,10 +11,20 @@ const NOW=Date.parse('2026-11-23T18:00:00+09:00');
 /** What a Markdown renderer shows for escaped text. */
 const shown=md=>md.replace(/ {2}\n/g,'\n').replace(/\\([\\`*_\[\]<>#|~&$\-+=.)])/g,'$1').replace(/^ +/gm,m=>' '.repeat(m.length));
 const aiNote=l=>C.clean({...AI.raw,kind:'ai',generatedBy:{provider:'chatgpt',model:AI.model},at:NOW,basis:C.basisKey(l)},l);
+// The golden export records Seoul wall times. Compare every byte in its original timezone.
+function renderGoldenRecord() {
+ const previous=process.env.TZ;
+ try {
+  process.env.TZ='Asia/Seoul';
+  return N.lessonMarkdown(SQLI(),{now:Date.parse('2000-01-01T12:00:00+09:00')});
+ } finally {
+  if(previous===undefined)delete process.env.TZ;else process.env.TZ=previous;
+ }
+}
 const conceptPart=md=>md.split(/\n## 학습 기록\n|\n<toggle>\n학습 기록/)[0];
 
 test('the export fixture is a synthetic golden file: re-exporting the rebuilt record gives the same Markdown',()=>{
- const md=N.lessonMarkdown(SQLI(),{now:Date.parse('2000-01-01T12:00:00+09:00')});
+ const md=renderGoldenRecord();
  const orig=fs.readFileSync(path.join(__dirname,'fixtures','sqli_time_blind_export.md'),'utf8');
  assert.equal(md,orig);
  assert.ok(orig.split('\n').length>=420,'long transcript export');
@@ -168,5 +178,5 @@ test('malformed or failed synthesis never breaks the export and never invents co
 test('historical records: an old note without a concept note still exports, and the old full note is unchanged',()=>{
  const legacy=fx('scaffold_sqli_lesson.json');const l={id:'old',topic:'SQL Injection',lesson:legacy,stage:5,maxStage:5,prediction:'',scenarios:[],drafts:[],events:[],createdAt:1,updatedAt:2,complete:true};
  const md=C.exportMarkdown(l,{now:NOW});assert.ok(md.startsWith('# '));assert.ok(md.includes('## 학습 기록'));
- assert.equal(N.lessonMarkdown(SQLI(),{now:Date.parse('2000-01-01T12:00:00+09:00')}),fs.readFileSync(path.join(__dirname,'fixtures','sqli_time_blind_export.md'),'utf8'));
+ assert.equal(renderGoldenRecord(),fs.readFileSync(path.join(__dirname,'fixtures','sqli_time_blind_export.md'),'utf8'));
 });

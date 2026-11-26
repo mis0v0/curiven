@@ -58,8 +58,6 @@ async function completeLesson(page){
 }
 async function backupFile(name,obj){const f=path.join(TMP,name);fs.writeFileSync(f,JSON.stringify(obj));return f}
 
-let exported; // shared between tests 1–8 (sequential within this file)
-
 test('1–6,10: onboarding once, persistence across reloads, multiple topics, edits reach AI, reset keeps profile, constellation intact',async()=>{
  const t=await open(),{page}=t;
  // 1. First launch → onboarding, no topic field.
@@ -118,7 +116,7 @@ test('1–6,10: onboarding once, persistence across reloads, multiple topics, ed
  assert.match(await page.textContent('#atlasCount'),/탐험 1 · 개념 4/);await page.click('#atlasClose');
  // 8a. Export includes profile + lessons.
  const [dl]=await Promise.all([page.waitForEvent('download'),clickExport(page)]);
- exported=JSON.parse(fs.readFileSync(await dl.path(),'utf8'));
+ const exported=JSON.parse(fs.readFileSync(await dl.path(),'utf8'));
  assert.equal(exported.format,'curiven-v01');assert.equal(exported.profileVersion,1);
  assert.deepEqual(exported.profile.interests,['추리 소설','홈베이킹','천체 관측']);assert.equal(exported.lessons.length,4);
  // Desktop screenshot for the report.
@@ -148,7 +146,18 @@ test('7: legacy v0.1/v0.2 data — records kept, interests suggested, old backup
 });
 
 test('8: restore profile from backup; conflicting profile requires explicit approval',async()=>{
- assert.ok(exported,'export from test 1');
+ // Produce a real download in a separate, seeded source profile for this round trip.
+ const interests=['추리 소설','홈베이킹','천체 관측'];
+ const lessons=['HTTP 쿠키와 세션','블랙홀','미분의 원리','SQL Injection'].map((topic,i)=>({
+  id:'restore-'+i,topic,lesson:SAMPLE,stage:1,drafts:[],events:[],scenarios:[],createdAt:1,updatedAt:2
+ }));
+ const source=await open({init:`localStorage.setItem('${PROFILE_KEY}',${JSON.stringify(JSON.stringify({version:1,interests}))});
+  localStorage.setItem('${LESSONS_KEY}',${JSON.stringify(JSON.stringify({lessons,active:null}))})`});
+ await goto(source);
+ const [download]=await Promise.all([source.page.waitForEvent('download'),clickExport(source.page)]);
+ const exported=JSON.parse(fs.readFileSync(await download.path(),'utf8'));
+ assert.deepEqual(exported.lessons.map(l=>l.id),lessons.map(l=>l.id));
+ await source.ctx.close();
  const f=await backupFile('new.json',exported);
  // a) Fresh browser, no profile → restore (with one confirm) skips onboarding.
  let t=await open();await goto(t);

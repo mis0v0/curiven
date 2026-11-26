@@ -64,6 +64,8 @@ jobs:
           "$RUNNER_TEMP/make-pdfs" tests/fixtures/material
       - name: Python regression and security tests
         run: python3 -m unittest discover -s tests
+      - name: Verify loopback HTTP and mocked Chrome navigation
+        run: node tests/browser_smoke.js
       - name: Node and mocked browser tests (optional SDK absent)
         shell: bash
         run: |
