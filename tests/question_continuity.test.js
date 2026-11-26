@@ -30,6 +30,29 @@ test('suggested questions: only the learner\'s own questions by form, in their e
  assert.deepEqual(L.learnerQuestions(''),[]);assert.deepEqual(L.learnerQuestions(null),[]);
 });
 
+test('suggested questions: quotation boundaries are kept, so reported speech is never offered as the learner\'s question',()=>{
+ const cases=[
+  ['several questions inside one quotation','선생님이 “왜 하늘은 파랄까요? 바다는 왜 파랄까요?”라고 물으셨어요.',[]],
+  ['reported questions followed by the learner\'s own','선생님이 “왜 하늘은 파랄까요? 바다는 왜 파랄까요?”라고 물으셨어요. 그런데 노을은 왜 빨간가요?',['그런데 노을은 왜 빨간가요?']],
+  ['a single quoted question, space before the closing mark','친구가 “쿠키는 어디에 저장돼요? ”라고 물었어요.',[]],
+  ['straight double quotes','선생님이 "왜 하늘은 파랄까요? 바다는 왜 파랄까요?"라고 하셨어요. 진공에서도 열이 이동하나요?',['진공에서도 열이 이동하나요?']],
+  ['straight single quotes','책에 \'세션은 어디에 있나요? 쿠키는요?\'라는 질문이 있어요.',[]],
+  ['corner brackets','선생님이 「왜 하늘은 파랄까요? 바다는 왜 파랄까요?」라고 물으셨어요.',[]],
+  ['double corner brackets','『열은 어디로 가나요? 왜 식나요?』라는 책을 읽었어요. 이 책 내용이 맞나요?',['이 책 내용이 맞나요?']],
+  ['a quoted statement with sentence punctuation','책에 ‘열은 이동한다. 온도가 같아지면 멈춘다.’라고 쓰여 있어요. 그래서 커피가 식어요.',[]],
+  ['learner questions containing quoted technical terms','그런데 “바인딩”이 뭔가요? "prepared statement"는 왜 안전한가요?',['그런데 “바인딩”이 뭔가요?','"prepared statement"는 왜 안전한가요?']],
+  ['nested quotation','선생님이 “그가 ‘왜?’라고 물었니? 답해 볼래?”라고 하셨어요. 그럼 숫자 칸도 위험한가요?',['그럼 숫자 칸도 위험한가요?']],
+  ['an opening mark never closed (ambiguous: nothing after it is offered)','선생님이 “왜 하늘은 파랄까요? 바다는 왜 파랄까요?라고 물으셨어요. 노을은 왜 빨간가요?',[]],
+  ['a closing mark never opened (ambiguous: nothing before it is offered)','왜 하늘은 파랄까요? 바다는요?”라고 물으셨어요. 그런데 노을은 왜 빨간가요?',['그런데 노을은 왜 빨간가요?']],
+  ['apostrophes are not quotation marks','I don\'t know the rule. Why is binding safe? It’s confusing.',['Why is binding safe?']],
+  ['several genuine questions outside any quotation','바인딩은 값을 따로 보내요. 그럼 숫자 칸도 위험한가요? 저장 프로시저는 안전할까요?',['그럼 숫자 칸도 위험한가요?','저장 프로시저는 안전할까요?']],
+  ['embedded interrogative and hedges stay assertions','선생님이 “왜?”라고 하셨는데, 왜 식는지는 잘 모르겠지만 열이 빠져나가는 것 같아요.',[]],
+  ['multiline explanation with a quotation across lines','열은 이동해요.\n책에는 “왜 멈출까요?\n온도가 같아서일까요?”라고 나와요.\n그런데 진공에서는 어떻게 되나요?',['그런데 진공에서는 어떻게 되나요?']]];
+ for(const [name,text,want] of cases){const got=L.learnerQuestions(text);
+  assert.deepEqual(got,want,name);
+  for(const q of got)assert.ok(text.includes(q),`${name}: suggestion is an exact substring of the learner's text`)}
+});
+
 function lesson(){
  const l={id:'Q',topic:'SQL Injection',lesson:JSON.parse(JSON.stringify(SQLI)),stage:4,maxStage:4,prediction:'',scenarios:[],drafts:[],feedback:null,events:[],createdAt:1,updatedAt:1,complete:false};
  const k=l.lesson.concepts[0];

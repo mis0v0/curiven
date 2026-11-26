@@ -103,11 +103,35 @@
   let offset=0;
   return source.some((sentence,i)=>{const start=offset,end=offset+=parts[i].length;
    return spans.some(([a,b])=>a<end&&start<b)&&asks(sentence)})}
+ /* Quoted stretches of a text as [start, end, closed] offsets into it (outermost quotation only). Typographic marks the
+    product already strips (“” ‘’ 「」 『』) and straight quotes, paired in order; an apostrophe between Latin letters
+    (don't, don’t) is not a quotation mark. A quotation that is never closed, or a closing mark with no opener, makes
+    the stretch it may cover ambiguous (closed=false): to the end of the text, or from its start. Form only — no meaning. */
+ const Q_OPEN={'“':'”','‘':'’','「':'」','『':'』','"':'"',"'":"'"},Q_CLOSE=new Set(['”','’','」','』']);
+ function quotedSpans(t){const spans=[],stack=[],latin=c=>/[A-Za-z]/.test(c||'');
+  for(let i=0;i<t.length;i++){const c=t[i];
+   if((c==="'"||c==='’'||c==='‘')&&latin(t[i-1])&&latin(t[i+1]))continue;
+   const top=stack.at(-1);
+   if(top&&c===top.close){stack.pop();if(!stack.length)spans.push([top.at,i+1,true]);continue}
+   if(Q_OPEN[c]&&!Q_CLOSE.has(c)){stack.push({at:i,close:Q_OPEN[c]});continue}
+   if(Q_CLOSE.has(c)){spans.push([stack.length?stack[0].at:0,i+1,false]);stack.length=0}} // mismatched or unopened
+  if(stack.length)spans.push([stack[0].at,t.length,false]);
+  return spans}
  /** Questions the learner asked in their own explanation, as exact substrings of it, in order (at most 5). Uses the
-     strict form-based `asks` (not sentenceKind), so 해요체 assertions, hedges, embedded "…인지" clauses and quoted
-     questions are not offered. Only a suggestion for the learner to confirm or edit — never sent, graded or stored. */
- function learnerQuestions(text){const out=[];
-  for(const s of sentences(text))for(const part of s.split(EV_SPLIT)){const p=part.trim();if(p&&asks(p)&&!out.includes(p))out.push(p)}
+     strict form-based `asks` (not sentenceKind), so 해요체 assertions, hedges and embedded "…인지" clauses are not
+     offered. Sentences are split only outside quotations, so reported speech stays one unit and is not offered as the
+     learner's own question; a stretch with an unbalanced quotation mark is skipped (the manual "ask" button remains).
+     Only a suggestion for the learner to confirm or edit — never sent, graded or stored. Leaves `sentences` (shared
+     by feedback validation and concept evidence) unchanged. */
+ function learnerQuestions(text){const t=String(text||''),spans=quotedSpans(t),out=[];
+  const inside=i=>spans.some(([a,b])=>a<i&&i<b),cuts=[0];
+  for(const m of t.matchAll(/(?<=[.!?？。])\s+|\n+/g))if(!inside(m.index))cuts.push(m.index,m.index+m[0].length);
+  for(const m of t.matchAll(new RegExp(EV_SPLIT.source,'g')))if(!inside(m.index))cuts.push(m.index,m.index);
+  cuts.push(t.length);cuts.sort((a,b)=>a-b);
+  for(let k=0;k+1<cuts.length;k+=2){const a=cuts[k],b=cuts[k+1],p=t.slice(a,b).trim();
+   if(!normQuote(p)||spans.some(([x,y,closed])=>!closed&&x<b&&a<y))continue;
+   let own='',at=a;for(const [x,y] of spans)if(x<b&&a<y){own+=t.slice(at,Math.max(at,x))+' ';at=Math.max(at,y)}own+=t.slice(at,b);
+   if(normQuote(own)&&asks(own)&&!out.includes(p))out.push(p)} // classified on the learner's own words; offered verbatim
   return out.slice(0,5)}
 
  /** Returns clean feedback or throws on malformed structure. `learnerText` (the explanation the feedback is
