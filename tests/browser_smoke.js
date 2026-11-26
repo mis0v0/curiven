@@ -4,6 +4,7 @@ const {spawn, execFileSync} = require('node:child_process');
 const {once} = require('node:events');
 const {createInterface} = require('node:readline');
 const path = require('node:path');
+const {realpathSync, existsSync} = require('node:fs');
 const {chromium} = require('playwright-core');
 const {isolatedEnv} = require('./isolation.js');
 
@@ -13,8 +14,9 @@ async function main() {
   const python = execFileSync('python3', ['-c', 'import sys; print(sys.executable)'], {encoding:'utf8'}).trim();
   const version = execFileSync(python, ['--version'], {encoding:'utf8'}).trim();
   if (process.env.pythonLocation) {
-    const expected = path.join(process.env.pythonLocation, 'bin');
-    console.log('Python executable under setup-python bin: ' + (path.dirname(python) === expected));
+    const expected = path.join(process.env.pythonLocation, 'bin', 'python3');
+    const identity = existsSync(expected) ? realpathSync(python) === realpathSync(expected) : 'unknown';
+    console.log('Python matches resolved setup-python executable: ' + identity);
   }
   const configured = ['http_proxy','https_proxy','all_proxy','no_proxy','node_use_env_proxy']
     .filter(key => Object.keys(process.env).some(k => k.toLowerCase() === key));
@@ -57,7 +59,9 @@ async function main() {
     console.log('Mocked onboarding visible');
   } catch (err) {
     // Emit only a short category/code, never request data, proxy URLs or child stderr.
-    const detail = err.cause?.code || err.message.match(/net::ERR_\w+|server exited [\w -]+|HTTP \d+/)?.[0] || err.name;
+    const timedOut = err.name === 'TimeoutError' || err.cause?.name === 'TimeoutError';
+    const detail = timedOut ? (stage === 'server startup' ? 'readiness deadline 10s' : 'request deadline') :
+      (typeof err.cause?.code === 'string' && err.cause.code) || err.message.match(/net::ERR_\w+|server exited [\w -]+|HTTP \d+/)?.[0] || err.name;
     throw Error(`${stage} failed (${detail}; child ${child.exitCode ?? child.signalCode ?? 'running'})`);
   } finally {
     child.kill();

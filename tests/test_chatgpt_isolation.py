@@ -1,7 +1,8 @@
 """Automated tests can never use the real ChatGPT sign-in or reach the model backend.
 Negative tests: each tries a way out and must be refused before any credential file, Keychain, bridge process or
 network connection is touched. Run: python3 -m unittest tests.test_chatgpt_isolation"""
-import json, os, socket, subprocess, sys, tempfile, threading, unittest
+import errno, json, os, socket, subprocess, sys, tempfile, threading, unittest
+from http.client import HTTPConnection
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 from unittest import mock
@@ -78,6 +79,47 @@ class ServerStartup(unittest.TestCase):
         base = {k: v for k, v in os.environ.items() if not k.startswith(('CURIVEN_', 'OPENAI_')) and k != 'NODE_TEST_CONTEXT'}
         ok = {'CURIVEN_TEST': '1', 'CURIVEN_NOTION_DIR': tempfile.mkdtemp(), 'CURIVEN_NOTION_SECRETS': 'memory', 'CURIVEN_NOTION_API': 'http://127.0.0.1:9'}
         return subprocess.run([sys.executable, str(ROOT / 'server.py')], env={**base, 'CURIVEN_PORT': '9', **ok, **env}, capture_output=True, text=True, timeout=20)
+
+    def test_ephemeral_server_accepts_http_with_hostname_lookup_blocked(self):
+        gate = threading.Event()
+
+        def blocked_lookup(host):
+            gate.wait(timeout=1)
+            raise AssertionError('startup attempted hostname lookup')
+
+        with mock.patch('socket.getfqdn', side_effect=blocked_lookup) as lookup:
+            with server.LoopbackHTTPServer((server.HOST, 0), server.Handler) as httpd:
+                lookup.assert_not_called()
+                self.assertEqual((httpd.server_name, httpd.server_port), httpd.socket.getsockname())
+                self.assertGreater(httpd.server_port, 0)
+                httpd.timeout = 3
+                worker = threading.Thread(target=httpd.handle_request)
+                worker.start()
+                client = HTTPConnection(server.HOST, httpd.server_port, timeout=3)
+                try:
+                    client.request('GET', '/tokens.css')
+                    response = client.getresponse()
+                    self.assertEqual(response.status, 200)
+                    self.assertTrue(response.read())
+                finally:
+                    client.close()
+                    worker.join()
+                lookup.assert_not_called()
+
+    def test_occupied_port_exits_without_announcing_readiness(self):
+        with socket.socket() as occupied:
+            occupied.bind((server.HOST, 0))
+            occupied.listen()
+            result = self.start({'CURIVEN_PORT': str(occupied.getsockname()[1])})
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(f'Errno {errno.EADDRINUSE}', result.stderr)
+        self.assertNotIn('CURIVEN →', result.stdout)
+
+    def test_non_loopback_address_rejected_before_socket_bind(self):
+        with mock.patch.object(socket.socket, 'bind') as bind:
+            with self.assertRaisesRegex(ValueError, 'IPv4 loopback'):
+                server.LoopbackHTTPServer(('0.0.0.0', 0), server.Handler)
+            bind.assert_not_called()
 
     def test_refuses_real_chatgpt_settings(self):
         for env in ({'CURIVEN_CHATGPT_DIR': str(REAL_STORE)}, {'CURIVEN_CHATGPT_DIR': str(test_guard.REAL_CONFIG)}, {'CURIVEN_SIWC_DIR': str(REAL_SDK)}):

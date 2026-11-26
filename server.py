@@ -3,6 +3,7 @@
 Sign in with ChatGPT SDK (default; see chatgpt_bridge.py) or, only when explicitly chosen, local Ollama.
 No third-party Python packages."""
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from socketserver import TCPServer
 from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
@@ -899,6 +900,19 @@ NOTION = notion_link.NotionLink()
 STATIC = ('/', '/index.html', '/constellation.css', '/constellation.js', '/profile.js', '/records.js', '/learning.js', '/boundary.js', '/boundary-ui.js', '/boundary.css', '/tutor.js', '/tutor-ui.js', '/notes.js', '/concept-note.js', '/journey.js', '/tutor.css', '/settings-ui.js', '/settings.css', '/notion-ui.js', '/concept-ui.js', '/material.js', '/material-ui.js', '/home-ui.js', '/tokens.css', '/copy.js', '/atlas-layout.js')
 
 
+class LoopbackHTTPServer(ThreadingHTTPServer):
+    # The browser requests several static assets concurrently.
+    request_queue_size = 64
+
+    def server_bind(self):
+        if self.server_address[0] != HOST:
+            raise ValueError('CURIVEN requires IPv4 loopback')
+        # HTTPServer adds a hostname lookup between bind and listen. The numeric
+        # address is already the canonical name for this loopback-only service.
+        TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = 'CURIVEN'
     sys_version = ''
@@ -1104,9 +1118,7 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     label = f'ChatGPT (official sign-in) · SDK {"ready" if chatgpt_bridge.sdk_installed() else "NOT installed"}' if PROVIDER == 'chatgpt' else f'Ollama model: {MODEL}' if PROVIDER == 'ollama' else 'no AI provider'
-    # The page loads ~13 files at once; the default listen backlog (5) can drop connections under load.
-    ThreadingHTTPServer.request_queue_size = 64
-    with ThreadingHTTPServer((HOST, PORT), Handler) as server:
+    with LoopbackHTTPServer((HOST, PORT), Handler) as server:
         port = server.server_port
         print(f'CURIVEN → http://{HOST}:{port} | {label}', flush=True)
         if DEV_PILOT: print(f'DEV ONLY: Boundary Constellation prototype (draft material) → http://{HOST}:{port}/dev/boundary', flush=True)

@@ -3,7 +3,6 @@
 Everything here uses fake bridges: these tests check CURIVEN's request shaping, error handling and
 security checks. They are NOT evidence that real ChatGPT sign-in or inference works."""
 import json, os, sys, tempfile, threading, unittest
-from http.server import ThreadingHTTPServer
 from pathlib import Path
 from unittest import mock
 from urllib.error import HTTPError
@@ -50,7 +49,7 @@ class LiveServer(unittest.TestCase):
         c = mock.patch.object(server, 'chatgpt', self.provider_obj); c.start(); self.addCleanup(c.stop)
         self.ollama_calls = []
         o = mock.patch.object(server, 'urlopen', lambda *a, **k: self.ollama_calls.append(a) or (_ for _ in ()).throw(OSError('no ollama'))); o.start(); self.addCleanup(o.stop)
-        self.httpd = ThreadingHTTPServer(('127.0.0.1', 0), server.Handler)
+        self.httpd = server.LoopbackHTTPServer(('127.0.0.1', 0), server.Handler)
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
         self.addCleanup(lambda: (self.httpd.shutdown(), self.httpd.server_close()))
         self.port = self.httpd.server_address[1]
@@ -80,7 +79,7 @@ class LocalSecurity(LiveServer):
     def test_bind_address_is_loopback_and_not_configurable(self):
         self.assertEqual(server.HOST, '127.0.0.1')
         src = (ROOT / 'server.py').read_text()
-        self.assertIn("ThreadingHTTPServer((HOST, PORT), Handler)", src)
+        self.assertIn("LoopbackHTTPServer((HOST, PORT), Handler)", src)
         self.assertNotIn("environ.get('CURIVEN_HOST'", src)
 
     def test_same_origin_request_succeeds(self):
