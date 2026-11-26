@@ -128,7 +128,7 @@
    if(f){o.push(`**AI 피드백${f.reviewer?.model?' ('+esc(f.reviewer.model)+')':''}:** ${esc(f.summary)}`,'');
     const q=x=>{const v=L?L.verbatimQuote(x.quote,dr.text):null;return v?`“${esc(v)}” — `:''};
     for(const x of f.correct)o.push(`- 잘한 점: ${q(x)}${esc(x.point)}`);
-    for(const x of f.precision)o.push(`- 다듬을 점: ${q(x)}${esc(x.issue)}`);
+    for(const x of f.precision)o.push(`- ${x.reclassified?'질문·가설의 전제 확인':'다듬을 점'}: ${q(x)}${esc(x.issue)}`);
     for(const x of f.misconceptions)o.push(`- 다시 생각할 점: ${q(x)}${esc(x.issue)}`);
     for(const x of f.missing)o.push(`- 빠진 조건: ${esc(x.issue)}`);
     if(f.uncertainty)o.push(`- AI가 판단하지 못한 점: ${esc(f.uncertainty)}`);
@@ -205,13 +205,16 @@
   else{for(const r of v.rows)o.push(`- **${esc(r.aspect)}** — ${r.values.map((x,i)=>`${esc(v.columns[i])}: ${esc(x)}`).join(' / ')}`);o.push('');if(v.note)o.push(`_${esc(v.note)}_`,'')}}
  function threadMd(o,l,msgs){if(!msgs||!msgs.length)return;
   for(const m of msgs){
-   if(m.role==='learner'){const about=m.ref?.kind==='section'?` — 개념 설명 ‘${esc(l.lesson?.technical?.[m.ref.i]?.heading||'')}’에 대해`:m.ref?.kind==='term'?` — 용어 ‘${esc(m.ref.term)}’에 대해`:'';
+   if(m.role==='learner'){const dn=m.ref?.kind==='draft'&&T?T.draftFor(l,m.ref)?.n:null;
+    const about=m.ref?.kind==='section'?` — 개념 설명 ‘${esc(l.lesson?.technical?.[m.ref.i]?.heading||'')}’에 대해`:m.ref?.kind==='term'?` — 용어 ‘${esc(m.ref.term)}’에 대해`:m.ref?.kind==='draft'?(dn?` — 내 설명 ${dn}을 쓰다가 생긴 질문`:' — 내 설명을 쓰다가 생긴 질문'):'';
     o.push(`**나**${m.intent==='check'?' (이해 확인 요청)':''} · ${when(m.at)}${m.quick?' (버튼)':''}${about}`,'',quote(esc(m.text)),'');
     if(m.status==='failed')o.push(`_답을 받지 못했어요${m.error?': '+esc(m.error):''}_`,'');
     else if(m.status==='noted')o.push('_메모로 남김 (AI에게 보내지 않음)_','')}
    else{o.push(`**AI 튜터**${m.reviewer?.model?' ('+esc(m.reviewer.model)+')':''}`,'',rich(m.text),'');
     const op=T?T.opinionText(m.assessment):null,lines=[];
-    if(op)lines.push(`- ${op}${m.assessment.quote&&m.assessment.verdict!=='correct'?` — “${esc(m.assessment.quote)}”`:''}`);
+    // The quotation is shown only as the learner actually wrote it (a tolerated paraphrase can flip the meaning).
+    const said=m.assessment?.quote&&m.assessment.verdict!=='correct'&&L?L.verbatimQuote(m.assessment.quote,(l.dialogue||[]).find(x=>x.id===m.replyTo)?.text):null;
+    if(op)lines.push(`- ${op}${said?` — “${esc(said)}”`:''}`);
     if(m.followUp)lines.push(`- 튜터의 질문: ${esc(m.followUp)}`);
     if(m.uncertainty)lines.push(`- 확실하지 않은 점: ${esc(m.uncertainty)}`);
     if(lines.length)o.push(...lines,'')}}

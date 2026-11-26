@@ -20,6 +20,7 @@ function askTutor(l,opts){if(!canWrite())return;
  const r=T.addLearner(l,{...opts,stage:l.stage,noted});
  if(!r.ok){toast(r.reason==='empty'?'먼저 내용을 적어 주세요.':r.reason==='long'?`메시지는 ${T.MAX_MESSAGE.toLocaleString()}자까지 보낼 수 있어요.`:r.reason==='full'?'이 탐험의 대화가 너무 길어요. 새 탐험에서 이어 가 주세요.':'보낼 수 없어요.');return false}
  const dk=opts.draftKey||tKey(l,opts.ref);tutorText.delete(dk);tutorReplyTo.delete(dk); // composer of the thread it was typed in
+ if(dk===tKey(l,null)){suggested.delete(l.id);const h=helpState.get(l.id);if(h)h.note='';document.getElementById('helpNote')?.remove()} // the suggestion note no longer applies
  track(l,noted?'질문을 메모함':'AI 튜터에게 물어봄');
  if(!noted)sendTutor(l.id,r.msg.id);else refreshTutor();
  return true}
@@ -66,7 +67,9 @@ function buildThread(box){
    log.append(b)}
   else{const b=E('div','tutor-msg ai');b.append(E('div','tutor-who','AI 튜터'));richText(b,m.text);if(typeof tutorSources==='function')tutorSources(b,l,m);
    // A short opinion only on what the learner asserted; questions get an answer, not a label (full assessment stays in the record).
-   const op=T.opinionText(m.assessment);if(op){const a=E('p','tutor-assess',op+(m.assessment.quote&&m.assessment.verdict!=='correct'?` — “${m.assessment.quote}”`:''));a.dataset.verdict=m.assessment.verdict;b.append(a)}
+   // The quotation is shown only as the learner actually wrote it: a tolerated paraphrase can flip the meaning (없어요 → 있어요).
+   const op=T.opinionText(m.assessment),said=op&&m.assessment.quote&&m.assessment.verdict!=='correct'?window.CuriLearning.verbatimQuote(m.assessment.quote,(l.dialogue||[]).find(x=>x.id===m.replyTo)?.text):null;
+   if(op){const a=E('p','tutor-assess',op+(said?` — “${said}”`:''));a.dataset.verdict=m.assessment.verdict;b.append(a)}
    if(m.uncertainty)b.append(E('p','hint tutor-unc','확실하지 않은 점: '+m.uncertainty));
    if(m.followUp){const answered=(l.dialogue||[]).some(x=>x.inReplyTo===m.id);const f=E('div','tutor-follow');f.append(E('p','',m.followUp));
     if(!answered&&writable)f.append(button('이 질문에 답하기',()=>{tutorReplyTo.set(k,m.id);buildThread(box);document.getElementById('tin-'+safe)?.focus()},'small-action tutor-answer'));
@@ -128,12 +131,13 @@ function mountHelp(m,l){if(!l?.lesson)return;const card=m.querySelector('section
  tg.id='helpToggle';tg.setAttribute('aria-expanded',String(h.open));tg.setAttribute('aria-controls','helpRegion');bar.append(tg);
  const after=card.querySelector(':scope > .sub')||card.querySelector(':scope > h2');(after||card.firstChild).after(bar);
  if(h.open)placeHelp(l,false)}
-function anchorEl(l,h){if(h.anchor.startsWith('sec:')){const el=document.getElementById('sec-'+h.anchor.slice(4));if(el)return el}if(h.anchor==='mat'){const el=document.getElementById('materialViewer');if(el)return el}return document.getElementById('helpBar')}
+function anchorEl(l,h){if(h.anchor.startsWith('draft:')){const el=document.getElementById('draftAsk-'+h.anchor.slice(6));if(el)return el}if(h.anchor.startsWith('sec:')){const el=document.getElementById('sec-'+h.anchor.slice(4));if(el)return el}if(h.anchor==='mat'){const el=document.getElementById('materialViewer');if(el)return el}return document.getElementById('helpBar')}
 function placeHelp(l,focus){const h=helpFor(l);document.getElementById('helpRegion')?.remove();const at=anchorEl(l,h);if(!at)return;
  const r=E('section','help-region');r.id='helpRegion';r.setAttribute('aria-label','AI 튜터');r.tabIndex=-1;
  const head=E('div','help-head');head.append(E('h3','','AI 튜터'),button('접기',()=>closeHelp(l),'linkish help-close'));r.append(head);
  r.append(E('p','tiny help-trust','답이 틀릴 수 있어요. 중요한 내용은 출처로 확인해 보세요.')); // stated once here, not on every reply
- if(h.ref){const ctx=E('div','help-context');ctx.append(E('span','',`지금 묻는 부분: ${h.label}`),button('일반 질문으로',()=>{h.ref=null;h.label='';placeHelp(l,true)},'linkish'));r.append(ctx)}
+ if(h.ref){const ctx=E('div','help-context');ctx.append(E('span','',`지금 묻는 부분: ${h.label}`),button('일반 질문으로',()=>{h.ref=null;h.label='';h.note='';placeHelp(l,true)},'linkish'));r.append(ctx)}
+ if(h.note){const n=E('p','tiny help-note',h.note);n.id='helpNote';r.append(n)}
  const gl=T.glossary(l.lesson);
  if(gl.length){const d=E('details','tutor-glossary');d.id='glossary';d.open=tutorOpen.has(l.id+'|glossary');d.addEventListener('toggle',()=>{d.open?tutorOpen.add(l.id+'|glossary'):tutorOpen.delete(l.id+'|glossary')});
   d.append(E('summary','',`용어 풀이 (${gl.length}개)`));
@@ -146,10 +150,28 @@ function placeHelp(l,focus){const h=helpFor(l);document.getElementById('helpRegi
  at.after(r);
  const tg=document.getElementById('helpToggle');if(tg){tg.setAttribute('aria-expanded','true');tg.textContent='AI 튜터 접기'}
  if(focus){r.scrollIntoView({block:'nearest',behavior:reduceMotion()?'auto':'smooth'});(r.querySelector('#tutorThread textarea')||r).focus({preventScroll:true})}}
-function openHelp(l,{anchor='top',ref=null,label='',opener='helpToggle'}={}){const h=helpFor(l);Object.assign(h,{open:true,anchor,ref,label,opener});placeHelp(l,true)}
-function closeHelp(l){const h=helpFor(l);h.open=false;document.getElementById('helpRegion')?.remove();
+function openHelp(l,{anchor='top',ref=null,label='',opener='helpToggle',note=''}={}){const h=helpFor(l);Object.assign(h,{open:true,anchor,ref,label,opener,note});placeHelp(l,true)}
+function closeHelp(l){const h=helpFor(l);h.open=false;h.note='';document.getElementById('helpRegion')?.remove();
+ // Closing cancels a suggestion the learner never touched; anything they typed or edited stays for later.
+ const k=tKey(l,null);if(suggested.has(l.id)&&tutorText.get(k)===suggested.get(l.id))tutorText.delete(k);suggested.delete(l.id);
  const tg=document.getElementById('helpToggle');if(tg){tg.setAttribute('aria-expanded','false');const n=T.stream(l,null).filter(x=>x.role==='learner').length;tg.textContent=`AI 튜터에게 묻기${n?` · 대화 ${n}개`:''}`}
  document.getElementById(h.opener)?.focus()}
+/** Under a saved explanation: carry on with a question the learner raised while writing it, in the SAME help region
+    (opened right below that explanation, with it as context). The questions found in it (L.learnerQuestions: strict,
+    form-based, exact words) are placed in an EMPTY composer to confirm, edit or delete; text the learner was already
+    typing there is never replaced. Nothing is sent until the learner presses send (offline: kept as a note), the
+    explanation is not changed, and neither the question nor the reply touches feedback, completion or evidence. */
+const suggested=new Map(); // lessonId -> the exact suggestion the app put in the composer (removed again only while untouched)
+function draftAsk(parent,l,draft,n){
+ const qs=window.CuriLearning.learnerQuestions(draft.text),wrap=E('div','draft-ask');wrap.id='draftAsk-'+n;
+ const b=button(qs.length?'설명 속 질문 이어서 묻기':'이 설명에 대해 묻기',()=>{
+  const k=tKey(l,null),cur=tutorText.get(k)||'',untouched=!cur.trim()||cur===suggested.get(l.id),filled=untouched&&qs.length>0;
+  if(untouched){if(filled){tutorText.set(k,qs.join('\n'));suggested.set(l.id,qs.join('\n'))}else{tutorText.delete(k);suggested.delete(l.id)}}
+  openHelp(l,{anchor:'draft:'+n,ref:{kind:'draft',at:draft.at},label:`내 설명 ${n}`,opener:'draftAskBtn-'+n,
+   note:filled?'설명에 쓴 질문을 그대로 옮겨 두었어요. 고치거나 지워도 되고, 보내기 전에는 AI에게 전달되지 않아요.':qs.length?'입력창에 쓰던 글이 있어서 그대로 두었어요.':''})},'small-action draft-ask-btn');
+ b.id='draftAskBtn-'+n;b.setAttribute('aria-controls','helpRegion');
+ if(qs.length)b.setAttribute('aria-label',`내 설명 ${n}에 쓴 질문 ${qs.length}개를 AI 튜터 입력창으로 옮기기`);
+ wrap.append(b);parent.append(wrap)}
 /** "이 부분 묻기" under a concept section: opens the one help region right below that section, with its context. */
 function helpLink(block,l,i,heading){block.id='sec-'+i;const b=button('이 부분 묻기',()=>openHelp(l,{anchor:'sec:'+i,ref:{kind:'section',i},label:heading,opener:'ask-sec-'+i}),'small-action help-ask');
  b.id='ask-sec-'+i;b.setAttribute('aria-label',`‘${heading}’에 대해 묻기`);b.setAttribute('aria-controls','helpRegion');block.append(b)}

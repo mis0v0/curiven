@@ -112,6 +112,7 @@
   if(ref.kind==='term')return `term:${ref.term}`;
   if(ref.kind==='section')return `sec:${ref.i}`;
   if(ref.kind==='page')return `pg:${ref.n}`;
+  if(ref.kind==='draft')return `dr:${ref.at}`;
   return 'general';
  }
  function cleanRef(ref){
@@ -126,8 +127,14 @@
   if(ref.kind==='term'&&s(ref.term))return {kind:'term',term:s(ref.term).slice(0,80)};
   if(ref.kind==='section'&&Number.isInteger(ref.i)&&ref.i>=0)return {kind:'section',i:ref.i};
   if(ref.kind==='page'&&Number.isInteger(ref.n)&&ref.n>0)return {kind:'page',n:ref.n};
+  // A question that came up while the learner wrote this saved explanation (identified by its timestamp).
+  if(ref.kind==='draft'&&Number.isFinite(ref.at))return {kind:'draft',at:ref.at};
   return null;
  }
+ /** The saved explanation a {kind:'draft'} reference names and its number (1-based, record order), or null when no
+     explanation, or more than one, has that time: never a guess. */
+ function draftFor(l,ref){if(ref?.kind!=='draft')return null;const ds=(Array.isArray(l?.drafts)?l.drafts:[]).map((d,i)=>[d,i]).filter(([d])=>d&&typeof d.text==='string'&&d.at===ref.at);
+  return ds.length===1?{draft:ds[0][0],n:ds[0][1]+1}:null}
  const dialogue=l=>Array.isArray(l?.dialogue)?l.dialogue:[];
 
  /* ---------- feedback references (2026-11-24) ----------
@@ -229,6 +236,8 @@
    return {kind:'scenario',question:sc.question,options:sc.options,answered:!!rec,...(rec?{reason:sc.reason}:{})}}
   if(ref.kind==='section'){const t=d.technical?.[ref.i];return t?{kind:'section',heading:t.heading,text:[t.plain,t.text].filter(Boolean).join('\n')}:null}
   if(ref.kind==='page'&&l.material&&M)return {kind:'page',n:ref.n,label:M.label(l.material,ref.n)};
+  // The learner's own explanation, sent as context for a question it raised (not as something to review).
+  if(ref.kind==='draft'){const x=draftFor(l,ref);return x?{kind:'draft',draft:x.draft.text}:null}
   // Only a reference that resolves to one item gives the tutor that item; otherwise no feedback item is sent at all.
   if(ref.kind==='feedback'){const r=resolveFeedback(l,ref);if(r.status!=='resolved')return null;
    const it=r.type==='summary'?{issue:r.feedback.summary,question:''}:{quote:r.item.quote||'',issue:r.item.issue,why:r.item.why||'',question:r.item.question};
@@ -292,6 +301,6 @@
  const state=(m,inFlight)=>m.status==='pending'&&!inFlight?'interrupted':m.status;
  const replyOf=(l,m)=>dialogue(l).find(x=>x.role==='tutor'&&x.replyTo===m.id)||null;
 
- const api={INTENTS,VERDICT_TEXT,prereqLabel,opinionText,MAX_MESSAGE,MAX_MESSAGES,normalizeExtras,cleanVisual,cleanReading,readingList,glossary,termsIn,refKey,cleanRef,stream,addLearner,history,focusFor,payload,validateReply,attachReply,markFailed,state,replyOf,validFeedback,resolveFeedback,itemRef,unplaced,unlinked};
+ const api={INTENTS,VERDICT_TEXT,prereqLabel,opinionText,MAX_MESSAGE,MAX_MESSAGES,normalizeExtras,cleanVisual,cleanReading,readingList,glossary,termsIn,refKey,cleanRef,stream,addLearner,history,focusFor,payload,validateReply,attachReply,markFailed,state,replyOf,validFeedback,resolveFeedback,itemRef,unplaced,unlinked,draftFor};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.CuriTutor=api;
 })(typeof window!=='undefined'?window:globalThis);

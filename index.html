@@ -217,7 +217,7 @@ function explain(m,l){const d=l.lesson,c=stagePanel(m,l,4),inv=C.explainInvite(d
  // Status only when there is something to know (reviewing, or no AI); no standing disclaimer.
  const reviewing=inflight.has('fb:'+l.id);if(reviewing||!provider.online){const msg=E('div','msg',reviewing?'AI가 설명을 읽고 있어요…':'AI가 연결되지 않았어요. 설명은 저장되고, 연결한 뒤 피드백을 받을 수 있어요.');msg.id='explainStatus';msg.setAttribute('role','status');c.append(msg)}const row=E('div','actions');
  const submit=button(provider.online?'설명 저장하고 피드백 받기':'내 설명 저장하기',()=>{const text=t.value.trim();if(text.length<12){toast('한두 문장만 더 적어 주세요. 모르는 부분은 모른다고 적어도 괜찮아요.');return}if(busy)return;clearTimeout(draftTimer);pendingDraft=null;delete l.draftInProgress;const draft={text,at:Date.now(),feedback:null};l.drafts.push(draft);track(l,'이해한 내용을 설명함');if(provider.online)requestFeedback(l,draft);else render()});submit.disabled=reviewing;row.append(submit,button('학습 마무리하기 →',()=>{if(!l.drafts.length){toast('먼저 자신의 설명을 남겨 주세요.');return}if(!l.complete){l.complete=true;track(l,'탐험 완료');setStage(l,5);notionAfterComplete(l);return}setStage(l,5)},'btn secondary'));c.append(row);
- if(l.drafts.length){const h=E('div','concept');h.id='draftHistory';h.append(E('h3','',`내 설명 ${l.drafts.length}개 기록`));const ids=d.concepts.map(x=>x.id);l.drafts.slice().reverse().forEach((draft,i)=>{const n=l.drafts.length-i;h.append(E('p','tiny draft-version',`설명 ${n} · ${n===1?'처음 쓴 설명':'고쳐 쓴 설명'}`),E('div','old',draft.text));
+ if(l.drafts.length){const h=E('div','concept');h.id='draftHistory';h.append(E('h3','',`내 설명 ${l.drafts.length}개 기록`));const ids=d.concepts.map(x=>x.id);l.drafts.slice().reverse().forEach((draft,i)=>{const n=l.drafts.length-i;h.append(E('p','tiny draft-version',`설명 ${n} · ${n===1?'처음 쓴 설명':'고쳐 쓴 설명'}`),E('div','old',draft.text));if(canWrite())draftAsk(h,l,draft,n);
   let f=null,bad=false;if(draft.feedback){try{f=L.validateFeedback(draft.feedback,ids,draft.text)}catch{bad=true}}
   if(f)renderFeedback(h,f,d.concepts,{l,draft});
   else{h.append(E('p','hint feedback-missing',bad?'저장된 AI 피드백의 형식이 올바르지 않아 표시하지 않았어요. 내 설명은 그대로 남아 있어요.':draft.feedbackError?'AI 피드백을 받지 못했어요: '+draft.feedbackError+' (내 설명은 저장됐어요)':'AI 피드백 없음'));
@@ -249,7 +249,8 @@ function renderFeedback(h,f,concepts,ctx,text=ctx?.draft.text){const box=E('div'
   for(const x of f.correct)box.append(E('p','hint fb-correct','✓ '+q(x.quote)+x.point));
   // A question or guess the coach had called a misconception is listed as a point to refine (x.reclassified stays in the record).
   const point=(type,i,cls,text,question)=>{const on=asks(type,i),el=E('p','hint '+cls,text+(on?' — '+question:''));el.dataset.fb=`${type}:${i}`;box.append(el);if(on)reply(type,i)};
-  f.precision.forEach((x,i)=>point('precision',i,'fb-precision','더 정확하게: '+q(x.quote)+x.issue+' 왜: '+x.why,x.question));
+  // A question or guess the validator moved out of misconceptions is labelled as a premise check, as in the journey archive.
+  f.precision.forEach((x,i)=>point('precision',i,'fb-precision',(x.reclassified?'질문·가설의 전제 확인: ':'더 정확하게: ')+q(x.quote)+x.issue+' 왜: '+x.why,x.question));
   f.misconceptions.forEach((x,i)=>point('misconceptions',i,'fb-misconception','다시 생각하기: '+q(x.quote)+x.issue+(x.why?' 왜: '+x.why:''),x.question));
   f.missing.forEach((x,i)=>point('missing',i,'fb-missing','빠진 조건: '+x.issue,x.question));
   const hidden=items.filter(([t,i])=>!asks(t,i)).length;

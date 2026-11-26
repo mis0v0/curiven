@@ -103,6 +103,12 @@
   let offset=0;
   return source.some((sentence,i)=>{const start=offset,end=offset+=parts[i].length;
    return spans.some(([a,b])=>a<end&&start<b)&&asks(sentence)})}
+ /** Questions the learner asked in their own explanation, as exact substrings of it, in order (at most 5). Uses the
+     strict form-based `asks` (not sentenceKind), so 해요체 assertions, hedges, embedded "…인지" clauses and quoted
+     questions are not offered. Only a suggestion for the learner to confirm or edit — never sent, graded or stored. */
+ function learnerQuestions(text){const out=[];
+  for(const s of sentences(text))for(const part of s.split(EV_SPLIT)){const p=part.trim();if(p&&asks(p)&&!out.includes(p))out.push(p)}
+  return out.slice(0,5)}
 
  /** Returns clean feedback or throws on malformed structure. `learnerText` (the explanation the feedback is
      about) enables the quotation check; without it, v2 criticisms cannot be verified and are withheld.
@@ -215,6 +221,6 @@
   })};
  }
 
- const api={FEEDBACK_SCHEMA,utteranceKind,sentenceKind,quoteKind,guardVerdict,validateFeedback,stampFeedback,quoteFound,verbatimQuote,normQuote,conceptStatus,feedbackPayload,learningContext,scenarioTitle,shuffleScenarios};
+ const api={FEEDBACK_SCHEMA,utteranceKind,sentenceKind,quoteKind,guardVerdict,validateFeedback,stampFeedback,quoteFound,verbatimQuote,learnerQuestions,normQuote,conceptStatus,feedbackPayload,learningContext,scenarioTitle,shuffleScenarios};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.CuriLearning=api;
 })(typeof window!=='undefined'?window:globalThis);
