@@ -155,7 +155,7 @@
      button-only exchanges go first, then the oldest exchanges; `omitted` says how many messages were left out. */
  function payload(l,profile){const d=l.lesson||{},msgs=learnerMessages(l),num=new Map(msgs.map(m=>[m.id,m.n]));
   const ex=[];for(const m of dlg(l)){if(m.role!=='learner'||m.status==='noted')continue;const r=T?T.replyOf(l,m):null;if(!r)continue;
-   ex.push({n:num.get(m.id)||null,ask:String(m.text).slice(0,BUDGET.message),button:!!m.quick,about:m.ref?.kind==='term'?`용어 ‘${m.ref.term}’`:m.ref?.kind==='section'?`개념 설명 ‘${d.technical?.[m.ref.i]?.heading||''}’`:m.ref?.kind==='scenario'?`사고 실험 ${m.ref.i+1}`:m.ref?.kind==='feedback'?'설명 피드백':'',
+   ex.push({n:num.get(m.id)||null,ask:String(m.text).slice(0,BUDGET.message),button:!!m.quick,about:m.ref?.kind==='term'?`용어 ‘${m.ref.term}’`:m.ref?.kind==='section'?`개념 설명 ‘${d.technical?.[m.ref.i]?.heading||''}’`:m.ref?.kind==='scenario'?`사고 실험 ${m.ref.i+1}`:m.ref?.kind==='feedback'?'설명 피드백':m.ref?.kind==='draft'?'내 설명을 쓰다가 생긴 질문':'',
     reply:String(r.text||'').slice(0,BUDGET.reply),...(r.followUp?{tutorQuestion:String(r.followUp).slice(0,400)}:{})})}
   let size=JSON.stringify(ex).length,omitted=0;
   while(size>BUDGET.dialogue&&ex.length){let k=ex.findIndex(x=>x.button&&!x.n);if(k<0)k=0;size-=JSON.stringify(ex[k]).length;ex.splice(k,1);omitted+=2}

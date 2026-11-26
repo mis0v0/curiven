@@ -415,7 +415,9 @@ def build_tutor_user(inp):
         elif kind == 'section':
             focus_text = '학습자가 지금 읽고 있는 개념 설명 부분: ' + json.dumps({'heading': _clip(focus.get('heading'), 100), 'text': _clip(focus.get('text'), 1500)}, ensure_ascii=False)
         elif kind == 'draft':
-            focus_text = '학습자가 확인받고 싶은 자기 설명(원문):\n' + _clip(focus.get('draft'), 3000)
+            # A question the learner raised while writing their own explanation: the explanation is context, not a submission to grade.
+            focus_text = ('학습자가 자기 설명을 쓰다가 생긴 질문을 묻고 있다. 아래 설명은 질문을 이해하기 위한 맥락일 뿐 평가 대상이 아니다. '
+                          '질문에 답하고, 설명을 대신 고쳐 쓰지 않는다.\n학습자의 설명(원문):\n' + _clip(focus.get('draft'), 3000))
         elif kind == 'page' and isinstance(focus.get('n'), int):
             focus_text = f'학습자가 보고 있는 수업 자료: {_clip(focus.get("label"), 30)} (아래 수업 자료 발췌에 있음)'
     history, total = [], 0

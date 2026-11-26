@@ -81,6 +81,14 @@ class TutorRequest(unittest.TestCase):
         user, _ = server.build_tutor_user(self.body(focus={'kind': 'feedback', 'type': 'precision', 'quote': '문자열로 처리해서', 'issue': '바인딩과 문자열 처리 구분', 'why': '값은 문자열에 한정되지 않음', 'question': '바인딩은 무엇을 따로 전달할까요?', 'draft': '원래 설명 원문'}))
         self.assertIn('바인딩은 무엇을 따로 전달할까요?', user); self.assertIn('원래 설명 원문', user)
 
+    def test_explanation_focus_is_context_for_the_question_not_a_submission(self):
+        draft = '바인딩은 값을 따로 보내요. 그런데 숫자만 받는 칸이면 바인딩 없이도 안전한 건가요?'
+        user, _ = server.build_tutor_user(self.body(intent='ask', message='숫자만 받는 칸이면 바인딩 없이도 안전한 건가요?', focus={'kind': 'draft', 'draft': draft}))
+        self.assertIn('자기 설명을 쓰다가 생긴 질문', user); self.assertIn('평가 대상이 아니다', user)
+        self.assertIn(draft, user, 'the explanation is passed verbatim')
+        self.assertNotIn('확인받고 싶은', user, 'not framed as a request to review the explanation')
+        self.assertIn(server.TUTOR_INTENTS['ask'], user)
+
 
 class TutorReview(unittest.TestCase):
     def test_valid_reply_and_assessment(self):

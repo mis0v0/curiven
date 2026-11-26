@@ -48,6 +48,11 @@
 .tech-all{display:block;margin:10px 0 0}
 .tutor-actions{align-items:center}.tutor-actions .tutor-chips{margin-top:0}
 .help-trust{margin-top:2px}
+/* Continue a question from a saved explanation: same entry style as "이 부분 묻기", next to the learner's own words. */
+.draft-ask{margin:8px 0 4px}
+.draft-ask-btn{font-weight:700;color:var(--accent);min-height:44px}
+.draft-ask-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.help-note{margin-top:8px;color:var(--text-2)}
 /* Visual explanations: plain semantic list/table, readable at phone width, no motion. */
 .viz{margin:14px 0 4px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
 .viz-title{font-weight:750;font-size:14px;color:var(--ink);text-align:left;margin-bottom:10px}
