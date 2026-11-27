@@ -100,6 +100,8 @@ test('several questions, no question, cancelling, and text the learner already t
  assert.equal(await page.evaluate(()=>document.activeElement.id),'draftAskBtn-2');
  assert.equal(calls.length,0);assert.equal((await stored(page)).lessons[0].dialogue,undefined);
  // An explanation without a question: the same region, empty, with that explanation as context (manual fallback).
+ // Q4-A: an earlier explanation is folded until the learner opens it.
+ assert.equal(await page.isVisible('#draftAskBtn-1'),false);await page.click('#draftOld-1 > summary');
  await page.click('#draftAskBtn-1');assert.equal(await page.inputValue(composer),'','not carried over from the cancelled suggestion');
  assert.match(await page.textContent('#helpRegion .help-context'),/내 설명 1/);assert.equal(await page.locator('#helpNote').count(),0);
  // Text the learner typed is never replaced by a suggestion, and survives closing.

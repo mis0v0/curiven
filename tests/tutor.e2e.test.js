@@ -146,8 +146,13 @@ test('4–5 answer a feedback question, answer the tutor\'s follow-up, then revi
  assert.match(await th.locator('.tutor-follow').first().textContent(),/답했어요/);
  // Revise: a new version; the first explanation and its feedback stay.
  const D2='바인딩은 쿼리 구조를 먼저 고정하고, 입력은 값으로만 따로 전달해서 문법으로 해석되지 않게 해요. 열 이름은 허용 목록으로 골라요.';
- await page.fill('#draft',D2);await page.click('text=설명 저장하고 피드백 받기');await page.waitForSelector('text=내 설명 2개 기록');
- assert.match(await page.textContent('#draftHistory'),/설명 2 · 고쳐 쓴 설명.*설명 1 · 처음 쓴 설명/s);
+ await page.fill('#draft',D2);await page.click('text=설명 저장하고 피드백 받기');await page.waitForFunction(()=>document.querySelector('#currentTitle')?.textContent==='내 최신 설명 · 설명 2');
+ // Q4-A: the new version is the latest explanation; the first, with its feedback and conversation, is folded below it.
+ assert.equal(await page.textContent('.current-expl .old'),D2);
+ assert.equal(await page.evaluate(()=>document.getElementById('draftOld-1').open),false);
+ assert.match(await page.textContent('#draftOld-1 > summary'),/^설명 1 · AI 피드백 있음 · 대화 2개/);
+ await page.click('#draftOld-1 > summary');assert.equal(await page.textContent('#draftOld-1 .old'),D1);
+ assert.equal(await page.locator('#draftOld-1 .feedback .tutor-own').count(),2,'the earlier conversation is still there, under its own feedback');
  const s=(await stored(page)).lessons[0];
  assert.deepEqual(s.drafts.map(d=>d.text),[D1,D2]);
  const learner=s.dialogue.filter(m=>m.role==='learner');assert.deepEqual(learner.map(m=>m.text),[R1,R2]);

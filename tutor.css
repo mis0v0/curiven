@@ -50,7 +50,7 @@
 .help-trust{margin-top:2px}
 /* Continue a question from a saved explanation: same entry style as "이 부분 묻기", next to the learner's own words. */
 .draft-ask{margin:8px 0 4px}
-.draft-ask-btn{font-weight:700;color:var(--accent);min-height:44px}
+.draft-ask-btn{font-weight:700;color:var(--accent);min-height:44px;font-size:var(--fs-small);padding:8px 14px;border-color:var(--line-field)} /* Q4-A: was easy to overlook */
 .draft-ask-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .help-note{margin-top:8px;color:var(--text-2)}
 /* Visual explanations: plain semantic list/table, readable at phone width, no motion. */
@@ -159,3 +159,19 @@ body:not(.focus-mode) .layout{grid-template-columns:200px minmax(0,1fr) 256px;ga
 .fb-unplaced-mine,.fb-unplaced-ai{white-space:pre-wrap;overflow-wrap:anywhere}.fb-unplaced-ai{padding-left:12px}
 /* Explain stage: long unbroken text (a URL, code, a quote without spaces) wraps instead of widening the page (2026-11-25) */
 #draftHistory{overflow-wrap:anywhere}
+/* Q4-A explain stage: the latest saved explanation and its own feedback first; earlier versions folded below. */
+.current-title{margin:0 0 4px;scroll-margin-top:var(--s3)}
+.current-title:focus-visible{outline:3px solid var(--focus);outline-offset:4px;border-radius:6px}
+.edit-state{margin:4px 0 8px;padding:8px 12px;border-left:3px solid var(--line-field);background:var(--surface-sunken);border-radius:0 10px 10px 0;color:var(--text-2)}
+.edit-state[hidden]{display:none}
+.feedback-pending{margin-top:12px}
+.revise-link{margin-top:12px;min-height:44px;font-weight:700;font-size:var(--fs-small);padding:8px 14px}
+.revise-link:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.earlier{margin-top:var(--s3);border-top:1px solid var(--line);padding-top:var(--s2)}
+.earlier-title{margin:0 0 4px;font-size:var(--fs-small);color:var(--text-2)}
+.draft-earlier{border:1px solid var(--line);border-radius:var(--radius-panel);margin-top:var(--s1);padding:0 var(--s2)}
+.draft-earlier>summary{cursor:pointer;padding:10px 0;font-size:var(--fs-small);font-weight:650;min-height:44px;display:list-item}
+.draft-earlier>summary:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.draft-earlier[open]{padding-bottom:var(--s2)}
+.earlier-peek{display:block;font-weight:400;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#retryFeedback{min-height:44px}

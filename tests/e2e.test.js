@@ -53,7 +53,7 @@ async function completeLesson(page){
  for(let i=0;i<n;i++){const box=page.locator('.concept').nth(i);await box.locator('.opt').first().click();await box.locator('text=예상 확인하기').click()}
  await page.click('text=원리 알아보기 →');await page.click('text=이해한 내용 정리하기 →');
  await page.fill('#draft','브라우저는 서버가 준 세션 ID를 쿠키로 저장하고 매 요청마다 다시 보내요.');
- await page.click('text=설명 저장하고 피드백 받기');await page.waitForSelector('text=내 설명 1개 기록');
+ await page.click('text=설명 저장하고 피드백 받기');await page.waitForSelector('text=내 최신 설명 · 설명 1');
  await page.click('text=학습 마무리하기 →');
 }
 async function backupFile(name,obj){const f=path.join(TMP,name);fs.writeFileSync(f,JSON.stringify(obj));return f}

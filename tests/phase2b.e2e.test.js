@@ -216,7 +216,7 @@ test('F — real dialogue: ask → answer → learner reply → review → corre
  assert.match(await page.textContent('#tutorThread .tutor-msg.me:nth-last-of-type(2) .tutor-who'),/이해 확인 요청/);
  const tc=calls.filter(c=>c.mode==='tutor');assert.deepEqual(tc.map(c=>c.intent),['ask','reply','check']);assert.deepEqual(tc.map(c=>c.history.length),[0,2,4],'each turn carries the conversation so far');
  // The learner revises the explanation in the same place; the earlier one stays.
- await page.fill('#draft',D2);await page.click('text=설명 저장하고 피드백 받기');await page.waitForSelector('text=내 설명 2개 기록');
+ await page.fill('#draft',D2);await page.click('text=설명 저장하고 피드백 받기');await page.waitForSelector('text=내 최신 설명 · 설명 2');
  const s=(await stored(page)).lessons[0];assert.deepEqual(s.drafts.map(d=>d.text),[D1,D2]);
  assert.deepEqual(s.dialogue.filter(m=>m.role==='learner').map(m=>[m.text,m.intent]),[['값 바인딩이 정확히 뭐예요?','ask'],['따옴표도 그냥 글자로 취급돼요','reply'],['결국 바인딩은 입력을 문자열로 바꿔서 막는 거예요.','check']],'exact words, exact attribution');
  const md=await page.evaluate(()=>window.CuriNotes.lessonMarkdown(data.lessons[0]));assert.match(md,/\*\*나\*\* \(이해 확인 요청\)/);assert.ok(md.includes('결국 바인딩은 입력을 문자열로 바꿔서 막는 거예요.'));
